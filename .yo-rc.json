@@ -1,0 +1,36 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "com.niveka",
+            "nativeLanguage": "fr"
+        },
+        "jhipsterVersion": "5.7.2",
+        "applicationType": "monolith",
+        "baseName": "fireD",
+        "packageName": "com.niveka",
+        "packageFolder": "com/niveka",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": false,
+        "websocket": "spring-websocket",
+        "databaseType": "mongodb",
+        "devDatabaseType": "mongodb",
+        "prodDatabaseType": "mongodb",
+        "searchEngine": "elasticsearch",
+        "messageBroker": "kafka",
+        "serviceDiscoveryType": "eureka",
+        "buildTool": "gradle",
+        "enableSwaggerCodegen": true,
+        "jwtSecretKey": "ZjAyYzhlODQyODkwYWMyMDNhOTk3NjIxMWI0OWMwNjQyODQwNDA5N2Q2N2I1ZmMwNTg3YzEzY2YwNzU4ZGMyM2NiMDRmNDk2OWZmYTg2NzliNzcwZjkxYzE3NzZhZTcxZmUwZjEyODA3MjY3NzA2MjRmNmEzMTAxZjg3MTExNjY=",
+        "clientFramework": "angularX",
+        "useSass": true,
+        "clientPackageManager": "npm",
+        "testFrameworks": [],
+        "jhiPrefix": "jhi",
+        "otherModules": [],
+        "enableTranslation": true,
+        "nativeLanguage": "fr",
+        "languages": ["fr", "en", "es"]
+    }
+}
