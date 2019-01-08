@@ -1,0 +1,27 @@
+{
+    "fireDApp": {
+        "compteRenduSuivi": {
+            "home": {
+                "title": "Compte Rendu Suivis",
+                "createLabel": "Crear nuevo Compte Rendu Suivi",
+                "createOrEditLabel": "Crear o editar Compte Rendu Suivi",
+                "search": "Search for Compte Rendu Suivi"
+            },
+            "created": "Un nuevo Compte Rendu Suivi ha sido creado con el identificador {{ param }}",
+            "updated": "Un Compte Rendu Suivi ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Compte Rendu Suivi ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Compte Rendu Suivi {{ id }}?"
+            },
+            "detail": {
+                "title": "Compte Rendu Suivi"
+            },
+            "contenu": "Contenu",
+            "dateProchaineRdv": "Date Prochaine Rdv",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "suivi": "Suivi"
+        }
+    }
+}

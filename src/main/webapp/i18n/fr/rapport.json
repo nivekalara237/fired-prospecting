@@ -1,0 +1,30 @@
+{
+    "fireDApp": {
+        "rapport": {
+            "home": {
+                "title": "Rapports",
+                "createLabel": "Créer un nouveau Rapport",
+                "createOrEditLabel": "Créer ou éditer un Rapport",
+                "search": "Recherche pour Rapport"
+            },
+            "created": "Un nouveau Rapport a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Rapport avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Rapport avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Rapport {{ id }} ?"
+            },
+            "detail": {
+                "title": "Rapport"
+            },
+            "objet": "Objet",
+            "copies": "Copies",
+            "contenu": "Contenu",
+            "type": "Type",
+            "position": "Position",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "user": "User"
+        }
+    }
+}

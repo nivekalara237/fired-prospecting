@@ -7,6 +7,15 @@
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entités",
+                "rapport": "Rapport",
+                "prospect": "Prospect",
+                "copie": "Copie",
+                "objet": "Objet",
+                "channel": "Channel",
+                "entreprise": "Entreprise",
+                "message": "Message",
+                "suivi": "Suivi",
+                "compteRenduSuivi": "Compte Rendu Suivi",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

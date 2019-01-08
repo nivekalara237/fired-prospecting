@@ -1,0 +1,42 @@
+{
+    "name": "CompteRenduSuivi",
+    "fields": [
+        {
+            "fieldName": "contenu",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateProchaineRdv",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deletedAt",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "suivi",
+            "otherEntityName": "suivi",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190108061425",
+    "entityTableName": "compte_rendu_suivi",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-suivi-heading" jhiTranslate="fireDApp.suivi.home.createOrEditLabel">Create or edit a Suivi</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!suivi.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="suivi.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.suivi.dateRdv" for="field_dateRdv">Date Rdv</label>
+                    <input type="text" class="form-control" name="dateRdv" id="field_dateRdv"
+                        [(ngModel)]="suivi.dateRdv" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.suivi.createdAt" for="field_createdAt">Created At</label>
+                    <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                        [(ngModel)]="suivi.createdAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.suivi.updatedAt" for="field_updatedAt">Updated At</label>
+                    <input type="text" class="form-control" name="updatedAt" id="field_updatedAt"
+                        [(ngModel)]="suivi.updatedAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.suivi.deletedAt" for="field_deletedAt">Deleted At</label>
+                    <input type="text" class="form-control" name="deletedAt" id="field_deletedAt"
+                        [(ngModel)]="suivi.deletedAt" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.suivi.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" [(ngModel)]="suivi.user" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === suivi.user?.id ? suivi.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

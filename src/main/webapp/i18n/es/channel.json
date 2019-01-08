@@ -1,0 +1,29 @@
+{
+    "fireDApp": {
+        "channel": {
+            "home": {
+                "title": "Channels",
+                "createLabel": "Crear nuevo Channel",
+                "createOrEditLabel": "Crear o editar Channel",
+                "search": "Search for Channel"
+            },
+            "created": "Un nuevo Channel ha sido creado con el identificador {{ param }}",
+            "updated": "Un Channel ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Channel ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Channel {{ id }}?"
+            },
+            "detail": {
+                "title": "Channel"
+            },
+            "designation": "Designation",
+            "entrepriseId": "Entreprise Id",
+            "code": "Code",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "entreprise": "Entreprise",
+            "user": "User"
+        }
+    }
+}

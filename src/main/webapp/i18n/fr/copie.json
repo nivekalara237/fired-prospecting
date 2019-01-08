@@ -1,0 +1,24 @@
+{
+    "fireDApp": {
+        "copie": {
+            "home": {
+                "title": "Copies",
+                "createLabel": "Créer un nouveau Copie",
+                "createOrEditLabel": "Créer ou éditer un Copie",
+                "search": "Recherche pour Copie"
+            },
+            "created": "Un nouveau Copie a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Copie avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Copie avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Copie {{ id }} ?"
+            },
+            "detail": {
+                "title": "Copie"
+            },
+            "email": "Email",
+            "createdAt": "Created At",
+            "rapport": "Rapport"
+        }
+    }
+}

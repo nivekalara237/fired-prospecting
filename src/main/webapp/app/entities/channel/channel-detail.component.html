@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="channel">
+            <h2><span jhiTranslate="fireDApp.channel.detail.title">Channel</span> {{channel.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fireDApp.channel.designation">Designation</span></dt>
+                <dd>
+                    <span>{{channel.designation}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.entrepriseId">Entreprise Id</span></dt>
+                <dd>
+                    <span>{{channel.entrepriseId}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.code">Code</span></dt>
+                <dd>
+                    <span>{{channel.code}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.createdAt">Created At</span></dt>
+                <dd>
+                    <span>{{channel.createdAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.updatedAt">Updated At</span></dt>
+                <dd>
+                    <span>{{channel.updatedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.deletedAt">Deleted At</span></dt>
+                <dd>
+                    <span>{{channel.deletedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.entreprise">Entreprise</span></dt>
+                <dd>
+                    <div *ngIf="channel.entreprise">
+                        <a [routerLink]="['/entreprise', channel.entreprise?.id, 'view']">{{channel.entreprise?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.channel.user">User</span></dt>
+                <dd>
+                    <span *ngFor="let user of channel.users; let last = last">
+                        {{user.username}}{{last ? '' : ', '}}
+                    </span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/channel', channel.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

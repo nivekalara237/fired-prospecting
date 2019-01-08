@@ -1,0 +1,27 @@
+{
+    "fireDApp": {
+        "compteRenduSuivi": {
+            "home": {
+                "title": "CompteRenduSuivis",
+                "createLabel": "Créer un nouveau Compte Rendu Suivi",
+                "createOrEditLabel": "Créer ou éditer un Compte Rendu Suivi",
+                "search": "Recherche pour Compte Rendu Suivi"
+            },
+            "created": "Un nouveau Compte Rendu Suivi a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Compte Rendu Suivi avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Compte Rendu Suivi avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Compte Rendu Suivi {{ id }} ?"
+            },
+            "detail": {
+                "title": "Compte Rendu Suivi"
+            },
+            "contenu": "Contenu",
+            "dateProchaineRdv": "Date Prochaine Rdv",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "suivi": "Suivi"
+        }
+    }
+}

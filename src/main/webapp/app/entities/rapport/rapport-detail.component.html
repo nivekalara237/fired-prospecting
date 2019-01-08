@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="rapport">
+            <h2><span jhiTranslate="fireDApp.rapport.detail.title">Rapport</span> {{rapport.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fireDApp.rapport.objet">Objet</span></dt>
+                <dd>
+                    <span>{{rapport.objet}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.copies">Copies</span></dt>
+                <dd>
+                    <span>{{rapport.copies}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.contenu">Contenu</span></dt>
+                <dd>
+                    <span>{{rapport.contenu}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.type">Type</span></dt>
+                <dd>
+                    <span>{{rapport.type}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.position">Position</span></dt>
+                <dd>
+                    <span>{{rapport.position}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.createdAt">Created At</span></dt>
+                <dd>
+                    <span>{{rapport.createdAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.updatedAt">Updated At</span></dt>
+                <dd>
+                    <span>{{rapport.updatedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.deletedAt">Deleted At</span></dt>
+                <dd>
+                    <span>{{rapport.deletedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.rapport.user">User</span></dt>
+                <dd>
+                    {{rapport.user?.id}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/rapport', rapport.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

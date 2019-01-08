@@ -1,0 +1,30 @@
+{
+    "name": "Copie",
+    "fields": [
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "rapport",
+            "otherEntityName": "rapport",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20190108061419",
+    "entityTableName": "copie",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

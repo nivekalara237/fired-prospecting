@@ -1,0 +1,44 @@
+{
+    "name": "Entreprise",
+    "fields": [
+        {
+            "fieldName": "designation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "logo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deletedAt",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "entreprise",
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "otherEntityField": "username",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190108061422",
+    "entityTableName": "entreprise",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

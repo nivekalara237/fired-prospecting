@@ -1,0 +1,65 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="message">
+            <h2><span jhiTranslate="fireDApp.message.detail.title">Message</span> {{message.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fireDApp.message.contenu">Contenu</span></dt>
+                <dd>
+                    <span>{{message.contenu}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.key">Key</span></dt>
+                <dd>
+                    <span>{{message.key}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.vu">Vu</span></dt>
+                <dd>
+                    <span>{{message.vu}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.time">Time</span></dt>
+                <dd>
+                    <span>{{message.time}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.channelId">Channel Id</span></dt>
+                <dd>
+                    <span>{{message.channelId}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.createdAt">Created At</span></dt>
+                <dd>
+                    <span>{{message.createdAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.updatedAt">Updated At</span></dt>
+                <dd>
+                    <span>{{message.updatedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.deletedAt">Deleted At</span></dt>
+                <dd>
+                    <span>{{message.deletedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.channel">Channel</span></dt>
+                <dd>
+                    <div *ngIf="message.channel">
+                        <a [routerLink]="['/channel', message.channel?.id, 'view']">{{message.channel?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.message.user">User</span></dt>
+                <dd>
+                    {{message.user?.id}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/message', message.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

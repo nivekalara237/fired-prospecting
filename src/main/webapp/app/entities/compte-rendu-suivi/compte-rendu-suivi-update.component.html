@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-compte-rendu-suivi-heading" jhiTranslate="fireDApp.compteRenduSuivi.home.createOrEditLabel">Create or edit a Compte Rendu Suivi</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!compteRenduSuivi.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="compteRenduSuivi.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.contenu" for="field_contenu">Contenu</label>
+                    <input type="text" class="form-control" name="contenu" id="field_contenu"
+                        [(ngModel)]="compteRenduSuivi.contenu" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.dateProchaineRdv" for="field_dateProchaineRdv">Date Prochaine Rdv</label>
+                    <input type="text" class="form-control" name="dateProchaineRdv" id="field_dateProchaineRdv"
+                        [(ngModel)]="compteRenduSuivi.dateProchaineRdv" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.createdAt" for="field_createdAt">Created At</label>
+                    <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                        [(ngModel)]="compteRenduSuivi.createdAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.updatedAt" for="field_updatedAt">Updated At</label>
+                    <input type="text" class="form-control" name="updatedAt" id="field_updatedAt"
+                        [(ngModel)]="compteRenduSuivi.updatedAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.deletedAt" for="field_deletedAt">Deleted At</label>
+                    <input type="text" class="form-control" name="deletedAt" id="field_deletedAt"
+                        [(ngModel)]="compteRenduSuivi.deletedAt" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.suivi" for="field_suivi">Suivi</label>
+                    <select class="form-control" id="field_suivi" name="suivi" [(ngModel)]="compteRenduSuivi.suivi" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="suiviOption.id === compteRenduSuivi.suivi?.id ? compteRenduSuivi.suivi : suiviOption" *ngFor="let suiviOption of suivis; trackBy: trackSuiviById">{{suiviOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

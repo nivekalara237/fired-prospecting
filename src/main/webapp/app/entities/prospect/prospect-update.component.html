@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-prospect-heading" jhiTranslate="fireDApp.prospect.home.createOrEditLabel">Create or edit a Prospect</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!prospect.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="prospect.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.nom" for="field_nom">Nom</label>
+                    <input type="text" class="form-control" name="nom" id="field_nom"
+                        [(ngModel)]="prospect.nom" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.email" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                        [(ngModel)]="prospect.email" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.telephone" for="field_telephone">Telephone</label>
+                    <input type="text" class="form-control" name="telephone" id="field_telephone"
+                        [(ngModel)]="prospect.telephone" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.type" for="field_type">Type</label>
+                    <input type="number" class="form-control" name="type" id="field_type"
+                        [(ngModel)]="prospect.type" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.dateRdv" for="field_dateRdv">Date Rdv</label>
+                    <input type="text" class="form-control" name="dateRdv" id="field_dateRdv"
+                        [(ngModel)]="prospect.dateRdv" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.compteRendu" for="field_compteRendu">Compte Rendu</label>
+                    <input type="text" class="form-control" name="compteRendu" id="field_compteRendu"
+                        [(ngModel)]="prospect.compteRendu" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.localisation" for="field_localisation">Localisation</label>
+                    <input type="text" class="form-control" name="localisation" id="field_localisation"
+                        [(ngModel)]="prospect.localisation" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.position" for="field_position">Position</label>
+                    <input type="text" class="form-control" name="position" id="field_position"
+                        [(ngModel)]="prospect.position" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.createdAt" for="field_createdAt">Created At</label>
+                    <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                        [(ngModel)]="prospect.createdAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.updatedAt" for="field_updatedAt">Updated At</label>
+                    <input type="text" class="form-control" name="updatedAt" id="field_updatedAt"
+                        [(ngModel)]="prospect.updatedAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.deletedAt" for="field_deletedAt">Deleted At</label>
+                    <input type="text" class="form-control" name="deletedAt" id="field_deletedAt"
+                        [(ngModel)]="prospect.deletedAt" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.suivi" for="field_suivi">Suivi</label>
+                    <select class="form-control" id="field_suivi" name="suivi" [(ngModel)]="prospect.suivi">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="suiviOption.id === prospect.suivi?.id ? prospect.suivi : suiviOption" *ngFor="let suiviOption of suivis; trackBy: trackSuiviById">{{suiviOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.prospect.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" [(ngModel)]="prospect.user" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === prospect.user?.id ? prospect.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

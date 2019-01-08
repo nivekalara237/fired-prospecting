@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-message-heading" jhiTranslate="fireDApp.message.home.createOrEditLabel">Create or edit a Message</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!message.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="message.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.contenu" for="field_contenu">Contenu</label>
+                    <input type="text" class="form-control" name="contenu" id="field_contenu"
+                        [(ngModel)]="message.contenu" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.key" for="field_key">Key</label>
+                    <input type="text" class="form-control" name="key" id="field_key"
+                        [(ngModel)]="message.key" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.vu" for="field_vu">Vu</label>
+                    <input type="text" class="form-control" name="vu" id="field_vu"
+                        [(ngModel)]="message.vu" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.time" for="field_time">Time</label>
+                    <input type="text" class="form-control" name="time" id="field_time"
+                        [(ngModel)]="message.time" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.channelId" for="field_channelId">Channel Id</label>
+                    <input type="number" class="form-control" name="channelId" id="field_channelId"
+                        [(ngModel)]="message.channelId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.createdAt" for="field_createdAt">Created At</label>
+                    <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                        [(ngModel)]="message.createdAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.updatedAt" for="field_updatedAt">Updated At</label>
+                    <input type="text" class="form-control" name="updatedAt" id="field_updatedAt"
+                        [(ngModel)]="message.updatedAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.deletedAt" for="field_deletedAt">Deleted At</label>
+                    <input type="text" class="form-control" name="deletedAt" id="field_deletedAt"
+                        [(ngModel)]="message.deletedAt" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.channel" for="field_channel">Channel</label>
+                    <select class="form-control" id="field_channel" name="channel" [(ngModel)]="message.channel" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="channelOption.id === message.channel?.id ? message.channel : channelOption" *ngFor="let channelOption of channels; trackBy: trackChannelById">{{channelOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.message.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" [(ngModel)]="message.user" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === message.user?.id ? message.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.id}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

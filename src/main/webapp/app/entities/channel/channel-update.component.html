@@ -1,0 +1,67 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-channel-heading" jhiTranslate="fireDApp.channel.home.createOrEditLabel">Create or edit a Channel</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!channel.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="channel.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.designation" for="field_designation">Designation</label>
+                    <input type="text" class="form-control" name="designation" id="field_designation"
+                        [(ngModel)]="channel.designation" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.entrepriseId" for="field_entrepriseId">Entreprise Id</label>
+                    <input type="text" class="form-control" name="entrepriseId" id="field_entrepriseId"
+                        [(ngModel)]="channel.entrepriseId" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.code" for="field_code">Code</label>
+                    <input type="text" class="form-control" name="code" id="field_code"
+                        [(ngModel)]="channel.code" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.createdAt" for="field_createdAt">Created At</label>
+                    <input type="text" class="form-control" name="createdAt" id="field_createdAt"
+                        [(ngModel)]="channel.createdAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.updatedAt" for="field_updatedAt">Updated At</label>
+                    <input type="text" class="form-control" name="updatedAt" id="field_updatedAt"
+                        [(ngModel)]="channel.updatedAt" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.deletedAt" for="field_deletedAt">Deleted At</label>
+                    <input type="text" class="form-control" name="deletedAt" id="field_deletedAt"
+                        [(ngModel)]="channel.deletedAt" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="fireDApp.channel.entreprise" for="field_entreprise">Entreprise</label>
+                    <select class="form-control" id="field_entreprise" name="entreprise" [(ngModel)]="channel.entreprise" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="entrepriseOption.id === channel.entreprise?.id ? channel.entreprise : entrepriseOption" *ngFor="let entrepriseOption of entreprises; trackBy: trackEntrepriseById">{{entrepriseOption.id}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label jhiTranslate="fireDApp.channel.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" multiple name="user" [(ngModel)]="channel.users">
+                        <option [ngValue]="getSelected(channel.users, userOption)" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.username}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

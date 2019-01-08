@@ -1,0 +1,34 @@
+{
+    "fireDApp": {
+        "prospect": {
+            "home": {
+                "title": "Prospects",
+                "createLabel": "Crear nuevo Prospect",
+                "createOrEditLabel": "Crear o editar Prospect",
+                "search": "Search for Prospect"
+            },
+            "created": "Un nuevo Prospect ha sido creado con el identificador {{ param }}",
+            "updated": "Un Prospect ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Prospect ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Prospect {{ id }}?"
+            },
+            "detail": {
+                "title": "Prospect"
+            },
+            "nom": "Nom",
+            "email": "Email",
+            "telephone": "Telephone",
+            "type": "Type",
+            "dateRdv": "Date Rdv",
+            "compteRendu": "Compte Rendu",
+            "localisation": "Localisation",
+            "position": "Position",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "suivi": "Suivi",
+            "user": "User"
+        }
+    }
+}

@@ -6,6 +6,7 @@ buildscript {
         mavenCentral()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -199,9 +200,11 @@ dependencies {
     runtime "io.jsonwebtoken:jjwt-impl"
     runtime "io.jsonwebtoken:jjwt-jackson"
     compile "com.github.mongobee:mongobee"
+    compile 'com.github.thunder413:DateTimeUtils:1.0'
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
+    compile 'joda-time:joda-time:2.10.1'
     compile "io.springfox:springfox-bean-validators"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"

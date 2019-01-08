@@ -1,0 +1,25 @@
+{
+    "fireDApp": {
+        "objet": {
+            "home": {
+                "title": "Objets",
+                "createLabel": "Créer un nouveau Objet",
+                "createOrEditLabel": "Créer ou éditer un Objet",
+                "search": "Recherche pour Objet"
+            },
+            "created": "Un nouveau Objet a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Objet avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Objet avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Objet {{ id }} ?"
+            },
+            "detail": {
+                "title": "Objet"
+            },
+            "nom": "Nom",
+            "lien": "Lien",
+            "encode": "Encode",
+            "rapport": "Rapport"
+        }
+    }
+}

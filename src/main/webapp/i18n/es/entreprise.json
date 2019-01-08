@@ -1,0 +1,27 @@
+{
+    "fireDApp": {
+        "entreprise": {
+            "home": {
+                "title": "Entreprises",
+                "createLabel": "Crear nuevo Entreprise",
+                "createOrEditLabel": "Crear o editar Entreprise",
+                "search": "Search for Entreprise"
+            },
+            "created": "Un nuevo Entreprise ha sido creado con el identificador {{ param }}",
+            "updated": "Un Entreprise ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Entreprise ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Entreprise {{ id }}?"
+            },
+            "detail": {
+                "title": "Entreprise"
+            },
+            "designation": "Designation",
+            "logo": "Logo",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "user": "User"
+        }
+    }
+}

@@ -1,0 +1,101 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="fireDApp.message.home.title">Messages</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-message" [routerLink]="['/message/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span class="hidden-sm-down"  jhiTranslate="fireDApp.message.home.createLabel">
+            Create new Message
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'fireDApp.message.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <fa-icon [icon]="'search'"></fa-icon>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <fa-icon [icon]="'trash-alt'"></fa-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="messages">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="contenu"><span jhiTranslate="fireDApp.message.contenu">Contenu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="key"><span jhiTranslate="fireDApp.message.key">Key</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="vu"><span jhiTranslate="fireDApp.message.vu">Vu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="time"><span jhiTranslate="fireDApp.message.time">Time</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="channelId"><span jhiTranslate="fireDApp.message.channelId">Channel Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.message.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.message.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.message.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="channel.id"><span jhiTranslate="fireDApp.message.channel">Channel</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="user.id"><span jhiTranslate="fireDApp.message.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let message of messages ;trackBy: trackId">
+                <td><a [routerLink]="['/message', message.id, 'view' ]">{{message.id}}</a></td>
+                <td>{{message.contenu}}</td>
+                <td>{{message.key}}</td>
+                <td>{{message.vu}}</td>
+                <td>{{message.time}}</td>
+                <td>{{message.channelId}}</td>
+                <td>{{message.createdAt}}</td>
+                <td>{{message.updatedAt}}</td>
+                <td>{{message.deletedAt}}</td>
+                <td>
+                    <div *ngIf="message.channel">
+                        <a [routerLink]="['../channel', message.channel?.id, 'view' ]" >{{message.channel?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    {{message.user?.id}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/message', message.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/message', message.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'message/'+ message.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="messages && messages.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

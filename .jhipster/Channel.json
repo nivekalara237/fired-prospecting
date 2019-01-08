@@ -1,0 +1,54 @@
+{
+    "name": "Channel",
+    "fields": [
+        {
+            "fieldName": "designation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "entrepriseId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "code",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deletedAt",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "entreprise",
+            "otherEntityName": "entreprise",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "channel",
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "otherEntityField": "username",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20190108061421",
+    "entityTableName": "channel",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

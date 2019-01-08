@@ -1,0 +1,25 @@
+{
+    "fireDApp": {
+        "objet": {
+            "home": {
+                "title": "Objets",
+                "createLabel": "Crear nuevo Objet",
+                "createOrEditLabel": "Crear o editar Objet",
+                "search": "Search for Objet"
+            },
+            "created": "Un nuevo Objet ha sido creado con el identificador {{ param }}",
+            "updated": "Un Objet ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Objet ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Objet {{ id }}?"
+            },
+            "detail": {
+                "title": "Objet"
+            },
+            "nom": "Nom",
+            "lien": "Lien",
+            "encode": "Encode",
+            "rapport": "Rapport"
+        }
+    }
+}

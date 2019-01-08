@@ -1,0 +1,115 @@
+
+entity Rapport {
+    id Long,
+    contenu String,
+    sujet String,
+    fichier String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+
+entity Prospect {
+    id Long,
+    nom String,
+    email String,
+    telephone String,
+    type Integer,
+    dateRdv String,
+    compteRendu String,
+    localisation String,
+    position String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String,
+}
+entity Rapport {
+    id Long,
+    objet String,
+    copies String,
+    contenu String,
+    type Integer,
+    position String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+
+entity Copie {
+    id Long,
+    email String,
+    createdAt String
+}
+entity Objet {
+    id Long,
+    nom String,
+    lien String,
+    encode String,
+}
+entity Channel {
+    id Long,
+    designation String,
+    entrepriseId String,
+    code String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+entity Entreprise{
+	id Long,
+    designation String,
+    logo String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+entity Message {
+    id Long,
+    contenu String,
+    key String,
+    vu String,
+    time String,
+    channelId Long,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+entity Suivi{
+	id Long,
+    dateRdv String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+entity CompteRenduSuivi{
+	id Long,
+    contenu String,
+    dateProchaineRdv String,
+    createdAt String,
+    updatedAt String,
+    deletedAt String
+}
+relationship OneToOne{
+	Prospect{suivi} to Suivi
+}
+relationship ManyToOne{
+	CompteRenduSuivi{suivi} to Suivi,
+    Objet{rapport} to Rapport,
+    Copie{rapport} to Rapport,
+    Message{channel} to Channel,
+    Message{user} to User,
+    Rapport{user} to User,
+    Prospect{user} to User,
+    Suivi{user} to User,
+//    User{entreprise} to Entreprise,
+    Channel{entreprise} to Entreprise
+}
+relationship ManyToMany{
+	//User{channel(code)} to Channel{user},
+	Channel{user(username)} to User{channel}
+	Entreprise{user(username)} to User{entreprise}
+	//User{entreprise(designation)} to Entreprise{user}
+}
+service all with serviceImpl
+paginate Entreprise, Channel, Objet, Copie, CompteRenduSuivi with infinite-scroll
+paginate Suivi, Prospect, Rapport, Message with pagination

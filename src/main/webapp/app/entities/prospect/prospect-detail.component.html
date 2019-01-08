@@ -1,0 +1,77 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="prospect">
+            <h2><span jhiTranslate="fireDApp.prospect.detail.title">Prospect</span> {{prospect.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fireDApp.prospect.nom">Nom</span></dt>
+                <dd>
+                    <span>{{prospect.nom}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.email">Email</span></dt>
+                <dd>
+                    <span>{{prospect.email}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.telephone">Telephone</span></dt>
+                <dd>
+                    <span>{{prospect.telephone}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.type">Type</span></dt>
+                <dd>
+                    <span>{{prospect.type}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.dateRdv">Date Rdv</span></dt>
+                <dd>
+                    <span>{{prospect.dateRdv}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.compteRendu">Compte Rendu</span></dt>
+                <dd>
+                    <span>{{prospect.compteRendu}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.localisation">Localisation</span></dt>
+                <dd>
+                    <span>{{prospect.localisation}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.position">Position</span></dt>
+                <dd>
+                    <span>{{prospect.position}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.createdAt">Created At</span></dt>
+                <dd>
+                    <span>{{prospect.createdAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.updatedAt">Updated At</span></dt>
+                <dd>
+                    <span>{{prospect.updatedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.deletedAt">Deleted At</span></dt>
+                <dd>
+                    <span>{{prospect.deletedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.suivi">Suivi</span></dt>
+                <dd>
+                    <div *ngIf="prospect.suivi">
+                        <a [routerLink]="['/suivi', prospect.suivi?.id, 'view']">{{prospect.suivi?.id}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.prospect.user">User</span></dt>
+                <dd>
+                    {{prospect.user?.id}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/prospect', prospect.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

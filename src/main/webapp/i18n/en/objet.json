@@ -1,0 +1,25 @@
+{
+    "fireDApp": {
+        "objet": {
+            "home": {
+                "title": "Objets",
+                "createLabel": "Create a new Objet",
+                "createOrEditLabel": "Create or edit a Objet",
+                "search": "Search for Objet"
+            },
+            "created": "A new Objet is created with identifier {{ param }}",
+            "updated": "A Objet is updated with identifier {{ param }}",
+            "deleted": "A Objet is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Objet {{ id }}?"
+            },
+            "detail": {
+                "title": "Objet"
+            },
+            "nom": "Nom",
+            "lien": "Lien",
+            "encode": "Encode",
+            "rapport": "Rapport"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "fireDApp": {
+        "suivi": {
+            "home": {
+                "title": "Suivis",
+                "createLabel": "Créer un nouveau Suivi",
+                "createOrEditLabel": "Créer ou éditer un Suivi",
+                "search": "Recherche pour Suivi"
+            },
+            "created": "Un nouveau Suivi a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Suivi avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Suivi avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Suivi {{ id }} ?"
+            },
+            "detail": {
+                "title": "Suivi"
+            },
+            "dateRdv": "Date Rdv",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "user": "User"
+        }
+    }
+}

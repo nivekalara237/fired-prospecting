@@ -1,0 +1,31 @@
+{
+    "fireDApp": {
+        "message": {
+            "home": {
+                "title": "Messages",
+                "createLabel": "Créer un nouveau Message",
+                "createOrEditLabel": "Créer ou éditer un Message",
+                "search": "Recherche pour Message"
+            },
+            "created": "Un nouveau Message a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Message avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Message avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Message {{ id }} ?"
+            },
+            "detail": {
+                "title": "Message"
+            },
+            "contenu": "Contenu",
+            "key": "Key",
+            "vu": "Vu",
+            "time": "Time",
+            "channelId": "Channel Id",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "channel": "Channel",
+            "user": "User"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "fireDApp": {
+        "suivi": {
+            "home": {
+                "title": "Suivis",
+                "createLabel": "Create a new Suivi",
+                "createOrEditLabel": "Create or edit a Suivi",
+                "search": "Search for Suivi"
+            },
+            "created": "A new Suivi is created with identifier {{ param }}",
+            "updated": "A Suivi is updated with identifier {{ param }}",
+            "deleted": "A Suivi is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Suivi {{ id }}?"
+            },
+            "detail": {
+                "title": "Suivi"
+            },
+            "dateRdv": "Date Rdv",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "user": "User"
+        }
+    }
+}

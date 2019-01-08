@@ -1,0 +1,24 @@
+{
+    "fireDApp": {
+        "copie": {
+            "home": {
+                "title": "Copies",
+                "createLabel": "Crear nuevo Copie",
+                "createOrEditLabel": "Crear o editar Copie",
+                "search": "Search for Copie"
+            },
+            "created": "Un nuevo Copie ha sido creado con el identificador {{ param }}",
+            "updated": "Un Copie ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Copie ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Copie {{ id }}?"
+            },
+            "detail": {
+                "title": "Copie"
+            },
+            "email": "Email",
+            "createdAt": "Created At",
+            "rapport": "Rapport"
+        }
+    }
+}

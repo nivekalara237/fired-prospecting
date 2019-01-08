@@ -1,0 +1,30 @@
+{
+    "fireDApp": {
+        "rapport": {
+            "home": {
+                "title": "Rapports",
+                "createLabel": "Crear nuevo Rapport",
+                "createOrEditLabel": "Crear o editar Rapport",
+                "search": "Search for Rapport"
+            },
+            "created": "Un nuevo Rapport ha sido creado con el identificador {{ param }}",
+            "updated": "Un Rapport ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Rapport ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Rapport {{ id }}?"
+            },
+            "detail": {
+                "title": "Rapport"
+            },
+            "objet": "Objet",
+            "copies": "Copies",
+            "contenu": "Contenu",
+            "type": "Type",
+            "position": "Position",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At",
+            "user": "User"
+        }
+    }
+}
