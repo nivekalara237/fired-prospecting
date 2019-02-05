@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { JhiAlertService } from 'ng-jhipster';
 
 import { ISuivi } from 'app/shared/model/suivi.model';
 import { SuiviService } from './suivi.service';
-import { IUser, UserService } from 'app/core';
 
 @Component({
     selector: 'jhi-suivi-update',
@@ -16,26 +14,13 @@ export class SuiviUpdateComponent implements OnInit {
     suivi: ISuivi;
     isSaving: boolean;
 
-    users: IUser[];
-
-    constructor(
-        protected jhiAlertService: JhiAlertService,
-        protected suiviService: SuiviService,
-        protected userService: UserService,
-        protected activatedRoute: ActivatedRoute
-    ) {}
+    constructor(protected suiviService: SuiviService, protected activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ suivi }) => {
             this.suivi = suivi;
         });
-        this.userService.query().subscribe(
-            (res: HttpResponse<IUser[]>) => {
-                this.users = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
     }
 
     previousState() {
@@ -62,13 +47,5 @@ export class SuiviUpdateComponent implements OnInit {
 
     protected onSaveError() {
         this.isSaving = false;
-    }
-
-    protected onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
-    }
-
-    trackUserById(index: number, item: IUser) {
-        return item.id;
     }
 }

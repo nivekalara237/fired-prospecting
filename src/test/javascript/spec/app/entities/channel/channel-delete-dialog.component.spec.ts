@@ -9,7 +9,7 @@ import { ChannelDeleteDialogComponent } from 'app/entities/channel/channel-delet
 import { ChannelService } from 'app/entities/channel/channel.service';
 
 describe('Component Tests', () => {
-    describe('Channel Management Delete Component', () => {
+    describe('ZChannel Management Delete Component', () => {
         let comp: ChannelDeleteDialogComponent;
         let fixture: ComponentFixture<ChannelDeleteDialogComponent>;
         let service: ChannelService;

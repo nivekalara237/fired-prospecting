@@ -1,35 +1,31 @@
 package com.niveka.service.impl;
 
-import com.niveka.service.RapportService;
 import com.niveka.domain.Rapport;
 import com.niveka.repository.RapportRepository;
-import com.niveka.repository.search.RapportSearchRepository;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing Rapport.
  */
 @Service
-public class RapportServiceImpl implements RapportService {
+public class RapportServiceImpl {
 
     private final Logger log = LoggerFactory.getLogger(RapportServiceImpl.class);
 
     private final RapportRepository rapportRepository;
 
-    private final RapportSearchRepository rapportSearchRepository;
+    //private final RapportSearchRepository rapportSearchRepository;
 
-    public RapportServiceImpl(RapportRepository rapportRepository, RapportSearchRepository rapportSearchRepository) {
+    public RapportServiceImpl(RapportRepository rapportRepository/*, RapportSearchRepository rapportSearchRepository*/) {
         this.rapportRepository = rapportRepository;
-        this.rapportSearchRepository = rapportSearchRepository;
+        //this.rapportSearchRepository = rapportSearchRepository;
     }
 
     /**
@@ -38,11 +34,12 @@ public class RapportServiceImpl implements RapportService {
      * @param rapport the entity to save
      * @return the persisted entity
      */
-    @Override
+    //@Override
     public Rapport save(Rapport rapport) {
         log.debug("Request to save Rapport : {}", rapport);
+        rapport.setUpdatedAt(Utils.currentJodaDateStr());
         Rapport result = rapportRepository.save(rapport);
-        rapportSearchRepository.save(result);
+        //rapportSearchRepository.save(result);
         return result;
     }
 
@@ -52,7 +49,7 @@ public class RapportServiceImpl implements RapportService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Rapport> findAll(Pageable pageable) {
         log.debug("Request to get all Rapports");
         return rapportRepository.findAll(pageable);
@@ -65,7 +62,7 @@ public class RapportServiceImpl implements RapportService {
      * @param id the id of the entity
      * @return the entity
      */
-    @Override
+    //@Override
     public Optional<Rapport> findOne(String id) {
         log.debug("Request to get Rapport : {}", id);
         return rapportRepository.findById(id);
@@ -76,11 +73,11 @@ public class RapportServiceImpl implements RapportService {
      *
      * @param id the id of the entity
      */
-    @Override
+    //@Override
     public void delete(String id) {
         log.debug("Request to delete Rapport : {}", id);
         rapportRepository.deleteById(id);
-        rapportSearchRepository.deleteById(id);
+        //rapportSearchRepository.deleteById(id);
     }
 
     /**
@@ -90,8 +87,10 @@ public class RapportServiceImpl implements RapportService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Rapport> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Rapports for query {}", query);
-        return rapportSearchRepository.search(queryStringQuery(query), pageable);    }
+        return null;
+        //return rapportSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

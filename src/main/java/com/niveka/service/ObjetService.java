@@ -1,24 +1,52 @@
 package com.niveka.service;
 
 import com.niveka.domain.Objet;
-
+import com.niveka.repository.ObjetRepository;
+import com.niveka.service.dto.ObjetDTO;
+import com.niveka.service.mapper.ObjetMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 /**
- * Service Interface for managing Objet.
+ * Service Implementation for managing Objet.
  */
-public interface ObjetService {
+@Service
+public class ObjetService {
+
+    private final Logger log = LoggerFactory.getLogger(ObjetService.class);
+
+    private final ObjetRepository objetRepository;
+
+    private final ObjetMapper objetMapper;
+
+    //private final ObjetSearchRepository objetSearchRepository;
+
+    public ObjetService(ObjetRepository objetRepository, ObjetMapper objetMapper/*, ObjetSearchRepository objetSearchRepository*/) {
+        this.objetRepository = objetRepository;
+        this.objetMapper = objetMapper;
+        //this.objetSearchRepository = objetSearchRepository;
+    }
 
     /**
      * Save a objet.
      *
-     * @param objet the entity to save
+     * @param objetDTO the entity to save
      * @return the persisted entity
      */
-    Objet save(Objet objet);
+    public ObjetDTO save(ObjetDTO objetDTO) {
+        log.debug("Request to save Objet : {}", objetDTO);
+
+        Objet objet = objetMapper.toEntity(objetDTO);
+        objet = objetRepository.save(objet);
+        ObjetDTO result = objetMapper.toDto(objet);
+        //objetSearchRepository.save(objet);
+        return result;
+    }
 
     /**
      * Get all the objets.
@@ -26,31 +54,48 @@ public interface ObjetService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<Objet> findAll(Pageable pageable);
+    public Page<ObjetDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all Objets");
+        return objetRepository.findAll(pageable)
+            .map(objetMapper::toDto);
+    }
 
 
     /**
-     * Get the "id" objet.
+     * Get one objet by id.
      *
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Objet> findOne(String id);
+    public Optional<ObjetDTO> findOne(String id) {
+        log.debug("Request to get Objet : {}", id);
+        return objetRepository.findById(id)
+            .map(objetMapper::toDto);
+    }
 
     /**
-     * Delete the "id" objet.
+     * Delete the objet by id.
      *
      * @param id the id of the entity
      */
-    void delete(String id);
+    public void delete(String id) {
+        log.debug("Request to delete Objet : {}", id);
+        objetRepository.deleteById(id);
+        //objetSearchRepository.deleteById(id);
+    }
 
     /**
      * Search for the objet corresponding to the query.
      *
      * @param query the query of the search
-     * 
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<Objet> search(String query, Pageable pageable);
+    public Page<ObjetDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Objets for query {}", query);
+        //return objetSearchRepository.search(queryStringQuery(query), pageable)
+            //.map(objetMapper::toDto);
+
+        return null;
+    }
 }

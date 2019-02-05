@@ -6,7 +6,7 @@ export interface ISuivi {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
-    user?: IUser;
+    users?: IUser[];
 }
 
 export class Suivi implements ISuivi {
@@ -16,6 +16,6 @@ export class Suivi implements ISuivi {
         public createdAt?: string,
         public updatedAt?: string,
         public deletedAt?: string,
-        public user?: IUser
+        public users?: IUser[]
     ) {}
 }

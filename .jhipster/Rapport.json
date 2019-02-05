@@ -44,10 +44,10 @@
     ],
     "changelogDate": "20190108061417",
     "entityTableName": "rapport",
-    "dto": "no",
     "pagination": "pagination",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "service": "serviceClass",
+    "dto": "mapstruct",
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

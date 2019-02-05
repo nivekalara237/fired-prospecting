@@ -1,11 +1,11 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Copie;
 import com.niveka.service.CopieService;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
+import com.niveka.service.dto.CopieDTO;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,18 +45,18 @@ public class CopieResource {
     /**
      * POST  /copies : Create a new copie.
      *
-     * @param copie the copie to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new copie, or with status 400 (Bad Request) if the copie has already an ID
+     * @param copieDTO the copieDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new copieDTO, or with status 400 (Bad Request) if the copie has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/copies")
     @Timed
-    public ResponseEntity<Copie> createCopie(@RequestBody Copie copie) throws URISyntaxException {
-        log.debug("REST request to save Copie : {}", copie);
-        if (copie.getId() != null) {
+    public ResponseEntity<CopieDTO> createCopie(@RequestBody CopieDTO copieDTO) throws URISyntaxException {
+        log.debug("REST request to save Copie : {}", copieDTO);
+        if (copieDTO.getId() != null) {
             throw new BadRequestAlertException("A new copie cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Copie result = copieService.save(copie);
+        CopieDTO result = copieService.save(copieDTO);
         return ResponseEntity.created(new URI("/api/copies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +65,22 @@ public class CopieResource {
     /**
      * PUT  /copies : Updates an existing copie.
      *
-     * @param copie the copie to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated copie,
-     * or with status 400 (Bad Request) if the copie is not valid,
-     * or with status 500 (Internal Server Error) if the copie couldn't be updated
+     * @param copieDTO the copieDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated copieDTO,
+     * or with status 400 (Bad Request) if the copieDTO is not valid,
+     * or with status 500 (Internal Server Error) if the copieDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/copies")
     @Timed
-    public ResponseEntity<Copie> updateCopie(@RequestBody Copie copie) throws URISyntaxException {
-        log.debug("REST request to update Copie : {}", copie);
-        if (copie.getId() == null) {
+    public ResponseEntity<CopieDTO> updateCopie(@RequestBody CopieDTO copieDTO) throws URISyntaxException {
+        log.debug("REST request to update Copie : {}", copieDTO);
+        if (copieDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Copie result = copieService.save(copie);
+        CopieDTO result = copieService.save(copieDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, copie.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, copieDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +92,9 @@ public class CopieResource {
      */
     @GetMapping("/copies")
     @Timed
-    public ResponseEntity<List<Copie>> getAllCopies(Pageable pageable) {
+    public ResponseEntity<List<CopieDTO>> getAllCopies(Pageable pageable) {
         log.debug("REST request to get a page of Copies");
-        Page<Copie> page = copieService.findAll(pageable);
+        Page<CopieDTO> page = copieService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/copies");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -102,21 +102,21 @@ public class CopieResource {
     /**
      * GET  /copies/:id : get the "id" copie.
      *
-     * @param id the id of the copie to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the copie, or with status 404 (Not Found)
+     * @param id the id of the copieDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the copieDTO, or with status 404 (Not Found)
      */
     @GetMapping("/copies/{id}")
     @Timed
-    public ResponseEntity<Copie> getCopie(@PathVariable String id) {
+    public ResponseEntity<CopieDTO> getCopie(@PathVariable String id) {
         log.debug("REST request to get Copie : {}", id);
-        Optional<Copie> copie = copieService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(copie);
+        Optional<CopieDTO> copieDTO = copieService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(copieDTO);
     }
 
     /**
      * DELETE  /copies/:id : delete the "id" copie.
      *
-     * @param id the id of the copie to delete
+     * @param id the id of the copieDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/copies/{id}")
@@ -137,9 +137,9 @@ public class CopieResource {
      */
     @GetMapping("/_search/copies")
     @Timed
-    public ResponseEntity<List<Copie>> searchCopies(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<CopieDTO>> searchCopies(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Copies for query {}", query);
-        Page<Copie> page = copieService.search(query, pageable);
+        Page<CopieDTO> page = copieService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/copies");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

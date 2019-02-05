@@ -4,13 +4,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configure a Mock version of ChannelSearchRepository to test the
+ * Configure a Mock version of ZChannelSearchRepository to test the
  * application without starting Elasticsearch.
  */
 @Configuration
 public class ChannelSearchRepositoryMockConfiguration {
 
     @MockBean
-    private ChannelSearchRepository mockChannelSearchRepository;
+    private ZChannelSearchRepository mockZChannelSearchRepository;
 
 }

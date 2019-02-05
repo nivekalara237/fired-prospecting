@@ -126,13 +126,13 @@ public class Entreprise implements Serializable {
 
     public Entreprise addUser(User user) {
         this.users.add(user);
-        //user.getEntreprises().add(this);
+        user.getEntreprises().add(this);
         return this;
     }
 
     public Entreprise removeUser(User user) {
         this.users.remove(user);
-        //user.getEntreprises().remove(this);
+        user.getEntreprises().remove(this);
         return this;
     }
 

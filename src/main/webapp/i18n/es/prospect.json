@@ -20,7 +20,7 @@
             "email": "Email",
             "telephone": "Telephone",
             "type": "Type",
-            "dateRdv": "Date Rdv",
+            "dateRdv": "Date RDV",
             "compteRendu": "Compte Rendu",
             "localisation": "Localisation",
             "position": "Position",
@@ -28,7 +28,15 @@
             "updatedAt": "Updated At",
             "deletedAt": "Deleted At",
             "suivi": "Suivi",
-            "user": "User"
+            "user": "User",
+            "le": "At ",
+            "time": {
+                "hour": "Hour",
+                "minute": "Minute",
+                "second": "Second",
+                "date": "Date"
+            },
+            "emailOrPhoneRequired": "Email or Phone field is required"
         }
     }
 }

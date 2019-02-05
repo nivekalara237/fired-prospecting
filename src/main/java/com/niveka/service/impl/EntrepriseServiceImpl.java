@@ -1,35 +1,31 @@
 package com.niveka.service.impl;
 
-import com.niveka.service.EntrepriseService;
 import com.niveka.domain.Entreprise;
 import com.niveka.repository.EntrepriseRepository;
-import com.niveka.repository.search.EntrepriseSearchRepository;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing Entreprise.
  */
 @Service
-public class EntrepriseServiceImpl implements EntrepriseService {
+public class EntrepriseServiceImpl{
 
     private final Logger log = LoggerFactory.getLogger(EntrepriseServiceImpl.class);
 
     private final EntrepriseRepository entrepriseRepository;
 
-    private final EntrepriseSearchRepository entrepriseSearchRepository;
+    //private final EntrepriseSearchRepository entrepriseSearchRepository;
 
-    public EntrepriseServiceImpl(EntrepriseRepository entrepriseRepository, EntrepriseSearchRepository entrepriseSearchRepository) {
+    public EntrepriseServiceImpl(EntrepriseRepository entrepriseRepository/*, EntrepriseSearchRepository entrepriseSearchRepository*/) {
         this.entrepriseRepository = entrepriseRepository;
-        this.entrepriseSearchRepository = entrepriseSearchRepository;
+        //this.entrepriseSearchRepository = entrepriseSearchRepository;
     }
 
     /**
@@ -38,12 +34,12 @@ public class EntrepriseServiceImpl implements EntrepriseService {
      * @param entreprise the entity to save
      * @return the persisted entity
      */
-    @Override
+    //@Override
     public Entreprise save(Entreprise entreprise) {
         log.debug("Request to save Entreprise : {}", entreprise);
-
+        entreprise.setUpdatedAt(Utils.currentJodaDateStr());
         Entreprise result = entrepriseRepository.save(entreprise);
-        entrepriseSearchRepository.save(result);
+        //entrepriseSearchRepository.save(result);
         return result;
     }
 
@@ -53,7 +49,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Entreprise> findAll(Pageable pageable) {
         log.debug("Request to get all Entreprises");
         return entrepriseRepository.findAll(pageable);
@@ -75,7 +71,7 @@ public class EntrepriseServiceImpl implements EntrepriseService {
      * @param id the id of the entity
      * @return the entity
      */
-    @Override
+    //@Override
     public Optional<Entreprise> findOne(String id) {
         log.debug("Request to get Entreprise : {}", id);
         return entrepriseRepository.findOneWithEagerRelationships(id);
@@ -86,11 +82,11 @@ public class EntrepriseServiceImpl implements EntrepriseService {
      *
      * @param id the id of the entity
      */
-    @Override
+    //@Override
     public void delete(String id) {
         log.debug("Request to delete Entreprise : {}", id);
         entrepriseRepository.deleteById(id);
-        entrepriseSearchRepository.deleteById(id);
+        //entrepriseSearchRepository.deleteById(id);
     }
 
     /**
@@ -100,8 +96,10 @@ public class EntrepriseServiceImpl implements EntrepriseService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Entreprise> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Entreprises for query {}", query);
-        return entrepriseSearchRepository.search(queryStringQuery(query), pageable);    }
+        return null;
+        //return entrepriseSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

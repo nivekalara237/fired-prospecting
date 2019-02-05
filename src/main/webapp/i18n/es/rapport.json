@@ -16,6 +16,9 @@
             "detail": {
                 "title": "Rapport"
             },
+            "type_1": "Daily",
+            "type_2": "Plane",
+            "type_3": "Other",
             "objet": "Objet",
             "copies": "Copies",
             "contenu": "Contenu",

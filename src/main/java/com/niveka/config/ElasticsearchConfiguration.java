@@ -6,22 +6,25 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.vanroy.springdata.jest.JestElasticsearchTemplate;
 import com.github.vanroy.springdata.jest.mapper.DefaultJestResultsMapper;
 import io.searchbox.client.JestClient;
+import org.elasticsearch.common.inject.Inject;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.elasticsearch.core.DefaultEntityMapper;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
-import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
+import org.springframework.data.elasticsearch.core.convert.MappingElasticsearchConverter;
 import org.springframework.data.elasticsearch.core.mapping.ElasticsearchPersistentProperty;
+import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
+import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentEntity;
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentProperty;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.model.Property;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
-import org.springframework.data.elasticsearch.core.convert.MappingElasticsearchConverter;
-import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchPersistentEntity;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 
@@ -45,19 +48,31 @@ public class ElasticsearchConfiguration {
     public ElasticsearchOperations elasticsearchTemplate(final JestClient jestClient,
                                                          final ElasticsearchConverter elasticsearchConverter,
                                                          final SimpleElasticsearchMappingContext simpleElasticsearchMappingContext,
-                                                         EntityMapper mapper) {
+                                                         //EntityMapper mapper) {
+                                                         Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
         return new JestElasticsearchTemplate(
             jestClient,
             new MappingElasticsearchConverter(new CustomElasticsearchMappingContext()),
-            new DefaultJestResultsMapper(simpleElasticsearchMappingContext, mapper));
+            //new DefaultJestResultsMapper(simpleElasticsearchMappingContext, mapper));
+            new DefaultJestResultsMapper(simpleElasticsearchMappingContext, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build())));
     }
 
-    public class CustomEntityMapper implements EntityMapper {
+    public static class CustomEntityMapper extends DefaultEntityMapper {
 
         private ObjectMapper objectMapper;
-
+        @Inject
+        private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
         public CustomEntityMapper(ObjectMapper objectMapper) {
             this.objectMapper = objectMapper;
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
+            objectMapper.configure(SerializationFeature.INDENT_OUTPUT, false);
+            objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
+        }
+
+        public CustomEntityMapper () {
+            objectMapper = jackson2ObjectMapperBuilder.createXmlMapper(false).build();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
             objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);

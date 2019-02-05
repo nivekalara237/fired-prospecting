@@ -8,7 +8,7 @@ import { ChannelDetailComponent } from 'app/entities/channel/channel-detail.comp
 import { Channel } from 'app/shared/model/channel.model';
 
 describe('Component Tests', () => {
-    describe('Channel Management Detail Component', () => {
+    describe('ZChannel Management Detail Component', () => {
         let comp: ChannelDetailComponent;
         let fixture: ComponentFixture<ChannelDetailComponent>;
         const route = ({ data: of({ channel: new Channel('123') }) } as any) as ActivatedRoute;

@@ -1,35 +1,31 @@
 package com.niveka.service.impl;
 
-import com.niveka.service.MessageService;
 import com.niveka.domain.Message;
 import com.niveka.repository.MessageRepository;
-import com.niveka.repository.search.MessageSearchRepository;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing Message.
  */
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl{
 
     private final Logger log = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     private final MessageRepository messageRepository;
 
-    private final MessageSearchRepository messageSearchRepository;
+    //private final MessageSearchRepository messageSearchRepository;
 
-    public MessageServiceImpl(MessageRepository messageRepository, MessageSearchRepository messageSearchRepository) {
+    public MessageServiceImpl(MessageRepository messageRepository/*, MessageSearchRepository messageSearchRepository*/) {
         this.messageRepository = messageRepository;
-        this.messageSearchRepository = messageSearchRepository;
+        //this.messageSearchRepository = messageSearchRepository;
     }
 
     /**
@@ -38,11 +34,12 @@ public class MessageServiceImpl implements MessageService {
      * @param message the entity to save
      * @return the persisted entity
      */
-    @Override
+    //@Override
     public Message save(Message message) {
         log.debug("Request to save Message : {}", message);
+        message.setUpdatedAt(Utils.currentJodaDateStr());
         Message result = messageRepository.save(message);
-        messageSearchRepository.save(result);
+        //messageSearchRepository.save(result);
         return result;
     }
 
@@ -52,7 +49,7 @@ public class MessageServiceImpl implements MessageService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Message> findAll(Pageable pageable) {
         log.debug("Request to get all Messages");
         return messageRepository.findAll(pageable);
@@ -65,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
      * @param id the id of the entity
      * @return the entity
      */
-    @Override
+    //@Override
     public Optional<Message> findOne(String id) {
         log.debug("Request to get Message : {}", id);
         return messageRepository.findById(id);
@@ -76,11 +73,11 @@ public class MessageServiceImpl implements MessageService {
      *
      * @param id the id of the entity
      */
-    @Override
+    //@Override
     public void delete(String id) {
         log.debug("Request to delete Message : {}", id);
         messageRepository.deleteById(id);
-        messageSearchRepository.deleteById(id);
+        //messageSearchRepository.deleteById(id);
     }
 
     /**
@@ -90,8 +87,10 @@ public class MessageServiceImpl implements MessageService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Message> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Messages for query {}", query);
-        return messageSearchRepository.search(queryStringQuery(query), pageable);    }
+        return null;
+        //return messageSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

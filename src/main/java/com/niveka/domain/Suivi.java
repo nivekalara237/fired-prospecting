@@ -1,13 +1,14 @@
 package com.niveka.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Suivi.
@@ -35,9 +36,7 @@ public class Suivi implements Serializable {
 
     @DBRef
     @Field("user")
-    @JsonIgnoreProperties("")
-    private User user;
-
+    private Set<User> users = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -99,17 +98,29 @@ public class Suivi implements Serializable {
         this.deletedAt = deletedAt;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public Suivi user(User user) {
-        this.user = user;
+    public Suivi users(Set<User> users) {
+        this.users = users;
         return this;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public Suivi addUser(User user) {
+        this.users.add(user);
+        user.getSuivis().add(this);
+        return this;
+    }
+
+    public Suivi removeUser(User user) {
+        this.users.remove(user);
+        user.getSuivis().remove(this);
+        return this;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,35 +1,31 @@
 package com.niveka.service.impl;
 
-import com.niveka.service.SuiviService;
 import com.niveka.domain.Suivi;
 import com.niveka.repository.SuiviRepository;
-import com.niveka.repository.search.SuiviSearchRepository;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing Suivi.
  */
 @Service
-public class SuiviServiceImpl implements SuiviService {
+public class SuiviServiceImpl{
 
     private final Logger log = LoggerFactory.getLogger(SuiviServiceImpl.class);
 
     private final SuiviRepository suiviRepository;
 
-    private final SuiviSearchRepository suiviSearchRepository;
+    //private final SuiviSearchRepository suiviSearchRepository;
 
-    public SuiviServiceImpl(SuiviRepository suiviRepository, SuiviSearchRepository suiviSearchRepository) {
+    public SuiviServiceImpl(SuiviRepository suiviRepository/*, SuiviSearchRepository suiviSearchRepository*/) {
         this.suiviRepository = suiviRepository;
-        this.suiviSearchRepository = suiviSearchRepository;
+        //this.suiviSearchRepository = suiviSearchRepository;
     }
 
     /**
@@ -38,11 +34,12 @@ public class SuiviServiceImpl implements SuiviService {
      * @param suivi the entity to save
      * @return the persisted entity
      */
-    @Override
+    //@Override
     public Suivi save(Suivi suivi) {
         log.debug("Request to save Suivi : {}", suivi);
+        suivi.setUpdatedAt(Utils.currentJodaDateStr());
         Suivi result = suiviRepository.save(suivi);
-        suiviSearchRepository.save(result);
+        //suiviSearchRepository.save(result);
         return result;
     }
 
@@ -52,7 +49,7 @@ public class SuiviServiceImpl implements SuiviService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Suivi> findAll(Pageable pageable) {
         log.debug("Request to get all Suivis");
         return suiviRepository.findAll(pageable);
@@ -65,7 +62,7 @@ public class SuiviServiceImpl implements SuiviService {
      * @param id the id of the entity
      * @return the entity
      */
-    @Override
+    //@Override
     public Optional<Suivi> findOne(String id) {
         log.debug("Request to get Suivi : {}", id);
         return suiviRepository.findById(id);
@@ -76,11 +73,11 @@ public class SuiviServiceImpl implements SuiviService {
      *
      * @param id the id of the entity
      */
-    @Override
+    //@Override
     public void delete(String id) {
         log.debug("Request to delete Suivi : {}", id);
         suiviRepository.deleteById(id);
-        suiviSearchRepository.deleteById(id);
+        //suiviSearchRepository.deleteById(id);
     }
 
     /**
@@ -90,8 +87,10 @@ public class SuiviServiceImpl implements SuiviService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<Suivi> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Suivis for query {}", query);
-        return suiviSearchRepository.search(queryStringQuery(query), pageable);    }
+        return null;
+        //return suiviSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

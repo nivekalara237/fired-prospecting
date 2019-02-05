@@ -1,8 +1,8 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Rapport;
 import com.niveka.service.RapportService;
+import com.niveka.service.dto.RapportDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
@@ -18,12 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Rapport.
@@ -45,18 +41,18 @@ public class RapportResource {
     /**
      * POST  /rapports : Create a new rapport.
      *
-     * @param rapport the rapport to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new rapport, or with status 400 (Bad Request) if the rapport has already an ID
+     * @param rapportDTO the rapportDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new rapportDTO, or with status 400 (Bad Request) if the rapport has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/rapports")
     @Timed
-    public ResponseEntity<Rapport> createRapport(@RequestBody Rapport rapport) throws URISyntaxException {
-        log.debug("REST request to save Rapport : {}", rapport);
-        if (rapport.getId() != null) {
+    public ResponseEntity<RapportDTO> createRapport(@RequestBody RapportDTO rapportDTO) throws URISyntaxException {
+        log.debug("REST request to save Rapport : {}", rapportDTO);
+        if (rapportDTO.getId() != null) {
             throw new BadRequestAlertException("A new rapport cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Rapport result = rapportService.save(rapport);
+        RapportDTO result = rapportService.save(rapportDTO);
         return ResponseEntity.created(new URI("/api/rapports/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +61,22 @@ public class RapportResource {
     /**
      * PUT  /rapports : Updates an existing rapport.
      *
-     * @param rapport the rapport to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated rapport,
-     * or with status 400 (Bad Request) if the rapport is not valid,
-     * or with status 500 (Internal Server Error) if the rapport couldn't be updated
+     * @param rapportDTO the rapportDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated rapportDTO,
+     * or with status 400 (Bad Request) if the rapportDTO is not valid,
+     * or with status 500 (Internal Server Error) if the rapportDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/rapports")
     @Timed
-    public ResponseEntity<Rapport> updateRapport(@RequestBody Rapport rapport) throws URISyntaxException {
-        log.debug("REST request to update Rapport : {}", rapport);
-        if (rapport.getId() == null) {
+    public ResponseEntity<RapportDTO> updateRapport(@RequestBody RapportDTO rapportDTO) throws URISyntaxException {
+        log.debug("REST request to update Rapport : {}", rapportDTO);
+        if (rapportDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Rapport result = rapportService.save(rapport);
+        RapportDTO result = rapportService.save(rapportDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, rapport.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, rapportDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +88,9 @@ public class RapportResource {
      */
     @GetMapping("/rapports")
     @Timed
-    public ResponseEntity<List<Rapport>> getAllRapports(Pageable pageable) {
+    public ResponseEntity<List<RapportDTO>> getAllRapports(Pageable pageable) {
         log.debug("REST request to get a page of Rapports");
-        Page<Rapport> page = rapportService.findAll(pageable);
+        Page<RapportDTO> page = rapportService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rapports");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -102,21 +98,21 @@ public class RapportResource {
     /**
      * GET  /rapports/:id : get the "id" rapport.
      *
-     * @param id the id of the rapport to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the rapport, or with status 404 (Not Found)
+     * @param id the id of the rapportDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the rapportDTO, or with status 404 (Not Found)
      */
     @GetMapping("/rapports/{id}")
     @Timed
-    public ResponseEntity<Rapport> getRapport(@PathVariable String id) {
+    public ResponseEntity<RapportDTO> getRapport(@PathVariable String id) {
         log.debug("REST request to get Rapport : {}", id);
-        Optional<Rapport> rapport = rapportService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(rapport);
+        Optional<RapportDTO> rapportDTO = rapportService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(rapportDTO);
     }
 
     /**
      * DELETE  /rapports/:id : delete the "id" rapport.
      *
-     * @param id the id of the rapport to delete
+     * @param id the id of the rapportDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/rapports/{id}")
@@ -137,9 +133,9 @@ public class RapportResource {
      */
     @GetMapping("/_search/rapports")
     @Timed
-    public ResponseEntity<List<Rapport>> searchRapports(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<RapportDTO>> searchRapports(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Rapports for query {}", query);
-        Page<Rapport> page = rapportService.search(query, pageable);
+        Page<RapportDTO> page = rapportService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/rapports");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

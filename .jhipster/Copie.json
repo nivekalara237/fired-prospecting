@@ -20,10 +20,10 @@
     ],
     "changelogDate": "20190108061419",
     "entityTableName": "copie",
-    "dto": "no",
+    "service": "serviceClass",
+    "dto": "mapstruct",
     "pagination": "infinite-scroll",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

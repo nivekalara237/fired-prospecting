@@ -33,7 +33,7 @@
             <th jhiSortBy="nom"><span jhiTranslate="fireDApp.objet.nom">Nom</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="lien"><span jhiTranslate="fireDApp.objet.lien">Lien</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="encode"><span jhiTranslate="fireDApp.objet.encode">Encode</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="rapport.id"><span jhiTranslate="fireDApp.objet.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rapportId"><span jhiTranslate="fireDApp.objet.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -44,8 +44,8 @@
                 <td>{{objet.lien}}</td>
                 <td>{{objet.encode}}</td>
                 <td>
-                    <div *ngIf="objet.rapport">
-                        <a [routerLink]="['../rapport', objet.rapport?.id, 'view' ]" >{{objet.rapport?.id}}</a>
+                    <div *ngIf="objet.rapportId">
+                        <a [routerLink]="['../rapport', objet.rapportId , 'view' ]" >{{objet.rapportId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

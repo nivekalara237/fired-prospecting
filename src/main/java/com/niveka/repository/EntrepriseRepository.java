@@ -24,4 +24,5 @@ public interface EntrepriseRepository extends MongoRepository<Entreprise, String
 
     @Query("{'id': ?0}")
     Optional<Entreprise> findOneWithEagerRelationships(String id);
+
 }

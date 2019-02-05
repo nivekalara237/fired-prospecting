@@ -34,10 +34,10 @@
     ],
     "changelogDate": "20190108061422",
     "entityTableName": "entreprise",
-    "dto": "no",
+    "service": "serviceClass",
+    "dto": "mapstruct",
     "pagination": "infinite-scroll",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"

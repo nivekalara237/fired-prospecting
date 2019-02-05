@@ -12,6 +12,7 @@ import java.util.Objects;
 /**
  * A CompteRenduSuivi.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Document(collection = "compte_rendu_suivi")
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "compterendusuivi")
 public class CompteRenduSuivi implements Serializable {
@@ -40,6 +41,12 @@ public class CompteRenduSuivi implements Serializable {
     @Field("suivi")
     @JsonIgnoreProperties("")
     private Suivi suivi;
+
+
+    @DBRef
+    @Field("prospect")
+    @JsonIgnoreProperties("")
+    private Prospect prospect;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -122,6 +129,18 @@ public class CompteRenduSuivi implements Serializable {
     public CompteRenduSuivi suivi(Suivi suivi) {
         this.suivi = suivi;
         return this;
+    }
+    public CompteRenduSuivi prospect(Prospect prospect) {
+        this.prospect = prospect;
+        return this;
+    }
+
+    public Prospect getProspect() {
+        return prospect;
+    }
+
+    public void setProspect(Prospect prospect) {
+        this.prospect = prospect;
     }
 
     public void setSuivi(Suivi suivi) {

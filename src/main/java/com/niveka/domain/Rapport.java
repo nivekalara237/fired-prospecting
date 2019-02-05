@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Rapport.
@@ -20,12 +22,6 @@ public class Rapport implements Serializable {
 
     @Id
     private String id;
-
-    @Field("objet")
-    private String objet;
-
-    @Field("copies")
-    private String copies;
 
     @Field("contenu")
     private String contenu;
@@ -50,6 +46,14 @@ public class Rapport implements Serializable {
     @JsonIgnoreProperties("")
     private User user;
 
+    @DBRef
+    @Field("objets")
+    private Set<Objet> objets = new HashSet<>();
+
+    @DBRef
+    @Field("copies")
+    private Set<Copie> copies = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -59,29 +63,18 @@ public class Rapport implements Serializable {
         this.id = id;
     }
 
-    public String getObjet() {
-        return objet;
-    }
-
-    public Rapport objet(String objet) {
-        this.objet = objet;
-        return this;
-    }
-
-    public void setObjet(String objet) {
-        this.objet = objet;
-    }
-
-    public String getCopies() {
+    public Set<Copie> getCopies() {
         return copies;
     }
 
-    public Rapport copies(String copies) {
+    public Rapport copies(Set<Copie> copies) {
         this.copies = copies;
         return this;
     }
 
-    public void setCopies(String copies) {
+
+
+    public void setCopies(Set<Copie> copies) {
         this.copies = copies;
     }
 
@@ -104,6 +97,19 @@ public class Rapport implements Serializable {
 
     public Rapport type(Integer type) {
         this.type = type;
+        return this;
+    }
+
+    public Set<Objet> getObjets() {
+        return objets;
+    }
+
+    public void setObjets(Set<Objet> objets) {
+        this.objets = objets;
+    }
+
+    public Rapport objets(Set<Objet> objets){
+        this.objets = objets;
         return this;
     }
 
@@ -201,13 +207,14 @@ public class Rapport implements Serializable {
     public String toString() {
         return "Rapport{" +
             "id=" + getId() +
-            ", objet='" + getObjet() + "'" +
+            ", objets='" + getObjets() + "'" +
             ", copies='" + getCopies() + "'" +
             ", contenu='" + getContenu() + "'" +
             ", type=" + getType() +
             ", position='" + getPosition() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
+            ", objets='" + getObjets() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
             "}";
     }

@@ -1,5 +1,3 @@
-import { ISuivi } from 'app/shared/model//suivi.model';
-
 export interface ICompteRenduSuivi {
     id?: string;
     contenu?: string;
@@ -7,7 +5,8 @@ export interface ICompteRenduSuivi {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
-    suivi?: ISuivi;
+    prospectId?: string;
+    suiviId?: string;
 }
 
 export class CompteRenduSuivi implements ICompteRenduSuivi {
@@ -18,6 +17,7 @@ export class CompteRenduSuivi implements ICompteRenduSuivi {
         public createdAt?: string,
         public updatedAt?: string,
         public deletedAt?: string,
-        public suivi?: ISuivi
+        public prospectId?: string,
+        public suiviId?: string
     ) {}
 }

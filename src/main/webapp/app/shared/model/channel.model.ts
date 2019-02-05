@@ -1,4 +1,3 @@
-import { IEntreprise } from 'app/shared/model//entreprise.model';
 import { IUser } from 'app/core/user/user.model';
 
 export interface IChannel {
@@ -9,7 +8,6 @@ export interface IChannel {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
-    entreprise?: IEntreprise;
     users?: IUser[];
 }
 
@@ -22,7 +20,6 @@ export class Channel implements IChannel {
         public createdAt?: string,
         public updatedAt?: string,
         public deletedAt?: string,
-        public entreprise?: IEntreprise,
         public users?: IUser[]
     ) {}
 }

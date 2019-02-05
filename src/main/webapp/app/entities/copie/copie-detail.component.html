@@ -15,8 +15,8 @@
                 </dd>
                 <dt><span jhiTranslate="fireDApp.copie.rapport">Rapport</span></dt>
                 <dd>
-                    <div *ngIf="copie.rapport">
-                        <a [routerLink]="['/rapport', copie.rapport?.id, 'view']">{{copie.rapport?.id}}</a>
+                    <div *ngIf="copie.rapportId">
+                        <a [routerLink]="['/rapport', copie.rapportId, 'view']">{{copie.rapportId}}</a>
                     </div>
                 </dd>
             </dl>

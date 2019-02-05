@@ -8,7 +8,7 @@ import { ChannelService } from 'app/entities/channel/channel.service';
 import { IChannel, Channel } from 'app/shared/model/channel.model';
 
 describe('Service Tests', () => {
-    describe('Channel Service', () => {
+    describe('ZChannel Service', () => {
         let injector: TestBed;
         let service: ChannelService;
         let httpMock: HttpTestingController;
@@ -36,7 +36,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should create a Channel', async () => {
+            it('should create a ZChannel', async () => {
                 const returnedFromService = Object.assign(
                     {
                         id: 'ID'
@@ -52,7 +52,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should update a Channel', async () => {
+            it('should update a ZChannel', async () => {
                 const returnedFromService = Object.assign(
                     {
                         designation: 'BBBBBB',
@@ -74,7 +74,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should return a list of Channel', async () => {
+            it('should return a list of ZChannel', async () => {
                 const returnedFromService = Object.assign(
                     {
                         designation: 'BBBBBB',
@@ -99,7 +99,7 @@ describe('Service Tests', () => {
                 httpMock.verify();
             });
 
-            it('should delete a Channel', async () => {
+            it('should delete a ZChannel', async () => {
                 const rxPromise = service.delete('123').subscribe(resp => expect(resp.ok));
 
                 const req = httpMock.expectOne({ method: 'DELETE' });

@@ -12,6 +12,7 @@ type EntityArrayResponseType = HttpResponse<ICompteRenduSuivi[]>;
 @Injectable({ providedIn: 'root' })
 export class CompteRenduSuiviService {
     public resourceUrl = SERVER_API_URL + 'api/compte-rendu-suivis';
+    public resourceUrlProspect = SERVER_API_URL + 'api/prospects';
     public resourceSearchUrl = SERVER_API_URL + 'api/_search/compte-rendu-suivis';
 
     constructor(protected http: HttpClient) {}
@@ -19,13 +20,21 @@ export class CompteRenduSuiviService {
     create(compteRenduSuivi: ICompteRenduSuivi): Observable<EntityResponseType> {
         return this.http.post<ICompteRenduSuivi>(this.resourceUrl, compteRenduSuivi, { observe: 'response' });
     }
+    createInProspectPage(compteRenduSuivi: ICompteRenduSuivi): Observable<EntityResponseType> {
+        return this.http.post<ICompteRenduSuivi>(this.resourceUrl, compteRenduSuivi, { observe: 'response' });
+    }
 
     update(compteRenduSuivi: ICompteRenduSuivi): Observable<EntityResponseType> {
         return this.http.put<ICompteRenduSuivi>(this.resourceUrl, compteRenduSuivi, { observe: 'response' });
     }
 
-    find(id: string): Observable<EntityResponseType> {
-        return this.http.get<ICompteRenduSuivi>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    find(prospect: string): Observable<EntityResponseType> {
+        return this.http.get<ICompteRenduSuivi>(`${this.resourceUrl}/${prospect}`, { observe: 'response' });
+    }
+
+    findByProspect(id: string): Observable<EntityArrayResponseType> {
+        // const options = createRequestOption(id);
+        return this.http.get<ICompteRenduSuivi[]>(`${this.resourceUrl}/by-prospect/${id}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {

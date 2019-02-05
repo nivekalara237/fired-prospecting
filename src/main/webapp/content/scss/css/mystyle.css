@@ -1,0 +1,86 @@
+.label {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    -webkit-border-radius: 0.25rem;
+    border-radius: 0.25rem;
+}
+.label:empty {
+    display: none;
+}
+.label-pill {
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    -webkit-border-radius: 10rem;
+    border-radius: 10rem;
+}
+.label-default {
+    background-color: #818a91;
+}
+.label-default[href]:focus,
+.label-default[href]:hover {
+    background-color: #687077;
+}
+.label-primary {
+    background-color: #0275d8;
+}
+.label-primary[href]:focus,
+.label-primary[href]:hover {
+    background-color: #025aa5;
+}
+.label-success {
+    background-color: #5cb85c;
+}
+.label-success[href]:focus,
+.label-success[href]:hover {
+    background-color: #449d44;
+}
+.label-info {
+    background-color: #5bc0de;
+}
+.label-info[href]:focus,
+.label-info[href]:hover {
+    background-color: #31b0d5;
+}
+.label-warning {
+    background-color: #f0ad4e;
+}
+.label-warning[href]:focus,
+.label-warning[href]:hover {
+    background-color: #ec971f;
+}
+.label-danger {
+    background-color: #d9534f;
+}
+.label-danger[href]:focus,
+.label-danger[href]:hover {
+    background-color: #c9302c;
+}
+
+/* SCROLL_BAR_TRACK */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #881d19;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #240b55;
+}

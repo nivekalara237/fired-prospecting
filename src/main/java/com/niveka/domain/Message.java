@@ -48,7 +48,7 @@ public class Message implements Serializable {
     @DBRef
     @Field("channel")
     @JsonIgnoreProperties("")
-    private Channel channel;
+    private ZChannel channel;
 
     @DBRef
     @Field("user")
@@ -168,16 +168,16 @@ public class Message implements Serializable {
         this.deletedAt = deletedAt;
     }
 
-    public Channel getChannel() {
+    public ZChannel getChannel() {
         return channel;
     }
 
-    public Message channel(Channel channel) {
+    public Message channel(ZChannel channel) {
         this.channel = channel;
         return this;
     }
 
-    public void setChannel(Channel channel) {
+    public void setChannel(ZChannel channel) {
         this.channel = channel;
     }
 

@@ -6,6 +6,8 @@ import com.niveka.domain.Suivi;
 import com.niveka.repository.SuiviRepository;
 import com.niveka.repository.search.SuiviSearchRepository;
 import com.niveka.service.SuiviService;
+import com.niveka.service.dto.SuiviDTO;
+import com.niveka.service.mapper.SuiviMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -59,6 +61,9 @@ public class SuiviResourceIntTest {
 
     @Autowired
     private SuiviRepository suiviRepository;
+
+    @Autowired
+    private SuiviMapper suiviMapper;
 
     @Autowired
     private SuiviService suiviService;
@@ -125,9 +130,10 @@ public class SuiviResourceIntTest {
         int databaseSizeBeforeCreate = suiviRepository.findAll().size();
 
         // Create the Suivi
+        SuiviDTO suiviDTO = suiviMapper.toDto(suivi);
         restSuiviMockMvc.perform(post("/api/suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(suivi)))
+            .content(TestUtil.convertObjectToJsonBytes(suiviDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Suivi in the database
@@ -149,11 +155,12 @@ public class SuiviResourceIntTest {
 
         // Create the Suivi with an existing ID
         suivi.setId("existing_id");
+        SuiviDTO suiviDTO = suiviMapper.toDto(suivi);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restSuiviMockMvc.perform(post("/api/suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(suivi)))
+            .content(TestUtil.convertObjectToJsonBytes(suiviDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Suivi in the database
@@ -206,9 +213,7 @@ public class SuiviResourceIntTest {
     @Test
     public void updateSuivi() throws Exception {
         // Initialize the database
-        suiviService.save(suivi);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockSuiviSearchRepository);
+        suiviRepository.save(suivi);
 
         int databaseSizeBeforeUpdate = suiviRepository.findAll().size();
 
@@ -219,10 +224,11 @@ public class SuiviResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        SuiviDTO suiviDTO = suiviMapper.toDto(updatedSuivi);
 
         restSuiviMockMvc.perform(put("/api/suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedSuivi)))
+            .content(TestUtil.convertObjectToJsonBytes(suiviDTO)))
             .andExpect(status().isOk());
 
         // Validate the Suivi in the database
@@ -243,11 +249,12 @@ public class SuiviResourceIntTest {
         int databaseSizeBeforeUpdate = suiviRepository.findAll().size();
 
         // Create the Suivi
+        SuiviDTO suiviDTO = suiviMapper.toDto(suivi);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restSuiviMockMvc.perform(put("/api/suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(suivi)))
+            .content(TestUtil.convertObjectToJsonBytes(suiviDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Suivi in the database
@@ -261,7 +268,7 @@ public class SuiviResourceIntTest {
     @Test
     public void deleteSuivi() throws Exception {
         // Initialize the database
-        suiviService.save(suivi);
+        suiviRepository.save(suivi);
 
         int databaseSizeBeforeDelete = suiviRepository.findAll().size();
 
@@ -281,7 +288,7 @@ public class SuiviResourceIntTest {
     @Test
     public void searchSuivi() throws Exception {
         // Initialize the database
-        suiviService.save(suivi);
+        suiviRepository.save(suivi);
         when(mockSuiviSearchRepository.search(queryStringQuery("id:" + suivi.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(suivi), PageRequest.of(0, 1), 1));
         // Search the suivi
@@ -307,5 +314,20 @@ public class SuiviResourceIntTest {
         assertThat(suivi1).isNotEqualTo(suivi2);
         suivi1.setId(null);
         assertThat(suivi1).isNotEqualTo(suivi2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(SuiviDTO.class);
+        SuiviDTO suiviDTO1 = new SuiviDTO();
+        suiviDTO1.setId("id1");
+        SuiviDTO suiviDTO2 = new SuiviDTO();
+        assertThat(suiviDTO1).isNotEqualTo(suiviDTO2);
+        suiviDTO2.setId(suiviDTO1.getId());
+        assertThat(suiviDTO1).isEqualTo(suiviDTO2);
+        suiviDTO2.setId("id2");
+        assertThat(suiviDTO1).isNotEqualTo(suiviDTO2);
+        suiviDTO1.setId(null);
+        assertThat(suiviDTO1).isNotEqualTo(suiviDTO2);
     }
 }

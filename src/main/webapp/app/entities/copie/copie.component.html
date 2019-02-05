@@ -32,7 +32,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="email"><span jhiTranslate="fireDApp.copie.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.copie.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="rapport.id"><span jhiTranslate="fireDApp.copie.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rapportId"><span jhiTranslate="fireDApp.copie.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -42,8 +42,8 @@
                 <td>{{copie.email}}</td>
                 <td>{{copie.createdAt}}</td>
                 <td>
-                    <div *ngIf="copie.rapport">
-                        <a [routerLink]="['../rapport', copie.rapport?.id, 'view' ]" >{{copie.rapport?.id}}</a>
+                    <div *ngIf="copie.rapportId">
+                        <a [routerLink]="['../rapport', copie.rapportId , 'view' ]" >{{copie.rapportId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

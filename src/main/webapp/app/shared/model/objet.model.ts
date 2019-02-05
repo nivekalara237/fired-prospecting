@@ -1,13 +1,11 @@
-import { IRapport } from 'app/shared/model//rapport.model';
-
 export interface IObjet {
     id?: string;
     nom?: string;
     lien?: string;
     encode?: string;
-    rapport?: IRapport;
+    rapportId?: string;
 }
 
 export class Objet implements IObjet {
-    constructor(public id?: string, public nom?: string, public lien?: string, public encode?: string, public rapport?: IRapport) {}
+    constructor(public id?: string, public nom?: string, public lien?: string, public encode?: string, public rapportId?: string) {}
 }

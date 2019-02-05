@@ -1,8 +1,8 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Message;
 import com.niveka.service.MessageService;
+import com.niveka.service.dto.MessageDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
@@ -18,12 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Message.
@@ -45,18 +41,18 @@ public class MessageResource {
     /**
      * POST  /messages : Create a new message.
      *
-     * @param message the message to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new message, or with status 400 (Bad Request) if the message has already an ID
+     * @param messageDTO the messageDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new messageDTO, or with status 400 (Bad Request) if the message has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/messages")
     @Timed
-    public ResponseEntity<Message> createMessage(@RequestBody Message message) throws URISyntaxException {
-        log.debug("REST request to save Message : {}", message);
-        if (message.getId() != null) {
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) throws URISyntaxException {
+        log.debug("REST request to save Message : {}", messageDTO);
+        if (messageDTO.getId() != null) {
             throw new BadRequestAlertException("A new message cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Message result = messageService.save(message);
+        MessageDTO result = messageService.save(messageDTO);
         return ResponseEntity.created(new URI("/api/messages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +61,22 @@ public class MessageResource {
     /**
      * PUT  /messages : Updates an existing message.
      *
-     * @param message the message to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated message,
-     * or with status 400 (Bad Request) if the message is not valid,
-     * or with status 500 (Internal Server Error) if the message couldn't be updated
+     * @param messageDTO the messageDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated messageDTO,
+     * or with status 400 (Bad Request) if the messageDTO is not valid,
+     * or with status 500 (Internal Server Error) if the messageDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/messages")
     @Timed
-    public ResponseEntity<Message> updateMessage(@RequestBody Message message) throws URISyntaxException {
-        log.debug("REST request to update Message : {}", message);
-        if (message.getId() == null) {
+    public ResponseEntity<MessageDTO> updateMessage(@RequestBody MessageDTO messageDTO) throws URISyntaxException {
+        log.debug("REST request to update Message : {}", messageDTO);
+        if (messageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Message result = messageService.save(message);
+        MessageDTO result = messageService.save(messageDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, message.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, messageDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +88,9 @@ public class MessageResource {
      */
     @GetMapping("/messages")
     @Timed
-    public ResponseEntity<List<Message>> getAllMessages(Pageable pageable) {
+    public ResponseEntity<List<MessageDTO>> getAllMessages(Pageable pageable) {
         log.debug("REST request to get a page of Messages");
-        Page<Message> page = messageService.findAll(pageable);
+        Page<MessageDTO> page = messageService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/messages");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -102,21 +98,21 @@ public class MessageResource {
     /**
      * GET  /messages/:id : get the "id" message.
      *
-     * @param id the id of the message to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the message, or with status 404 (Not Found)
+     * @param id the id of the messageDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the messageDTO, or with status 404 (Not Found)
      */
     @GetMapping("/messages/{id}")
     @Timed
-    public ResponseEntity<Message> getMessage(@PathVariable String id) {
+    public ResponseEntity<MessageDTO> getMessage(@PathVariable String id) {
         log.debug("REST request to get Message : {}", id);
-        Optional<Message> message = messageService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(message);
+        Optional<MessageDTO> messageDTO = messageService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(messageDTO);
     }
 
     /**
      * DELETE  /messages/:id : delete the "id" message.
      *
-     * @param id the id of the message to delete
+     * @param id the id of the messageDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/messages/{id}")
@@ -137,9 +133,9 @@ public class MessageResource {
      */
     @GetMapping("/_search/messages")
     @Timed
-    public ResponseEntity<List<Message>> searchMessages(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<MessageDTO>> searchMessages(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Messages for query {}", query);
-        Page<Message> page = messageService.search(query, pageable);
+        Page<MessageDTO> page = messageService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/messages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

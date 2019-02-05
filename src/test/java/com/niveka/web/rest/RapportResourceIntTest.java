@@ -6,6 +6,8 @@ import com.niveka.domain.Rapport;
 import com.niveka.repository.RapportRepository;
 import com.niveka.repository.search.RapportSearchRepository;
 import com.niveka.service.RapportService;
+import com.niveka.service.dto.RapportDTO;
+import com.niveka.service.mapper.RapportMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -73,6 +75,9 @@ public class RapportResourceIntTest {
     private RapportRepository rapportRepository;
 
     @Autowired
+    private RapportMapper rapportMapper;
+
+    @Autowired
     private RapportService rapportService;
 
     /**
@@ -119,8 +124,8 @@ public class RapportResourceIntTest {
      */
     public static Rapport createEntity() {
         Rapport rapport = new Rapport()
-            .objet(DEFAULT_OBJET)
-            .copies(DEFAULT_COPIES)
+            //.objets(DEFAULT_OBJET)
+            //.copies(DEFAULT_COPIES)
             .contenu(DEFAULT_CONTENU)
             .type(DEFAULT_TYPE)
             .position(DEFAULT_POSITION)
@@ -141,16 +146,17 @@ public class RapportResourceIntTest {
         int databaseSizeBeforeCreate = rapportRepository.findAll().size();
 
         // Create the Rapport
+        RapportDTO rapportDTO = rapportMapper.toDto(rapport);
         restRapportMockMvc.perform(post("/api/rapports")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(rapport)))
+            .content(TestUtil.convertObjectToJsonBytes(rapportDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Rapport in the database
         List<Rapport> rapportList = rapportRepository.findAll();
         assertThat(rapportList).hasSize(databaseSizeBeforeCreate + 1);
         Rapport testRapport = rapportList.get(rapportList.size() - 1);
-        assertThat(testRapport.getObjet()).isEqualTo(DEFAULT_OBJET);
+        //assertThat(testRapport.getObjet()).isEqualTo(DEFAULT_OBJET);
         assertThat(testRapport.getCopies()).isEqualTo(DEFAULT_COPIES);
         assertThat(testRapport.getContenu()).isEqualTo(DEFAULT_CONTENU);
         assertThat(testRapport.getType()).isEqualTo(DEFAULT_TYPE);
@@ -169,11 +175,12 @@ public class RapportResourceIntTest {
 
         // Create the Rapport with an existing ID
         rapport.setId("existing_id");
+        RapportDTO rapportDTO = rapportMapper.toDto(rapport);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restRapportMockMvc.perform(post("/api/rapports")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(rapport)))
+            .content(TestUtil.convertObjectToJsonBytes(rapportDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Rapport in the database
@@ -203,7 +210,7 @@ public class RapportResourceIntTest {
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
             .andExpect(jsonPath("$.[*].deletedAt").value(hasItem(DEFAULT_DELETED_AT.toString())));
     }
-    
+
     @Test
     public void getRapport() throws Exception {
         // Initialize the database
@@ -234,34 +241,33 @@ public class RapportResourceIntTest {
     @Test
     public void updateRapport() throws Exception {
         // Initialize the database
-        rapportService.save(rapport);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockRapportSearchRepository);
+        rapportRepository.save(rapport);
 
         int databaseSizeBeforeUpdate = rapportRepository.findAll().size();
 
         // Update the rapport
         Rapport updatedRapport = rapportRepository.findById(rapport.getId()).get();
         updatedRapport
-            .objet(UPDATED_OBJET)
-            .copies(UPDATED_COPIES)
+            //.objet(UPDATED_OBJET)
+            //.copies(UPDATED_COPIES)
             .contenu(UPDATED_CONTENU)
             .type(UPDATED_TYPE)
             .position(UPDATED_POSITION)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        RapportDTO rapportDTO = rapportMapper.toDto(updatedRapport);
 
         restRapportMockMvc.perform(put("/api/rapports")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedRapport)))
+            .content(TestUtil.convertObjectToJsonBytes(rapportDTO)))
             .andExpect(status().isOk());
 
         // Validate the Rapport in the database
         List<Rapport> rapportList = rapportRepository.findAll();
         assertThat(rapportList).hasSize(databaseSizeBeforeUpdate);
         Rapport testRapport = rapportList.get(rapportList.size() - 1);
-        assertThat(testRapport.getObjet()).isEqualTo(UPDATED_OBJET);
+        //assertThat(testRapport.getObjet()).isEqualTo(UPDATED_OBJET);
         assertThat(testRapport.getCopies()).isEqualTo(UPDATED_COPIES);
         assertThat(testRapport.getContenu()).isEqualTo(UPDATED_CONTENU);
         assertThat(testRapport.getType()).isEqualTo(UPDATED_TYPE);
@@ -279,11 +285,12 @@ public class RapportResourceIntTest {
         int databaseSizeBeforeUpdate = rapportRepository.findAll().size();
 
         // Create the Rapport
+        RapportDTO rapportDTO = rapportMapper.toDto(rapport);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restRapportMockMvc.perform(put("/api/rapports")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(rapport)))
+            .content(TestUtil.convertObjectToJsonBytes(rapportDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Rapport in the database
@@ -297,7 +304,7 @@ public class RapportResourceIntTest {
     @Test
     public void deleteRapport() throws Exception {
         // Initialize the database
-        rapportService.save(rapport);
+        rapportRepository.save(rapport);
 
         int databaseSizeBeforeDelete = rapportRepository.findAll().size();
 
@@ -317,7 +324,7 @@ public class RapportResourceIntTest {
     @Test
     public void searchRapport() throws Exception {
         // Initialize the database
-        rapportService.save(rapport);
+        rapportRepository.save(rapport);
         when(mockRapportSearchRepository.search(queryStringQuery("id:" + rapport.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(rapport), PageRequest.of(0, 1), 1));
         // Search the rapport
@@ -347,5 +354,20 @@ public class RapportResourceIntTest {
         assertThat(rapport1).isNotEqualTo(rapport2);
         rapport1.setId(null);
         assertThat(rapport1).isNotEqualTo(rapport2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(RapportDTO.class);
+        RapportDTO rapportDTO1 = new RapportDTO();
+        rapportDTO1.setId("id1");
+        RapportDTO rapportDTO2 = new RapportDTO();
+        assertThat(rapportDTO1).isNotEqualTo(rapportDTO2);
+        rapportDTO2.setId(rapportDTO1.getId());
+        assertThat(rapportDTO1).isEqualTo(rapportDTO2);
+        rapportDTO2.setId("id2");
+        assertThat(rapportDTO1).isNotEqualTo(rapportDTO2);
+        rapportDTO1.setId(null);
+        assertThat(rapportDTO1).isNotEqualTo(rapportDTO2);
     }
 }

@@ -1,5 +1,3 @@
-import { IUser } from 'app/core/user/user.model';
-
 export interface IRapport {
     id?: string;
     objet?: string;
@@ -10,7 +8,8 @@ export interface IRapport {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
-    user?: IUser;
+    userId?: string;
+    seen?: boolean;
 }
 
 export class Rapport implements IRapport {
@@ -24,6 +23,7 @@ export class Rapport implements IRapport {
         public createdAt?: string,
         public updatedAt?: string,
         public deletedAt?: string,
-        public user?: IUser
+        public userId?: string,
+        public seen?: boolean
     ) {}
 }

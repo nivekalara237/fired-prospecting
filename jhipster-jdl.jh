@@ -110,6 +110,8 @@ relationship ManyToMany{
 	Entreprise{user(username)} to User{entreprise}
 	//User{entreprise(designation)} to Entreprise{user}
 }
-service all with serviceImpl
-paginate Entreprise, Channel, Objet, Copie, CompteRenduSuivi with infinite-scroll
-paginate Suivi, Prospect, Rapport, Message with pagination
+dto * with mapstruct
+service all with serviceClass
+paginate Entreprise, Channel, Message, Objet, Copie, CompteRenduSuivi with infinite-scroll
+paginate Suivi, Prospect, Rapport with pagination
+angularSuffix * with niveka

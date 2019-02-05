@@ -12,7 +12,8 @@ import { ProspectService } from './prospect.service';
 
 @Component({
     selector: 'jhi-prospect',
-    templateUrl: './prospect.component.html'
+    templateUrl: './prospect.component.html',
+    styleUrls: ['./prospect.component.css']
 })
 export class ProspectComponent implements OnInit, OnDestroy {
     currentAccount: any;

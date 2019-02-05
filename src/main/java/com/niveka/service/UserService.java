@@ -10,8 +10,10 @@ import com.niveka.security.AuthoritiesConstants;
 import com.niveka.security.SecurityUtils;
 import com.niveka.service.dto.UserDTO;
 import com.niveka.service.util.RandomUtil;
-import com.niveka.web.rest.errors.*;
-
+import com.niveka.web.rest.errors.EmailAlreadyUsedException;
+import com.niveka.web.rest.errors.InvalidPasswordException;
+import com.niveka.web.rest.errors.LoginAlreadyUsedException;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -59,8 +61,10 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
+                user.setActivatedAt(Utils.currentJodaDateStr());
+                user.setUpdatedAt(Utils.currentJodaDateStr());
                 userRepository.save(user);
-                userSearchRepository.save(user);
+                //userSearchRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Activated user: {}", user);
                 return user;
@@ -87,6 +91,7 @@ public class UserService {
             .map(user -> {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(Instant.now());
+                user.setUpdatedAt(Utils.currentJodaDateStr());
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 return user;
@@ -118,6 +123,8 @@ public class UserService {
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
         newUser.setActivated(false);
+        newUser.setCreatedAt(Utils.currentJodaDateStr());
+        newUser.setUpdatedAt(Utils.currentJodaDateStr());
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
@@ -156,6 +163,8 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        user.setActivatedAt(Utils.currentJodaDateStr());
+        user.setUpdatedAt(Utils.currentJodaDateStr());
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
@@ -189,6 +198,7 @@ public class UserService {
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setUpdatedAt(Utils.currentJodaDateStr());
                 userRepository.save(user);
                 userSearchRepository.save(user);
                 this.clearUserCaches(user);
@@ -251,6 +261,7 @@ public class UserService {
                 }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
+                user.setUpdatedAt(Utils.currentJodaDateStr());
                 userRepository.save(user);
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
@@ -259,6 +270,10 @@ public class UserService {
 
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
+    }
+
+    public List<User> getCommercials(){
+        return userRepository.findAll();
     }
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {

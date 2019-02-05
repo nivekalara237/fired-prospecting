@@ -34,7 +34,6 @@
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.suivi.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.suivi.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.suivi.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="user.id"><span jhiTranslate="fireDApp.suivi.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -45,9 +44,6 @@
                 <td>{{suivi.createdAt}}</td>
                 <td>{{suivi.updatedAt}}</td>
                 <td>{{suivi.deletedAt}}</td>
-                <td>
-                    {{suivi.user?.id}}
-                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

@@ -21,7 +21,8 @@
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "deletedAt": "Deleted At",
-            "suivi": "Suivi"
+            "suivi": "Suivi",
+            "formName": "New meet with customer"
         }
     }
 }

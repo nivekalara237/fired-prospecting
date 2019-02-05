@@ -22,9 +22,9 @@
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="fireDApp.copie.rapport" for="field_rapport">Rapport</label>
-                    <select class="form-control" id="field_rapport" name="rapport" [(ngModel)]="copie.rapport" >
+                    <select class="form-control" id="field_rapport" name="rapport" [(ngModel)]="copie.rapportId" >
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="rapportOption.id === copie.rapport?.id ? copie.rapport : rapportOption" *ngFor="let rapportOption of rapports; trackBy: trackRapportById">{{rapportOption.id}}</option>
+                        <option [ngValue]="rapportOption.id" *ngFor="let rapportOption of rapports; trackBy: trackRapportById">{{rapportOption.id}}</option>
                     </select>
                 </div>
             </div>

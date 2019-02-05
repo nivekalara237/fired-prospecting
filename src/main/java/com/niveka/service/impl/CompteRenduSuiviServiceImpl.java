@@ -1,35 +1,31 @@
 package com.niveka.service.impl;
 
-import com.niveka.service.CompteRenduSuiviService;
 import com.niveka.domain.CompteRenduSuivi;
 import com.niveka.repository.CompteRenduSuiviRepository;
-import com.niveka.repository.search.CompteRenduSuiviSearchRepository;
+import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing CompteRenduSuivi.
  */
 @Service
-public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
+public class CompteRenduSuiviServiceImpl {
 
     private final Logger log = LoggerFactory.getLogger(CompteRenduSuiviServiceImpl.class);
 
     private final CompteRenduSuiviRepository compteRenduSuiviRepository;
 
-    private final CompteRenduSuiviSearchRepository compteRenduSuiviSearchRepository;
+    //private final CompteRenduSuiviSearchRepository compteRenduSuiviSearchRepository;
 
-    public CompteRenduSuiviServiceImpl(CompteRenduSuiviRepository compteRenduSuiviRepository, CompteRenduSuiviSearchRepository compteRenduSuiviSearchRepository) {
+    public CompteRenduSuiviServiceImpl(CompteRenduSuiviRepository compteRenduSuiviRepository/*, CompteRenduSuiviSearchRepository compteRenduSuiviSearchRepository*/) {
         this.compteRenduSuiviRepository = compteRenduSuiviRepository;
-        this.compteRenduSuiviSearchRepository = compteRenduSuiviSearchRepository;
+        //this.compteRenduSuiviSearchRepository = compteRenduSuiviSearchRepository;
     }
 
     /**
@@ -38,11 +34,12 @@ public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
      * @param compteRenduSuivi the entity to save
      * @return the persisted entity
      */
-    @Override
+    //@Override
     public CompteRenduSuivi save(CompteRenduSuivi compteRenduSuivi) {
         log.debug("Request to save CompteRenduSuivi : {}", compteRenduSuivi);
+        compteRenduSuivi.setUpdatedAt(Utils.currentJodaDateStr());
         CompteRenduSuivi result = compteRenduSuiviRepository.save(compteRenduSuivi);
-        compteRenduSuiviSearchRepository.save(result);
+        //compteRenduSuiviSearchRepository.save(result);
         return result;
     }
 
@@ -52,7 +49,7 @@ public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<CompteRenduSuivi> findAll(Pageable pageable) {
         log.debug("Request to get all CompteRenduSuivis");
         return compteRenduSuiviRepository.findAll(pageable);
@@ -65,7 +62,7 @@ public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
      * @param id the id of the entity
      * @return the entity
      */
-    @Override
+    //@Override
     public Optional<CompteRenduSuivi> findOne(String id) {
         log.debug("Request to get CompteRenduSuivi : {}", id);
         return compteRenduSuiviRepository.findById(id);
@@ -76,11 +73,11 @@ public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
      *
      * @param id the id of the entity
      */
-    @Override
+    //@Override
     public void delete(String id) {
         log.debug("Request to delete CompteRenduSuivi : {}", id);
         compteRenduSuiviRepository.deleteById(id);
-        compteRenduSuiviSearchRepository.deleteById(id);
+        //compteRenduSuiviSearchRepository.deleteById(id);
     }
 
     /**
@@ -90,8 +87,10 @@ public class CompteRenduSuiviServiceImpl implements CompteRenduSuiviService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    @Override
+    //@Override
     public Page<CompteRenduSuivi> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of CompteRenduSuivis for query {}", query);
-        return compteRenduSuiviSearchRepository.search(queryStringQuery(query), pageable);    }
+        return null;
+        //return compteRenduSuiviSearchRepository.search(queryStringQuery(query), pageable);
+    }
 }

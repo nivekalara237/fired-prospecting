@@ -1,6 +1,3 @@
-import { IChannel } from 'app/shared/model//channel.model';
-import { IUser } from 'app/core/user/user.model';
-
 export interface IMessage {
     id?: string;
     contenu?: string;
@@ -11,8 +8,7 @@ export interface IMessage {
     createdAt?: string;
     updatedAt?: string;
     deletedAt?: string;
-    channel?: IChannel;
-    user?: IUser;
+    userId?: string;
 }
 
 export class Message implements IMessage {
@@ -26,7 +22,6 @@ export class Message implements IMessage {
         public createdAt?: string,
         public updatedAt?: string,
         public deletedAt?: string,
-        public channel?: IChannel,
-        public user?: IUser
+        public userId?: string
     ) {}
 }

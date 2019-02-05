@@ -1,0 +1,71 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "project": {
+        "name": "jhipster"
+    },
+    "apps": [
+        {
+            "root": "src/main/webapp",
+            "outDir": "target/www/app",
+            "assets": ["content", "i18n", "favicon.ico"],
+            "index": "index.html",
+            "main": "app/app.main.ts",
+            "polyfills": "app/polyfills.ts",
+            "test": "src/test/javascript/spec/entry.ts",
+            "tsconfig": "../../../tsconfig.json",
+            "prefix": "jhi",
+            "mobile": false,
+            "styles": [
+                "content/scss/vendor.scss",
+                "content/scss/global.scss",
+                "node_modules/@nebular/theme/styles/prebuilt/cosmic.css",
+                "node_modules/bootstrap-css-only/css/bootstrap.min.css",
+                "node_modules/font-awesome/css/font-awesome.css", // optional
+                "node_modules/ionicons/css/ionicons.css", // optional
+                "node_modules/admin-lte-css/dist/css/AdminLTE.css",
+                "node_modules/admin-lte-css/dist/css/skins/_all-skins.css"
+            ],
+            "scripts": ["node_modules/jquery/dist/jquery.min.js", "node_modules/bootstrap/dist/js/bootstrap.js"]
+        }
+    ],
+    "e2e": {
+        "protractor": {
+            "config": "src/test/javascript/protractor.conf.js"
+        }
+    },
+    "lint": [
+        {
+            "project": "../../../tsconfig.json"
+        },
+        {
+            "project": "../../../tsconfig-aot.json"
+        }
+    ],
+    "test": {
+        "karma": {
+            "config": "src/test/javascript/karma.conf.js"
+        }
+    },
+    "defaults": {
+        "styleExt": "scss",
+        "prefixInterfaces": false,
+        "component": {
+            "inlineStyle": true,
+            "inlineTemplate": false,
+            "spec": false
+        },
+        "directive": {
+            "spec": false
+        },
+        "guard": {
+            "spec": false
+        },
+        "pipe": {
+            "spec": false
+        },
+        "service": {
+            "spec": false
+        }
+    },
+    "packageManager": "npm"
+}

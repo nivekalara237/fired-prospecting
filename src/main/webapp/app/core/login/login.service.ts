@@ -40,5 +40,6 @@ export class LoginService {
     logout() {
         this.authServerProvider.logout().subscribe();
         this.accountService.authenticate(null);
+        localStorage.removeItem('currentUser');
     }
 }

@@ -1,5 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgBootstrapFormValidationModule } from 'ng-bootstrap-form-validation';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { FireDSharedModule } from 'app/shared';
 import { FireDAdminModule } from 'app/admin/admin.module';
@@ -16,7 +18,14 @@ import {
 const ENTITY_STATES = [...prospectRoute, ...prospectPopupRoute];
 
 @NgModule({
-    imports: [FireDSharedModule, FireDAdminModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [
+        FireDSharedModule,
+        FireDAdminModule,
+        NgBootstrapFormValidationModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(ENTITY_STATES)
+    ],
     declarations: [
         ProspectComponent,
         ProspectDetailComponent,

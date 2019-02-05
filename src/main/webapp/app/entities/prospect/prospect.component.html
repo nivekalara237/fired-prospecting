@@ -29,45 +29,40 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="nom"><span jhiTranslate="fireDApp.prospect.nom">Nom</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="email"><span jhiTranslate="fireDApp.prospect.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="telephone"><span jhiTranslate="fireDApp.prospect.telephone">Telephone</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="type"><span jhiTranslate="fireDApp.prospect.type">Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="dateRdv"><span jhiTranslate="fireDApp.prospect.dateRdv">Date Rdv</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="compteRendu"><span jhiTranslate="fireDApp.prospect.compteRendu">Compte Rendu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="localisation"><span jhiTranslate="fireDApp.prospect.localisation">Localisation</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="position"><span jhiTranslate="fireDApp.prospect.position">Position</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.prospect.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.prospect.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.prospect.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="suivi.id"><span jhiTranslate="fireDApp.prospect.suivi">Suivi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="user.id"><span jhiTranslate="fireDApp.prospect.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
+            <th jhiSortBy="id" style="display: none;"></th>
+            <th jhiSortBy="nom" style="width: 8%"><span jhiTranslate="fireDApp.prospect.nom">Nom</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="email" style="width: 8%"><span jhiTranslate="fireDApp.prospect.email">Email</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="telephone" style="width: 8%"><span jhiTranslate="fireDApp.prospect.telephone">Telephone</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="type"><span jhiTranslate="fireDApp.prospect.type">Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <th jhiSortBy="dateRdv" style="width: 8%"><span jhiTranslate="fireDApp.prospect.dateRdv">Date Rdv</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="compteRendu" ><span jhiTranslate="fireDApp.prospect.compteRendu">Compte Rendu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="localisation" style="width: 8%"><span jhiTranslate="fireDApp.prospect.localisation">Localisation</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="position"><span jhiTranslate="fireDApp.prospect.position">Position</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <th jhiSortBy="createdAt" style="width: 10%"><span jhiTranslate="fireDApp.prospect.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.prospect.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <!--<th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.prospect.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <!--<th jhiSortBy="suivi.id"><span jhiTranslate="fireDApp.prospect.suivi">Suivi</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
+            <!--th jhiSortBy="user.id"><span jhiTranslate="fireDApp.prospect.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th-->
+            <th style="width: 15%"></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let prospect of prospects ;trackBy: trackId">
-                <td><a [routerLink]="['/prospect', prospect.id, 'view' ]">{{prospect.id}}</a></td>
+                <td  style="display: none;"><a [routerLink]="['/prospect', prospect.id, 'view' ]"></a></td>
                 <td>{{prospect.nom}}</td>
                 <td>{{prospect.email}}</td>
                 <td>{{prospect.telephone}}</td>
-                <td>{{prospect.type}}</td>
+                <!--<td>{{prospect.type}}</td>-->
                 <td>{{prospect.dateRdv}}</td>
                 <td>{{prospect.compteRendu}}</td>
                 <td>{{prospect.localisation}}</td>
-                <td>{{prospect.position}}</td>
+
                 <td>{{prospect.createdAt}}</td>
-                <td>{{prospect.updatedAt}}</td>
-                <td>{{prospect.deletedAt}}</td>
-                <td>
-                    <div *ngIf="prospect.suivi">
-                        <a [routerLink]="['../suivi', prospect.suivi?.id, 'view' ]" >{{prospect.suivi?.id}}</a>
-                    </div>
-                </td>
-                <td>
-                    {{prospect.user?.id}}
-                </td>
+                <!--<td>{{prospect.updatedAt}}</td>-->
+                <!--td>{{prospect.deletedAt}}</td-->
+                <!--<td>-->
+                    <!--{{prospect.user?.id}}-->
+                <!--</td>-->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

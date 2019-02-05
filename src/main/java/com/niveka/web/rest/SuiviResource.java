@@ -1,8 +1,8 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Suivi;
 import com.niveka.service.SuiviService;
+import com.niveka.service.dto.SuiviDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
@@ -18,12 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Suivi.
@@ -45,18 +41,18 @@ public class SuiviResource {
     /**
      * POST  /suivis : Create a new suivi.
      *
-     * @param suivi the suivi to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new suivi, or with status 400 (Bad Request) if the suivi has already an ID
+     * @param suiviDTO the suiviDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new suiviDTO, or with status 400 (Bad Request) if the suivi has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/suivis")
     @Timed
-    public ResponseEntity<Suivi> createSuivi(@RequestBody Suivi suivi) throws URISyntaxException {
-        log.debug("REST request to save Suivi : {}", suivi);
-        if (suivi.getId() != null) {
+    public ResponseEntity<SuiviDTO> createSuivi(@RequestBody SuiviDTO suiviDTO) throws URISyntaxException {
+        log.debug("REST request to save Suivi : {}", suiviDTO);
+        if (suiviDTO.getId() != null) {
             throw new BadRequestAlertException("A new suivi cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Suivi result = suiviService.save(suivi);
+        SuiviDTO result = suiviService.save(suiviDTO);
         return ResponseEntity.created(new URI("/api/suivis/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +61,22 @@ public class SuiviResource {
     /**
      * PUT  /suivis : Updates an existing suivi.
      *
-     * @param suivi the suivi to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated suivi,
-     * or with status 400 (Bad Request) if the suivi is not valid,
-     * or with status 500 (Internal Server Error) if the suivi couldn't be updated
+     * @param suiviDTO the suiviDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated suiviDTO,
+     * or with status 400 (Bad Request) if the suiviDTO is not valid,
+     * or with status 500 (Internal Server Error) if the suiviDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/suivis")
     @Timed
-    public ResponseEntity<Suivi> updateSuivi(@RequestBody Suivi suivi) throws URISyntaxException {
-        log.debug("REST request to update Suivi : {}", suivi);
-        if (suivi.getId() == null) {
+    public ResponseEntity<SuiviDTO> updateSuivi(@RequestBody SuiviDTO suiviDTO) throws URISyntaxException {
+        log.debug("REST request to update Suivi : {}", suiviDTO);
+        if (suiviDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Suivi result = suiviService.save(suivi);
+        SuiviDTO result = suiviService.save(suiviDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, suivi.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, suiviDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +88,9 @@ public class SuiviResource {
      */
     @GetMapping("/suivis")
     @Timed
-    public ResponseEntity<List<Suivi>> getAllSuivis(Pageable pageable) {
+    public ResponseEntity<List<SuiviDTO>> getAllSuivis(Pageable pageable) {
         log.debug("REST request to get a page of Suivis");
-        Page<Suivi> page = suiviService.findAll(pageable);
+        Page<SuiviDTO> page = suiviService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/suivis");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -102,21 +98,21 @@ public class SuiviResource {
     /**
      * GET  /suivis/:id : get the "id" suivi.
      *
-     * @param id the id of the suivi to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the suivi, or with status 404 (Not Found)
+     * @param id the id of the suiviDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the suiviDTO, or with status 404 (Not Found)
      */
     @GetMapping("/suivis/{id}")
     @Timed
-    public ResponseEntity<Suivi> getSuivi(@PathVariable String id) {
+    public ResponseEntity<SuiviDTO> getSuivi(@PathVariable String id) {
         log.debug("REST request to get Suivi : {}", id);
-        Optional<Suivi> suivi = suiviService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(suivi);
+        Optional<SuiviDTO> suiviDTO = suiviService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(suiviDTO);
     }
 
     /**
      * DELETE  /suivis/:id : delete the "id" suivi.
      *
-     * @param id the id of the suivi to delete
+     * @param id the id of the suiviDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/suivis/{id}")
@@ -137,9 +133,9 @@ public class SuiviResource {
      */
     @GetMapping("/_search/suivis")
     @Timed
-    public ResponseEntity<List<Suivi>> searchSuivis(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<SuiviDTO>> searchSuivis(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Suivis for query {}", query);
-        Page<Suivi> page = suiviService.search(query, pageable);
+        Page<SuiviDTO> page = suiviService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/suivis");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

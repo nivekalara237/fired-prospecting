@@ -39,13 +39,13 @@
                 </dd>
                 <dt><span jhiTranslate="fireDApp.message.channel">Channel</span></dt>
                 <dd>
-                    <div *ngIf="message.channel">
-                        <a [routerLink]="['/channel', message.channel?.id, 'view']">{{message.channel?.id}}</a>
+                    <div *ngIf="message.channelId">
+                        <a [routerLink]="['/channel', message.channelId, 'view']">{{message.channelId}}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="fireDApp.message.user">User</span></dt>
                 <dd>
-                    {{message.user?.id}}
+                    {{message.userId}}
                 </dd>
             </dl>
 

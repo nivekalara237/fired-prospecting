@@ -200,7 +200,9 @@ dependencies {
     runtime "io.jsonwebtoken:jjwt-impl"
     runtime "io.jsonwebtoken:jjwt-jackson"
     compile "com.github.mongobee:mongobee"
-    compile 'com.github.thunder413:DateTimeUtils:1.0'
+    compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.1.4.RELEASE'
+
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
@@ -224,6 +226,10 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.2'
+
 }
 
 task cleanResources(type: Delete) {

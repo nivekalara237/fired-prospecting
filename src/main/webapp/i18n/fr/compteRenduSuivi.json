@@ -21,7 +21,8 @@
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "deletedAt": "Deleted At",
-            "suivi": "Suivi"
+            "suivi": "Suivi",
+            "formName": "Nouveau rendez-vous avec le suivi (client)"
         }
     }
 }

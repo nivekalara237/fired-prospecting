@@ -18,7 +18,7 @@
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
         "searchEngine": "elasticsearch",
-        "messageBroker": "kafka",
+        "messageBroker": false,
         "serviceDiscoveryType": "eureka",
         "buildTool": "gradle",
         "enableSwaggerCodegen": true,

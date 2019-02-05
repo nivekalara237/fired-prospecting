@@ -1,9 +1,9 @@
 package com.niveka.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import com.niveka.config.Constants;
 import com.niveka.domain.User;
 import com.niveka.repository.UserRepository;
-import com.niveka.repository.search.UserSearchRepository;
 import com.niveka.security.AuthoritiesConstants;
 import com.niveka.service.MailService;
 import com.niveka.service.UserService;
@@ -13,11 +13,10 @@ import com.niveka.web.rest.errors.EmailAlreadyUsedException;
 import com.niveka.web.rest.errors.LoginAlreadyUsedException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
-import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -29,11 +28,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * REST controller for managing users.
@@ -71,14 +69,14 @@ public class UserResource {
 
     private final MailService mailService;
 
-    private final UserSearchRepository userSearchRepository;
+    //private final UserSearchRepository userSearchRepository;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository) {
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService/*, UserSearchRepository userSearchRepository*/) {
 
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
-        this.userSearchRepository = userSearchRepository;
+        //this.userSearchRepository = userSearchRepository;
     }
 
     /**
@@ -157,6 +155,30 @@ public class UserResource {
     }
 
     /**
+     * GET /users/commercials : get all users has role commercial per entreprise.
+     *
+     * @param entreprise the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/users/commercials/{entreprise}")
+    @Timed
+    public ResponseEntity<List<UserDTO>> getAllCommercials(@PathVariable String entreprise) {
+        final List<User> page = userService.getCommercials();
+        //log.debug("REST request get User : {}", page);
+        //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+        List<UserDTO> pagesDTO = new ArrayList<>();
+        Consumer consumer = new Consumer<User>() {
+            @Override
+            public void accept(User o) {
+                UserDTO dto = new UserDTO(o);
+                pagesDTO.add(dto);
+            }
+        };
+        page.forEach(consumer);
+        return ResponseEntity.ok().body(pagesDTO);
+    }
+
+    /**
      * @return a string list of the all of the roles
      */
     @GetMapping("/users/authorities")
@@ -206,8 +228,9 @@ public class UserResource {
     @GetMapping("/_search/users/{query}")
     @Timed
     public List<User> search(@PathVariable String query) {
-        return StreamSupport
-            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
+        return null;
+        //return StreamSupport
+          //  .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            //.collect(Collectors.toList());
     }
 }

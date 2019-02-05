@@ -36,7 +36,7 @@
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.channel.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.channel.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.channel.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="entreprise.id"><span jhiTranslate="fireDApp.channel.entreprise">Entreprise</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="entrepriseId"><span jhiTranslate="fireDApp.channel.entreprise">Entreprise</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -50,8 +50,8 @@
                 <td>{{channel.updatedAt}}</td>
                 <td>{{channel.deletedAt}}</td>
                 <td>
-                    <div *ngIf="channel.entreprise">
-                        <a [routerLink]="['../entreprise', channel.entreprise?.id, 'view' ]" >{{channel.entreprise?.id}}</a>
+                    <div *ngIf="channel.entrepriseId">
+                        <a [routerLink]="['../entreprise', channel.entrepriseId , 'view' ]" >{{channel.entrepriseId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

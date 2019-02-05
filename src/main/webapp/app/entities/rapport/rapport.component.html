@@ -1,5 +1,5 @@
 <div>
-    <h2 id="page-heading">
+    <h2 class="hide" id="page-heading">
         <span jhiTranslate="fireDApp.rapport.home.title">Rapports</span>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-rapport" [routerLink]="['/rapport/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
@@ -9,23 +9,8 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-        <div class="col-sm-12">
-            <form name="searchForm" class="form-inline">
-                <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'fireDApp.rapport.home.search' | translate }}">
-                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-                        <fa-icon [icon]="'search'"></fa-icon>
-                    </button>
-                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
-                        <fa-icon [icon]="'trash-alt'"></fa-icon>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
     <br/>
-    <div class="table-responsive" *ngIf="rapports">
+    <div style="display: none!important;" class="hide table-responsive" *ngIf="rapports">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
@@ -38,7 +23,7 @@
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.rapport.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.rapport.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.rapport.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="user.id"><span jhiTranslate="fireDApp.rapport.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userId"><span jhiTranslate="fireDApp.rapport.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -54,7 +39,7 @@
                 <td>{{rapport.updatedAt}}</td>
                 <td>{{rapport.deletedAt}}</td>
                 <td>
-                    {{rapport.user?.id}}
+                    {{rapport.userId}}
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
@@ -84,12 +69,282 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="rapports && rapports.length">
+    <div class="hide" *ngIf="rapports && rapports.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="box">
+                <div class="mail-box">
+                    <aside class="sm-side">
+                        <div class="inbox-body">
+                            <a class="btn btn-compose" (click)="_compose()" data-original-title="" title="">
+                                <fa-icon [icon]="'plus'"></fa-icon>
+                                <span class="hidden-sm-down"  jhiTranslate="fireDApp.rapport.home.createLabel">
+                                    Create new Rapport
+                                </span>
+                            </a>
+                        </div>
+
+                        <ul class="inbox-nav inbox-divider">
+                            <li class="active">
+                                <a (click)="_displayList()"><i class="fa fa-inbox"></i> Toute les rapports <span class="label label-danger pull-right">2</span></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-envelope-o"></i> Rapports non lus</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-print"></i> Archivés</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=" fa fa-trash-o"></i> Trash</a>
+                            </li>
+                        </ul>
+                        <ul *ngIf="commercials && commercials.length" class="commerciaux-list labels-info">
+                            <li *ngFor="let comm of commercials">
+                                <a (click)="_displayDetails()" class="clearfix mx-auto">
+                                    <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                                    <div class="friend-name">
+                                        <strong><a href="javascript:void(0)">{{comm.login}}</a> </strong>
+                                    </div>
+                                    <div class="last-message">{{comm.email}}</div>
+                                    <!--small class="time text-muted">Just now</small>
+                                    <small class="chat-alert label label-danger">1</small-->
+                                </a>
+                            </li>
+                        </ul>
+                    </aside>
+                    <aside class="lg-side">
+                        <div class="inbox-head">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form name="searchForm" class="form-inline">
+                                        <div class="input-group w-100 mt-3">
+                                            <input type="text" class="form-control sr-input" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'fireDApp.rapport.home.search' | translate }}">
+                                            <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                                                <fa-icon [icon]="'search'"></fa-icon>
+                                            </button>
+                                            <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                                                <fa-icon [icon]="'trash-alt'"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="displayList===true" class="inbox-body">
+                            <div class="heading-inbox row">
+                                <div class="col-md-8">
+                                    <div class="compose-btn compose-btn1">
+                                        <div class="col-auto my-1">
+                                            <div class="custom-control custom-checkbox mr-sm-2">
+                                                <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline">
+                                                <label class="custom-control-label" for="customControlInline">All</label>
+                                            </div>
+                                        </div>
+                                        <button title="" data-placement="top" data-toggle="tooltip" type="button" data-original-title="Print" class="btn  btn-sm tooltips"><i class="fa fa-print"></i> </button>
+                                        <button title="" data-placement="top" data-toggle="tooltip" data-original-title="Trash" class="btn btn-sm tooltips"><i class="fa fa-trash-o"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-inbox table-hover">
+                                <tbody>
+                                <tr class="unread">
+                                    <td class="inbox-small-cells">
+                                        <div class="custom-control custom-checkbox mr-sm-2">
+                                            <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline1">
+                                            <label class="custom-control-label" for="customControlInline1"></label>
+                                        </div>
+                                    </td>
+                                    <td class="view-message  dont-show">Arjuna Admin</td>
+                                    <td class="view-message ">Lorem ipsum dolor imit set.</td>
+                                    <td class="view-message  inbox-small-cells"><i class="fa fa-paperclip"></i></td>
+                                    <td class="view-message  text-right">9:27 AM</td>
+                                </tr>
+                                <tr class="unread">
+                                    <td class="inbox-small-cells">
+                                        <div class="custom-control custom-checkbox mr-sm-2">
+                                            <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline2">
+                                            <label class="custom-control-label" for="customControlInline2"></label>
+                                        </div>
+                                    </td>
+
+                                    <td class="view-message dont-show">John Doe</td>
+                                    <td class="view-message">Hi Bro, How are you?</td>
+                                    <td class="view-message inbox-small-cells"></td>
+                                    <td class="view-message text-right">March 15</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="inbox-small-cells">
+                                        <input type="checkbox" class="mail-checkbox">
+                                    </td>
+
+                                    <td class="view-message dont-show">Daemon nikiwa</td>
+                                    <td class="view-message">Lorem ipsum dolor sit amet</td>
+                                    <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td>
+                                    <td class="view-message text-right">June 16</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="inbox-small-cells">
+                                        <input type="checkbox" class="mail-checkbox">
+                                    </td>
+
+                                    <td class="view-message dont-show">Sumomonosuke</td>
+                                    <td class="view-message">Lorem ipsum dolor sit amet</td>
+                                    <td class="view-message inbox-small-cells"></td>
+                                    <td class="view-message text-right">August 10</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="inbox-small-cells">
+                                        <input type="checkbox" class="mail-checkbox">
+                                    </td>
+
+                                    <td class="view-message dont-show">Facebook</td>
+                                    <td class="view-message view-message">Dolor sit amet, consectetuer adipiscing</td>
+                                    <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td>
+                                    <td class="view-message text-right">April 14</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="hide" *ngIf="rapports && rapports.length">
+                                <div class="row justify-content-center">
+                                    <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="displayDetails===true" class="inbox-body">
+                            <div class="heading-inbox row">
+                                <div class="col-md-8">
+                                    <div class="compose-btn">
+                                        <a class="btn btn-sm btn-primary" href="mail_compose.html" data-original-title="" title=""><i class="fa fa-reply"></i> return</a>
+                                        <button title="" data-placement="top" data-toggle="tooltip" data-original-title="Trash" class="btn btn-sm tooltips"><i class="fa fa-trash-o"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <p class="date"> 8:02 PM 12 FEB 2014</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <h4> Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum.</h4>
+                                </div>
+                            </div>
+                            <div class="sender-info">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img alt="" src="https://bootdey.com/img/Content/avatar/avatar6.png">
+                                        <strong>John Doe</strong>
+                                        <span>[johndoe@gmail.com]</span>
+                                        to
+                                        <strong>me</strong>
+                                        <a class="sender-dropdown " href="javascript:;">
+                                            <i class="fa fa-chevron-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="view-mail">
+                                <p>Faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
+                                <p>Consequat risus. Mauris sed congue orci. Donec ultrices <a href="#">flatlab</a>. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec
+                                    <a href="#">vitae leo at sem lobortis porttitor eu consequat risus</a>. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
+                                <p>Modales vulputate urna, vel <a href="#">thevectorlab.net</a>. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
+                            </div>
+                            <div class="attachment-mail">
+                                <p>
+                                    <span><i class="fa fa-paperclip"></i> 3 attachments — </span>
+                                    <a href="#">Download all attachments</a>
+                                    |
+                                    <a href="#">View all images</a>
+                                </p>
+                                <ul>
+                                    <li>
+                                        <a href="#" class="atch-thumb">
+                                            <img src="https://lorempixel.com/128/100/nature/5">
+                                        </a>
+                                        <div class="file-name">
+                                            image-name.jpg
+                                        </div>
+                                        <span>12KB</span>
+                                        <div class="links">
+                                            <a href="#">View</a> -
+                                            <a href="#">Download</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="atch-thumb">
+                                            <img src="https://lorempixel.com/128/100/nature/4">
+                                        </a>
+                                        <div class="file-name">
+                                            img_name.jpg
+                                        </div>
+                                        <span>40KB</span>
+                                        <div class="links">
+                                            <a href="#">View</a> -
+                                            <a href="#">Download</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="atch-thumb">
+                                            <img src="https://lorempixel.com/128/100/nature/2">
+                                        </a>
+                                        <div class="file-name">
+                                            img_name.jpg
+                                        </div>
+                                        <span>30KB</span>
+                                        <div class="links">
+                                            <a href="#">View</a> -
+                                            <a href="#">Download</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="compose-btn pull-left">
+                                <a class="btn btn-sm btn-primary" href="mail_compose.html" data-original-title="" title=""><i class="fa fa-reply"></i> return</a>
+                                <button title="" data-placement="top" data-toggle="tooltip" type="button" data-original-title="Print" class="btn  btn-sm tooltips"><i class="fa fa-print"></i> </button>
+                            </div>
+                        </div>
+                        <div class="inbox-body mx-auto" *ngIf="compose===true">
+                            <form class="form-horizontal" novalidate #editForm="ngForm" role="form">
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="fireDApp.rapport.objet" for="field_objet">Objet</label>
+                                    <input required type="text" class="form-control" name="objet" id="field_objet"
+                                           [(ngModel)]="objet" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="fireDApp.rapport.copies" for="field_copies">Copies</label>
+                                    <input type="text" class="form-control" name="copies" id="field_copies"
+                                           [(ngModel)]="copies" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" jhiTranslate="fireDApp.rapport.contenu" for="field_contenu">Contenu</label>
+                                    <textarea required rows="8" type="text" class="form-control" name="contenu" id="field_contenu"
+                                              [(ngModel)]="contenu"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <input type="file"  (change)="onFileChange($event)" name="files" id="file-1" class="input-file" data-multiple-caption="{count} files selected" multiple />
+                                        <label for="file-1"  class="label-file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Choose a file&hellip;</span></label>
+                                        <div class="filenames"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                                        <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

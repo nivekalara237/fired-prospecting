@@ -7,6 +7,10 @@ eg $input-color: red;
 // Override Boostrap variables
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css);
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
+@import '~@nebular/theme/styles/prebuilt/cosmic';
+// @import "css/startui.css";
+@import 'css/mystyle.css';

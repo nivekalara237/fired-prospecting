@@ -27,8 +27,8 @@
                 </dd>
                 <dt><span jhiTranslate="fireDApp.compteRenduSuivi.suivi">Suivi</span></dt>
                 <dd>
-                    <div *ngIf="compteRenduSuivi.suivi">
-                        <a [routerLink]="['/suivi', compteRenduSuivi.suivi?.id, 'view']">{{compteRenduSuivi.suivi?.id}}</a>
+                    <div *ngIf="compteRenduSuivi.suiviId">
+                        <a [routerLink]="['/suivi', compteRenduSuivi.suiviId, 'view']">{{compteRenduSuivi.suiviId}}</a>
                     </div>
                 </dd>
             </dl>

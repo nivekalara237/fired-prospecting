@@ -1,7 +1,10 @@
 {
     "rulesDirectory": ["node_modules/codelyzer"],
-    "extends": ["tslint-config-prettier"],
-    "rules": {
+    "compilerOptions": {
+        "importHelpers": true
+    }
+    //"extends": ["tslint-config-prettier"]
+    /*"rules": {
         "class-name": true,
         "comment-format": [true, "check-space"],
         "curly": true,
@@ -73,5 +76,5 @@
         "use-pipe-transform-interface": false,
         "component-class-suffix": true,
         "directive-class-suffix": true
-    }
+    }*/
 }

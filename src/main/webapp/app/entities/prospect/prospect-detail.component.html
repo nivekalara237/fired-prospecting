@@ -1,65 +1,211 @@
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
         <div *ngIf="prospect">
             <h2><span jhiTranslate="fireDApp.prospect.detail.title">Prospect</span> {{prospect.id}}</h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="fireDApp.prospect.nom">Nom</span></dt>
-                <dd>
-                    <span>{{prospect.nom}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.email">Email</span></dt>
-                <dd>
-                    <span>{{prospect.email}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.telephone">Telephone</span></dt>
-                <dd>
-                    <span>{{prospect.telephone}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.type">Type</span></dt>
-                <dd>
-                    <span>{{prospect.type}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.dateRdv">Date Rdv</span></dt>
-                <dd>
-                    <span>{{prospect.dateRdv}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.compteRendu">Compte Rendu</span></dt>
-                <dd>
-                    <span>{{prospect.compteRendu}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.localisation">Localisation</span></dt>
-                <dd>
-                    <span>{{prospect.localisation}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.position">Position</span></dt>
-                <dd>
-                    <span>{{prospect.position}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.createdAt">Created At</span></dt>
-                <dd>
-                    <span>{{prospect.createdAt}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.updatedAt">Updated At</span></dt>
-                <dd>
-                    <span>{{prospect.updatedAt}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.deletedAt">Deleted At</span></dt>
-                <dd>
-                    <span>{{prospect.deletedAt}}</span>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.suivi">Suivi</span></dt>
-                <dd>
-                    <div *ngIf="prospect.suivi">
-                        <a [routerLink]="['/suivi', prospect.suivi?.id, 'view']">{{prospect.suivi?.id}}</a>
+
+            <div class="container-fluid row" style="margin-bottom: 20px;">
+                <ng-template #customLoadingTemplate>
+                    <div class="custom-class">
+                        <h3>
+                            Loading...
+                        </h3>
+                        <button (click)="showAlert()">
+                            Click me!
+                        </button>
                     </div>
-                </dd>
-                <dt><span jhiTranslate="fireDApp.prospect.user">User</span></dt>
-                <dd>
-                    {{prospect.user?.id}}
-                </dd>
-            </dl>
+                </ng-template>
+
+                <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading>
+                <div style="display: none!important;" class="col-3">
+                    <ul class="list-group">
+                        <li class="list-group-item active"><fa-icon [icon]="'person-booth'"></fa-icon>&nbsp;{{prospect.nom}}</li>
+                        <li class="list-group-item"><fa-icon [icon]="'envelope'"></fa-icon>&nbsp;{{prospect.email}}</li>
+                        <li class="list-group-item"><fa-icon [icon]="'phone'"></fa-icon>&nbsp;{{prospect.telephone}}</li>
+                        <li class="list-group-item"><fa-icon [icon]="'clock'"></fa-icon>&nbsp;Premier RDV: {{prospect.dateRdv}}</li>
+                        <li class="list-group-item"><fa-icon [icon]="'plus-circle'"></fa-icon>&nbsp;Le : {{prospect.createdAt}}</li>
+                        <li class="list-group-item" *ngIf="prospect.location"><fa-icon [icon]="'map-marker'"></fa-icon>&nbsp;{{prospect.location}}</li>
+                    </ul>
+                    <hr/>
+                </div>
+                <div class="col-3 pb-5">
+                    <!-- Account Sidebar-->
+                    <div class="author-card pb-3">
+                        <div class="author-card-cover" style="background-image: url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);">
+                            <a class="btn btn-style-1 btn-white btn-sm" href="#" data-toggle="tooltip" title="" data-original-title="You currently have 290 Reward points to spend">
+                                <i class="fa fa-award text-md"></i>&nbsp;<span *ngIf="compteRendus"> {{compteRendus.length}} </span> {{'fireDApp.prospect.suivi'|translate}}(s)
+                            </a>
+                        </div>
+                        <div class="author-card-profile">
+                            <div class="author-card-avatar"><img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Daniel Adams">
+                            </div>
+                            <div class="author-card-details">
+                                <h5 class="author-card-name text-lg">{{prospect.nom}}</h5><span class="author-card-position">{{'fireDApp.prospect.le'|translate}}: {{prospect.createdAt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard">
+                        <nav class="list-group list-group-flush">
+                            <a class="list-group-item active" href="javascript:void(0);">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div><i class="fa fa-shopping-bag mr-1 text-muted"></i>
+                                        <div class="d-inline-block font-weight-medium text-uppercase"><fa-icon [icon]="'envelope'"></fa-icon>&nbsp;{{prospect.email}}</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="list-group-item" href="javascript:void(0);"><i class="fa fa-user text-muted"></i><fa-icon [icon]="'phone'"></fa-icon>&nbsp;{{prospect.telephone}}</a>
+                            <a class="list-group-item" href="javascript:void(0);"><i class="fa fa-map-marker text-muted"></i><fa-icon [icon]="'map-marker'"></fa-icon>&nbsp;{{prospect.localisation}}</a>
+
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-9" style="padding-left: 5%;padding-right: 1%;">
+                    <div style="display: none" *ngFor="let compteRenduSuivi of compteRendus"  class="bd-callout bd-callout-primary">
+                        <h6> <fa-icon [icon]="'clock'"></fa-icon> Date: <span class="label label-primary"> {{compteRenduSuivi.createdAt}} </span> </h6>
+                        <h6> <fa-icon [icon]="'clock'"></fa-icon> Prochain RDV: <span class="label label-danger"> {{compteRenduSuivi.dateProchaineRdv}} </span> </h6>
+                        <p> {{ compteRenduSuivi.contenu }} </p>
+                    </div>
+                    <div class="row CRS justify-content-center">
+                        <div class="col-xl-10 col-12">
+                            <div class="timeline timeline-line-solid">
+                                <span class="timeline-label">
+                                    <span class="label">{{prospect.createdAt}}</span>
+                                </span>
+                                <div class="timeline-item">
+                                    <div class="timeline-point timeline-point"></div>
+                                    <div class="timeline-event">
+                                        <div class="widget has-shadow">
+                                            <div class="widget-header d-flex align-items-center">
+
+                                            </div>
+                                            <div class="widget-body">
+                                                <p>
+                                                    {{prospect.compteRendu}}
+                                                </p>
+                                            </div>
+                                            <div class="widget-footer d-flex align-items-center">
+                                                <div style="display: none!important;" class="col-xl-8 col-md-8 col-7 no-padding d-flex justify-content-start">
+                                                    <div class="users-like">
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar1.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar2.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar3.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar4.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar6.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-10 col-md-10 col-10 no-padding d-flex justify-content-end" style="color: #e07313bf;">
+                                                    <div class="meta">
+                                                        <ul>
+                                                            <li> <i class="la la-clock-o"></i> <span class="numb">du {{prospect.dateRdv}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="time-right">{{prospect.createdAt}}</div>
+                                    </div>
+                                </div>
+                                <div *ngFor="let compteRenduSuivi of compteRendus" class="timeline-item">
+                                    <div class="timeline-point timeline-point"></div>
+                                    <div class="timeline-event">
+                                        <div class="widget has-shadow">
+                                            <div class="widget-header d-flex align-items-center">
+
+                                            </div>
+                                            <div class="widget-body">
+                                                <p>
+                                                    {{compteRenduSuivi.contenu}}
+                                                </p>
+                                            </div>
+                                            <div class="widget-footer d-flex align-items-center">
+                                                <div style="display: none!important;" class="col-xl-8 col-md-8 col-7 no-padding d-flex justify-content-start">
+                                                    <div class="users-like">
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar1.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar2.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar3.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar4.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                        <a href="#">
+                                                            <img src="http://bootdey.com/img/Content/avatar/avatar6.png" class="img-fluid rounded-circle" alt="...">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-10 col-md-10 col-10 no-padding d-flex justify-content-end" style="color: #e07313bf;">
+                                                    <div class="meta">
+                                                        <ul>
+                                                            <li> <i class="la la-clock-o"></i> <span class="numb">du {{compteRenduSuivi.dateProchaineRdv | date:'medium'}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="time-right">{{compteRenduSuivi.createdAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <span class="timeline-label">
+                                    <span class="label bg-primary" *ngIf="compteRendus">{{compteRendus[compteRendus.length-1].dateProchaineRdv | date:'medium'}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-9" style="padding-left: 5%;padding-right: 1%;">
+                    <form class="form-horizontal" [formGroup]="formGroup" name="editForm" role="form" novalidate (ngSubmit)="saveCRS()" #editForm="ngForm">
+                        <legend jhiTranslate="fireDApp.compteRenduSuivi.formName">Form Name</legend>
+                        <div class="form-group">
+                            <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.dateProchaineRdv">Date Prochaine Rdv</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="input-group">
+                                        <input type="text" placeholder="{{'fireDApp.prospect.time.date'|translate}}" class="form-control" (click)="d.toggle()" name="dateRdv" id="field_dateRdv"
+                                               [(ngModel)]="dateProchainRdv" formControlName="DateRdv" ngbDatepicker #d="ngbDatepicker"/>
+                                        <div class="input-group-append">
+                                            <span  class="btn btn-outline-secondary input-group-text calendar" (click)="d.toggle()" type="button"> <fa-icon [icon]="'calendar'"></fa-icon> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <input id="changeMinuteStep" type="number" formControlName="HourStep" class="form-control" max="23" min="00" placeholder="{{'fireDApp.prospect.time.hour'|translate}}" [(ngModel)]="hourStep" />
+                                </div>
+                                <div class="col-2">
+                                    <input id="changeSecondStep" type="number" formControlName="MinuteStep" class="form-control" min="00" placeholder="{{'fireDApp.prospect.time.minute'|translate}}" max="59" [(ngModel)]="minuteStep" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="contenu" jhiTranslate="fireDApp.compteRenduSuivi.contenu">qsqsd qsd</label>
+                            <textarea rows="5" formControlName="Contenu" class="form-control" id="contenu" name="contenu" [(ngModel)]="contenu" >default text</textarea>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button class="btn btn-block btn-success" type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" jhiTranslate="entity.action.save">
+                                    <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;
+                                    Enregistrer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <button type="submit"
                     (click)="previousState()"

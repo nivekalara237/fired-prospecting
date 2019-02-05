@@ -1,23 +1,22 @@
 package com.niveka.domain;
 
-import com.niveka.config.Constants;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.niveka.config.Constants;
 import org.apache.commons.lang3.StringUtils;
-import javax.validation.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.
@@ -78,8 +77,64 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("reset_date")
     private Instant resetDate = null;
 
+    @Field("createdAt")
+    private String createdAt=null;
+
+    @Field("updatedAt")
+    private String updatedAt=null;
+
+    @Field("activatedAt")
+    private String activatedAt=null;
+
+    @Field("entreprise")
+    @JsonIgnore
+    private Set<Entreprise> entreprises = new HashSet<>();
+
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
+    @JsonIgnore
+    private Set<Suivi> suivis = new HashSet<>();
+
+    public User(String id, @NotNull @Pattern(regexp = Constants.LOGIN_REGEX) @Size(min = 1, max = 50) String login, @NotNull @Size(min = 60, max = 60) String password, @Size(max = 50) String firstName, @Size(max = 50) String lastName, @Email @Size(min = 5, max = 254) String email, boolean activated, @Size(min = 2, max = 6) String langKey, @Size(max = 256) String imageUrl, @Size(max = 20) String activationKey, @Size(max = 20) String resetKey, Instant resetDate, String createdAt, String updatedAt, String activatedAt) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.activated = activated;
+        this.langKey = langKey;
+        this.imageUrl = imageUrl;
+        this.activationKey = activationKey;
+        this.resetKey = resetKey;
+        this.resetDate = resetDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.activatedAt = activatedAt;
+    }
+
+    public User() {
+    }
+
+    public User(String id, String login, String password, String firstName, String lastName, String email, boolean activated, String langKey, String imageUrl, String activationKey, String resetKey, Instant resetDate, String createdAt, String updatedAt, String activatedAt, Set<Entreprise> entreprises, Set<Authority> authorities) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.activated = activated;
+        this.langKey = langKey;
+        this.imageUrl = imageUrl;
+        this.activationKey = activationKey;
+        this.resetKey = resetKey;
+        this.resetDate = resetDate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.activatedAt = activatedAt;
+        this.entreprises = entreprises;
+        this.authorities = authorities;
+    }
 
     public String getId() {
         return id;
@@ -185,6 +240,45 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+    public Set<Entreprise> getEntreprises() {
+        return entreprises;
+    }
+
+    public void setEntreprises(Set<Entreprise> entreprises) {
+        this.entreprises = entreprises;
+    }
+
+    public Set<Suivi> getSuivis() {
+        return suivis;
+    }
+
+    public void setSuivis(Set<Suivi> suivis) {
+        this.suivis = suivis;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getActivatedAt() {
+        return activatedAt;
+    }
+
+    public void setActivatedAt(String activatedAt) {
+        this.activatedAt = activatedAt;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -215,6 +309,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", createdAt='" + createdAt + '\'' +
+            ", updatedAt='" + updatedAt + '\'' +
             "}";
     }
 }

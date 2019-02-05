@@ -16,6 +16,9 @@
             "detail": {
                 "title": "Rapport"
             },
+            "type_1": "Jounalier",
+            "type_2": "Terrain",
+            "type_3": "Autre",
             "objet": "Objet",
             "copies": "Copies",
             "contenu": "Contenu",

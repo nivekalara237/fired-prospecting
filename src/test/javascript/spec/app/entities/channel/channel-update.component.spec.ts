@@ -9,7 +9,7 @@ import { ChannelService } from 'app/entities/channel/channel.service';
 import { Channel } from 'app/shared/model/channel.model';
 
 describe('Component Tests', () => {
-    describe('Channel Management Update Component', () => {
+    describe('ZChannel Management Update Component', () => {
         let comp: ChannelUpdateComponent;
         let fixture: ComponentFixture<ChannelUpdateComponent>;
         let service: ChannelService;

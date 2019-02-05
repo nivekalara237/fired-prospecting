@@ -1,6 +1,7 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ProdConfig } from './blocks/config/prod.config';
 import { FireDAppModule } from './app.module';
+import * as _ from 'lodash';
 
 ProdConfig();
 

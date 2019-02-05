@@ -28,7 +28,7 @@
     <div class="table-responsive" *ngIf="messages">
         <table class="table table-striped">
             <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="contenu"><span jhiTranslate="fireDApp.message.contenu">Contenu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="key"><span jhiTranslate="fireDApp.message.key">Key</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -38,12 +38,12 @@
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.message.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.message.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.message.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="channel.id"><span jhiTranslate="fireDApp.message.channel">Channel</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="user.id"><span jhiTranslate="fireDApp.message.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="channelId"><span jhiTranslate="fireDApp.message.channel">Channel</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="userId"><span jhiTranslate="fireDApp.message.user">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let message of messages ;trackBy: trackId">
                 <td><a [routerLink]="['/message', message.id, 'view' ]">{{message.id}}</a></td>
                 <td>{{message.contenu}}</td>
@@ -55,12 +55,12 @@
                 <td>{{message.updatedAt}}</td>
                 <td>{{message.deletedAt}}</td>
                 <td>
-                    <div *ngIf="message.channel">
-                        <a [routerLink]="['../channel', message.channel?.id, 'view' ]" >{{message.channel?.id}}</a>
+                    <div *ngIf="message.channelId">
+                        <a [routerLink]="['../channel', message.channelId , 'view' ]" >{{message.channelId}}</a>
                     </div>
                 </td>
                 <td>
-                    {{message.user?.id}}
+                    {{message.userId}}
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
@@ -89,13 +89,5 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div *ngIf="messages && messages.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-        </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
-        </div>
     </div>
 </div>

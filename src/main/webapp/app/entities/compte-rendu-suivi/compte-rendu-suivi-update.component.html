@@ -37,9 +37,9 @@
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.suivi" for="field_suivi">Suivi</label>
-                    <select class="form-control" id="field_suivi" name="suivi" [(ngModel)]="compteRenduSuivi.suivi" >
+                    <select class="form-control" id="field_suivi" name="suivi" [(ngModel)]="compteRenduSuivi.suiviId" >
                         <option [ngValue]="null"></option>
-                        <option [ngValue]="suiviOption.id === compteRenduSuivi.suivi?.id ? compteRenduSuivi.suivi : suiviOption" *ngFor="let suiviOption of suivis; trackBy: trackSuiviById">{{suiviOption.id}}</option>
+                        <option [ngValue]="suiviOption.id" *ngFor="let suiviOption of suivis; trackBy: trackSuiviById">{{suiviOption.id}}</option>
                     </select>
                 </div>
             </div>

@@ -4,8 +4,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
+import { NgBootstrapFormValidationModule } from 'ng-bootstrap-form-validation';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
@@ -18,18 +21,31 @@ import { FireDHomeModule } from './home/home.module';
 import { FireDAccountModule } from './account/account.module';
 import { FireDEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
+// import { MaterialModule } from './material.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
+// import {MaterialModule} from "./material.module";
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { NbThemeModule } from '@nebular/theme';
+import { NgxLoadingModule } from 'ngx-loading';
 
+import { EditorModule } from '@tinymce/tinymce-angular';
 @NgModule({
     imports: [
         BrowserModule,
         FireDAppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-' }),
+        NbThemeModule.forRoot(),
+        NgxUiLoaderModule,
+        NgbModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgBootstrapFormValidationModule.forRoot(),
+        NgxLoadingModule.forRoot({}),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
             alertAsToast: false,
-            alertTimeout: 5000,
+            alertTimeout: 25000,
             i18nEnabled: true,
             defaultI18nLang: 'fr'
         }),
@@ -37,6 +53,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
         FireDCoreModule,
         FireDHomeModule,
         FireDAccountModule,
+        EditorModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
         FireDEntityModule
     ],

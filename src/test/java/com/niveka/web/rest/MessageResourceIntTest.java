@@ -6,6 +6,8 @@ import com.niveka.domain.Message;
 import com.niveka.repository.MessageRepository;
 import com.niveka.repository.search.MessageSearchRepository;
 import com.niveka.service.MessageService;
+import com.niveka.service.dto.MessageDTO;
+import com.niveka.service.mapper.MessageMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -71,6 +73,9 @@ public class MessageResourceIntTest {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Autowired
     private MessageService messageService;
@@ -141,9 +146,10 @@ public class MessageResourceIntTest {
         int databaseSizeBeforeCreate = messageRepository.findAll().size();
 
         // Create the Message
+        MessageDTO messageDTO = messageMapper.toDto(message);
         restMessageMockMvc.perform(post("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(message)))
+            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Message in the database
@@ -169,11 +175,12 @@ public class MessageResourceIntTest {
 
         // Create the Message with an existing ID
         message.setId("existing_id");
+        MessageDTO messageDTO = messageMapper.toDto(message);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMessageMockMvc.perform(post("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(message)))
+            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Message in the database
@@ -234,9 +241,7 @@ public class MessageResourceIntTest {
     @Test
     public void updateMessage() throws Exception {
         // Initialize the database
-        messageService.save(message);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockMessageSearchRepository);
+        messageRepository.save(message);
 
         int databaseSizeBeforeUpdate = messageRepository.findAll().size();
 
@@ -251,10 +256,11 @@ public class MessageResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        MessageDTO messageDTO = messageMapper.toDto(updatedMessage);
 
         restMessageMockMvc.perform(put("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedMessage)))
+            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
             .andExpect(status().isOk());
 
         // Validate the Message in the database
@@ -279,11 +285,12 @@ public class MessageResourceIntTest {
         int databaseSizeBeforeUpdate = messageRepository.findAll().size();
 
         // Create the Message
+        MessageDTO messageDTO = messageMapper.toDto(message);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMessageMockMvc.perform(put("/api/messages")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(message)))
+            .content(TestUtil.convertObjectToJsonBytes(messageDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Message in the database
@@ -297,7 +304,7 @@ public class MessageResourceIntTest {
     @Test
     public void deleteMessage() throws Exception {
         // Initialize the database
-        messageService.save(message);
+        messageRepository.save(message);
 
         int databaseSizeBeforeDelete = messageRepository.findAll().size();
 
@@ -317,7 +324,7 @@ public class MessageResourceIntTest {
     @Test
     public void searchMessage() throws Exception {
         // Initialize the database
-        messageService.save(message);
+        messageRepository.save(message);
         when(mockMessageSearchRepository.search(queryStringQuery("id:" + message.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(message), PageRequest.of(0, 1), 1));
         // Search the message
@@ -347,5 +354,20 @@ public class MessageResourceIntTest {
         assertThat(message1).isNotEqualTo(message2);
         message1.setId(null);
         assertThat(message1).isNotEqualTo(message2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(MessageDTO.class);
+        MessageDTO messageDTO1 = new MessageDTO();
+        messageDTO1.setId("id1");
+        MessageDTO messageDTO2 = new MessageDTO();
+        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
+        messageDTO2.setId(messageDTO1.getId());
+        assertThat(messageDTO1).isEqualTo(messageDTO2);
+        messageDTO2.setId("id2");
+        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
+        messageDTO1.setId(null);
+        assertThat(messageDTO1).isNotEqualTo(messageDTO2);
     }
 }

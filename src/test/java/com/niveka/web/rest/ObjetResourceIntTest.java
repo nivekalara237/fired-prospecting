@@ -6,6 +6,8 @@ import com.niveka.domain.Objet;
 import com.niveka.repository.ObjetRepository;
 import com.niveka.repository.search.ObjetSearchRepository;
 import com.niveka.service.ObjetService;
+import com.niveka.service.dto.ObjetDTO;
+import com.niveka.service.mapper.ObjetMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -56,6 +58,9 @@ public class ObjetResourceIntTest {
 
     @Autowired
     private ObjetRepository objetRepository;
+
+    @Autowired
+    private ObjetMapper objetMapper;
 
     @Autowired
     private ObjetService objetService;
@@ -121,9 +126,10 @@ public class ObjetResourceIntTest {
         int databaseSizeBeforeCreate = objetRepository.findAll().size();
 
         // Create the Objet
+        ObjetDTO objetDTO = objetMapper.toDto(objet);
         restObjetMockMvc.perform(post("/api/objets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(objet)))
+            .content(TestUtil.convertObjectToJsonBytes(objetDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Objet in the database
@@ -144,11 +150,12 @@ public class ObjetResourceIntTest {
 
         // Create the Objet with an existing ID
         objet.setId("existing_id");
+        ObjetDTO objetDTO = objetMapper.toDto(objet);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restObjetMockMvc.perform(post("/api/objets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(objet)))
+            .content(TestUtil.convertObjectToJsonBytes(objetDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Objet in the database
@@ -199,9 +206,7 @@ public class ObjetResourceIntTest {
     @Test
     public void updateObjet() throws Exception {
         // Initialize the database
-        objetService.save(objet);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockObjetSearchRepository);
+        objetRepository.save(objet);
 
         int databaseSizeBeforeUpdate = objetRepository.findAll().size();
 
@@ -211,10 +216,11 @@ public class ObjetResourceIntTest {
             .nom(UPDATED_NOM)
             .lien(UPDATED_LIEN)
             .encode(UPDATED_ENCODE);
+        ObjetDTO objetDTO = objetMapper.toDto(updatedObjet);
 
         restObjetMockMvc.perform(put("/api/objets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedObjet)))
+            .content(TestUtil.convertObjectToJsonBytes(objetDTO)))
             .andExpect(status().isOk());
 
         // Validate the Objet in the database
@@ -234,11 +240,12 @@ public class ObjetResourceIntTest {
         int databaseSizeBeforeUpdate = objetRepository.findAll().size();
 
         // Create the Objet
+        ObjetDTO objetDTO = objetMapper.toDto(objet);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restObjetMockMvc.perform(put("/api/objets")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(objet)))
+            .content(TestUtil.convertObjectToJsonBytes(objetDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Objet in the database
@@ -252,7 +259,7 @@ public class ObjetResourceIntTest {
     @Test
     public void deleteObjet() throws Exception {
         // Initialize the database
-        objetService.save(objet);
+        objetRepository.save(objet);
 
         int databaseSizeBeforeDelete = objetRepository.findAll().size();
 
@@ -272,7 +279,7 @@ public class ObjetResourceIntTest {
     @Test
     public void searchObjet() throws Exception {
         // Initialize the database
-        objetService.save(objet);
+        objetRepository.save(objet);
         when(mockObjetSearchRepository.search(queryStringQuery("id:" + objet.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(objet), PageRequest.of(0, 1), 1));
         // Search the objet
@@ -297,5 +304,20 @@ public class ObjetResourceIntTest {
         assertThat(objet1).isNotEqualTo(objet2);
         objet1.setId(null);
         assertThat(objet1).isNotEqualTo(objet2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ObjetDTO.class);
+        ObjetDTO objetDTO1 = new ObjetDTO();
+        objetDTO1.setId("id1");
+        ObjetDTO objetDTO2 = new ObjetDTO();
+        assertThat(objetDTO1).isNotEqualTo(objetDTO2);
+        objetDTO2.setId(objetDTO1.getId());
+        assertThat(objetDTO1).isEqualTo(objetDTO2);
+        objetDTO2.setId("id2");
+        assertThat(objetDTO1).isNotEqualTo(objetDTO2);
+        objetDTO1.setId(null);
+        assertThat(objetDTO1).isNotEqualTo(objetDTO2);
     }
 }

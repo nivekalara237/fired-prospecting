@@ -1,12 +1,10 @@
-import { IRapport } from 'app/shared/model//rapport.model';
-
 export interface ICopie {
     id?: string;
     email?: string;
     createdAt?: string;
-    rapport?: IRapport;
+    rapportId?: string;
 }
 
 export class Copie implements ICopie {
-    constructor(public id?: string, public email?: string, public createdAt?: string, public rapport?: IRapport) {}
+    constructor(public id?: string, public email?: string, public createdAt?: string, public rapportId?: string) {}
 }

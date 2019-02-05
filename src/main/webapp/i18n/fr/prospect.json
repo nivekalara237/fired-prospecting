@@ -20,15 +20,23 @@
             "email": "Email",
             "telephone": "Telephone",
             "type": "Type",
-            "dateRdv": "Date Rdv",
+            "dateRdv": "Date RDV",
             "compteRendu": "Compte Rendu",
             "localisation": "Localisation",
             "position": "Position",
-            "createdAt": "Created At",
-            "updatedAt": "Updated At",
-            "deletedAt": "Deleted At",
+            "createdAt": "Creation",
+            "updatedAt": "Dernière modif",
+            "deletedAt": "Suppression",
             "suivi": "Suivi",
-            "user": "User"
+            "user": "User",
+            "le": "Le ",
+            "time": {
+                "hour": "Heure",
+                "minute": "Minute",
+                "second": "Seconde",
+                "date": "Date"
+            },
+            "emailOrPhoneRequired": "le champ adresse email ou numero de téléphone est requis"
         }
     }
 }

@@ -6,6 +6,8 @@ import com.niveka.domain.Prospect;
 import com.niveka.repository.ProspectRepository;
 import com.niveka.repository.search.ProspectSearchRepository;
 import com.niveka.service.ProspectService;
+import com.niveka.service.dto.ProspectDTO;
+import com.niveka.service.mapper.ProspectMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -82,6 +84,9 @@ public class ProspectResourceIntTest {
     private ProspectRepository prospectRepository;
 
     @Autowired
+    private ProspectMapper prospectMapper;
+
+    @Autowired
     private ProspectService prospectService;
 
     /**
@@ -153,9 +158,10 @@ public class ProspectResourceIntTest {
         int databaseSizeBeforeCreate = prospectRepository.findAll().size();
 
         // Create the Prospect
+        ProspectDTO prospectDTO = prospectMapper.toDto(prospect);
         restProspectMockMvc.perform(post("/api/prospects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(prospect)))
+            .content(TestUtil.convertObjectToJsonBytes(prospectDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Prospect in the database
@@ -184,11 +190,12 @@ public class ProspectResourceIntTest {
 
         // Create the Prospect with an existing ID
         prospect.setId("existing_id");
+        ProspectDTO prospectDTO = prospectMapper.toDto(prospect);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProspectMockMvc.perform(post("/api/prospects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(prospect)))
+            .content(TestUtil.convertObjectToJsonBytes(prospectDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Prospect in the database
@@ -255,9 +262,7 @@ public class ProspectResourceIntTest {
     @Test
     public void updateProspect() throws Exception {
         // Initialize the database
-        prospectService.save(prospect);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockProspectSearchRepository);
+        prospectRepository.save(prospect);
 
         int databaseSizeBeforeUpdate = prospectRepository.findAll().size();
 
@@ -275,10 +280,11 @@ public class ProspectResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        ProspectDTO prospectDTO = prospectMapper.toDto(updatedProspect);
 
         restProspectMockMvc.perform(put("/api/prospects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedProspect)))
+            .content(TestUtil.convertObjectToJsonBytes(prospectDTO)))
             .andExpect(status().isOk());
 
         // Validate the Prospect in the database
@@ -306,11 +312,12 @@ public class ProspectResourceIntTest {
         int databaseSizeBeforeUpdate = prospectRepository.findAll().size();
 
         // Create the Prospect
+        ProspectDTO prospectDTO = prospectMapper.toDto(prospect);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProspectMockMvc.perform(put("/api/prospects")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(prospect)))
+            .content(TestUtil.convertObjectToJsonBytes(prospectDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Prospect in the database
@@ -324,7 +331,7 @@ public class ProspectResourceIntTest {
     @Test
     public void deleteProspect() throws Exception {
         // Initialize the database
-        prospectService.save(prospect);
+        prospectRepository.save(prospect);
 
         int databaseSizeBeforeDelete = prospectRepository.findAll().size();
 
@@ -344,7 +351,7 @@ public class ProspectResourceIntTest {
     @Test
     public void searchProspect() throws Exception {
         // Initialize the database
-        prospectService.save(prospect);
+        prospectRepository.save(prospect);
         when(mockProspectSearchRepository.search(queryStringQuery("id:" + prospect.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(prospect), PageRequest.of(0, 1), 1));
         // Search the prospect
@@ -377,5 +384,20 @@ public class ProspectResourceIntTest {
         assertThat(prospect1).isNotEqualTo(prospect2);
         prospect1.setId(null);
         assertThat(prospect1).isNotEqualTo(prospect2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ProspectDTO.class);
+        ProspectDTO prospectDTO1 = new ProspectDTO();
+        prospectDTO1.setId("id1");
+        ProspectDTO prospectDTO2 = new ProspectDTO();
+        assertThat(prospectDTO1).isNotEqualTo(prospectDTO2);
+        prospectDTO2.setId(prospectDTO1.getId());
+        assertThat(prospectDTO1).isEqualTo(prospectDTO2);
+        prospectDTO2.setId("id2");
+        assertThat(prospectDTO1).isNotEqualTo(prospectDTO2);
+        prospectDTO1.setId(null);
+        assertThat(prospectDTO1).isNotEqualTo(prospectDTO2);
     }
 }

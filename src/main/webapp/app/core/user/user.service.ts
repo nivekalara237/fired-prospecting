@@ -6,6 +6,9 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
 
+type EntityResponseType = HttpResponse<IUser>;
+type EntityArrayResponseType = HttpResponse<IUser[]>;
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
     public resourceUrl = SERVER_API_URL + 'api/users';
@@ -22,6 +25,10 @@ export class UserService {
 
     find(login: string): Observable<HttpResponse<IUser>> {
         return this.http.get<IUser>(`${this.resourceUrl}/${login}`, { observe: 'response' });
+    }
+
+    findComm(entreprise: string): Observable<EntityArrayResponseType> {
+        return this.http.get<IUser[]>(`${this.resourceUrl}/commercials/${entreprise}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<HttpResponse<IUser[]>> {

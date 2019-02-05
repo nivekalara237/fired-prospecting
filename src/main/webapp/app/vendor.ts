@@ -39,11 +39,23 @@ import {
     faTrashAlt,
     faAsterisk,
     faTasks,
-    faHome
+    faHome,
+    faPhone,
+    faEnvelope,
+    faPlusCircle,
+    faCalendar,
+    faPersonBooth,
+    faMapMarker
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
+library.add(faEnvelope);
 library.add(faUser);
+library.add(faMapMarker);
+library.add(faPersonBooth);
+library.add(faCalendar);
+library.add(faPlusCircle);
+library.add(faPhone);
 library.add(faSort);
 library.add(faSortUp);
 library.add(faSortDown);

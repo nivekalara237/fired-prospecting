@@ -35,7 +35,7 @@
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.compteRenduSuivi.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.compteRenduSuivi.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.compteRenduSuivi.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="suivi.id"><span jhiTranslate="fireDApp.compteRenduSuivi.suivi">Suivi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="suiviId"><span jhiTranslate="fireDApp.compteRenduSuivi.suivi">Suivi</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
@@ -48,8 +48,8 @@
                 <td>{{compteRenduSuivi.updatedAt}}</td>
                 <td>{{compteRenduSuivi.deletedAt}}</td>
                 <td>
-                    <div *ngIf="compteRenduSuivi.suivi">
-                        <a [routerLink]="['../suivi', compteRenduSuivi.suivi?.id, 'view' ]" >{{compteRenduSuivi.suivi?.id}}</a>
+                    <div *ngIf="compteRenduSuivi.suiviId">
+                        <a [routerLink]="['../suivi', compteRenduSuivi.suiviId , 'view' ]" >{{compteRenduSuivi.suiviId}}</a>
                     </div>
                 </td>
                 <td class="text-right">

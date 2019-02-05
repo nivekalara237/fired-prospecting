@@ -1,14 +1,21 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Prospect;
+import com.niveka.domain.Suivi;
+import com.niveka.domain.User;
+import com.niveka.repository.UserRepository;
 import com.niveka.service.ProspectService;
+import com.niveka.service.SuiviService;
+import com.niveka.service.dto.ProspectDTO;
+import com.niveka.service.dto.SuiviDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
+import com.niveka.web.rest.util.Utils;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -18,12 +25,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Prospect.
@@ -38,6 +43,11 @@ public class ProspectResource {
 
     private final ProspectService prospectService;
 
+    @Autowired
+    private SuiviService suiviService;
+    @Autowired
+    private UserRepository userRepository;
+
     public ProspectResource(ProspectService prospectService) {
         this.prospectService = prospectService;
     }
@@ -45,18 +55,36 @@ public class ProspectResource {
     /**
      * POST  /prospects : Create a new prospect.
      *
-     * @param prospect the prospect to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new prospect, or with status 400 (Bad Request) if the prospect has already an ID
+     * @param prospectDTO the prospectDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new prospectDTO, or with status 400 (Bad Request) if the prospect has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/prospects")
     @Timed
-    public ResponseEntity<Prospect> createProspect(@RequestBody Prospect prospect) throws URISyntaxException {
-        log.debug("REST request to save Prospect : {}", prospect);
-        if (prospect.getId() != null) {
-            throw new BadRequestAlertException("A new prospect cannot already have an ID", ENTITY_NAME, "idexists");
+    public ResponseEntity<ProspectDTO> createProspect(@RequestBody ProspectDTO prospectDTO) throws URISyntaxException {
+        log.debug("REST request to save Prospect : {}", prospectDTO);
+        if (prospectDTO.getId() != null) {
+            throw new BadRequestAlertException("A new prospect cannot already have an ID", ENTITY_NAME, "exists");
         }
-        Prospect result = prospectService.save(prospect);
+
+        if(prospectDTO.getUserId()==null){
+            return ResponseEntity.badRequest()
+                .header("Failure","Verifiez votre connection")
+                .body(null);
+        }
+
+        Suivi suivi = new Suivi();
+
+        //le
+        suivi.setCreatedAt(Utils.currentJodaDateStr());
+        suivi.setDateRdv(prospectDTO.getDateRdv());
+        HashSet<User> users = new HashSet<>();
+        users.add(userRepository.findById((prospectDTO.getUserId())).orElse(null));
+        suivi.setUsers(users);
+        suivi.setUpdatedAt(Utils.currentJodaDateStr());
+        prospectDTO.setCreatedAt(Utils.currentJodaDateStr());
+        ProspectDTO result = prospectService.save(prospectDTO);
+        SuiviDTO suiviDTO = suiviService.save(suivi);
         return ResponseEntity.created(new URI("/api/prospects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +93,22 @@ public class ProspectResource {
     /**
      * PUT  /prospects : Updates an existing prospect.
      *
-     * @param prospect the prospect to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated prospect,
-     * or with status 400 (Bad Request) if the prospect is not valid,
-     * or with status 500 (Internal Server Error) if the prospect couldn't be updated
+     * @param prospectDTO the prospectDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated prospectDTO,
+     * or with status 400 (Bad Request) if the prospectDTO is not valid,
+     * or with status 500 (Internal Server Error) if the prospectDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/prospects")
     @Timed
-    public ResponseEntity<Prospect> updateProspect(@RequestBody Prospect prospect) throws URISyntaxException {
-        log.debug("REST request to update Prospect : {}", prospect);
-        if (prospect.getId() == null) {
+    public ResponseEntity<ProspectDTO> updateProspect(@RequestBody ProspectDTO prospectDTO) throws URISyntaxException {
+        log.debug("REST request to update Prospect : {}", prospectDTO);
+        if (prospectDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Prospect result = prospectService.save(prospect);
+        ProspectDTO result = prospectService.save(prospectDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, prospect.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, prospectDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,31 +120,34 @@ public class ProspectResource {
      */
     @GetMapping("/prospects")
     @Timed
-    public ResponseEntity<List<Prospect>> getAllProspects(Pageable pageable) {
+    public ResponseEntity<List<ProspectDTO>> getAllProspects(Pageable pageable) {
         log.debug("REST request to get a page of Prospects");
-        Page<Prospect> page = prospectService.findAll(pageable);
+        Page<ProspectDTO> page = prospectService.findAll(pageable);
+        List<ProspectDTO> pages = new ArrayList<>();
+        page.map(prospectDTO -> pages.add(prospectDTO.setCreated(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
+        //log.error("PROSPECT1", pages);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prospects");
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(pages);
     }
 
     /**
      * GET  /prospects/:id : get the "id" prospect.
      *
-     * @param id the id of the prospect to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the prospect, or with status 404 (Not Found)
+     * @param id the id of the prospectDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the prospectDTO, or with status 404 (Not Found)
      */
     @GetMapping("/prospects/{id}")
     @Timed
-    public ResponseEntity<Prospect> getProspect(@PathVariable String id) {
+    public ResponseEntity<ProspectDTO> getProspect(@PathVariable String id) {
         log.debug("REST request to get Prospect : {}", id);
-        Optional<Prospect> prospect = prospectService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(prospect);
+        Optional<ProspectDTO> prospectDTO = prospectService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(prospectDTO);
     }
 
     /**
      * DELETE  /prospects/:id : delete the "id" prospect.
      *
-     * @param id the id of the prospect to delete
+     * @param id the id of the prospectDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/prospects/{id}")
@@ -137,11 +168,14 @@ public class ProspectResource {
      */
     @GetMapping("/_search/prospects")
     @Timed
-    public ResponseEntity<List<Prospect>> searchProspects(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<ProspectDTO>> searchProspects(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Prospects for query {}", query);
-        Page<Prospect> page = prospectService.search(query, pageable);
+        Page<ProspectDTO> page = prospectService.search(query, pageable);
+        List<ProspectDTO> pages = new ArrayList<>();
+        page.map(prospectDTO -> pages.add(prospectDTO.setCreated(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
+        log.error("PROSPECT_2", pages);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/prospects");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(pages, headers, HttpStatus.OK);
     }
 
 }

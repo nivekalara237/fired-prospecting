@@ -2,10 +2,12 @@ package com.niveka.web.rest;
 
 import com.niveka.FireDApp;
 
-import com.niveka.domain.Channel;
-import com.niveka.repository.ChannelRepository;
-import com.niveka.repository.search.ChannelSearchRepository;
-import com.niveka.service.ChannelService;
+import com.niveka.domain.ZChannel;
+import com.niveka.repository.ZChannelRepository;
+import com.niveka.repository.search.ZChannelSearchRepository;
+import com.niveka.service.ZChannelService;
+import com.niveka.service.dto.ZChannelDTO;
+import com.niveka.service.mapper.ChannelMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -66,16 +68,19 @@ public class ChannelResourceIntTest {
     private static final String UPDATED_DELETED_AT = "BBBBBBBBBB";
 
     @Autowired
-    private ChannelRepository channelRepository;
+    private ZChannelRepository ZChannelRepository;
 
     @Mock
-    private ChannelRepository channelRepositoryMock;
-
-    @Mock
-    private ChannelService channelServiceMock;
+    private ZChannelRepository ZChannelRepositoryMock;
 
     @Autowired
-    private ChannelService channelService;
+    private ChannelMapper channelMapper;
+
+    @Mock
+    private ZChannelService ZChannelServiceMock;
+
+    @Autowired
+    private ZChannelService ZChannelService;
 
     /**
      * This repository is mocked in the com.niveka.repository.search test package.
@@ -83,7 +88,7 @@ public class ChannelResourceIntTest {
      * @see com.niveka.repository.search.ChannelSearchRepositoryMockConfiguration
      */
     @Autowired
-    private ChannelSearchRepository mockChannelSearchRepository;
+    private ZChannelSearchRepository mockZChannelSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -99,12 +104,12 @@ public class ChannelResourceIntTest {
 
     private MockMvc restChannelMockMvc;
 
-    private Channel channel;
+    private ZChannel channel;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ChannelResource channelResource = new ChannelResource(channelService);
+        final ChannelResource channelResource = new ChannelResource(ZChannelService);
         this.restChannelMockMvc = MockMvcBuilders.standaloneSetup(channelResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -119,8 +124,8 @@ public class ChannelResourceIntTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Channel createEntity() {
-        Channel channel = new Channel()
+    public static ZChannel createEntity() {
+        ZChannel channel = new ZChannel()
             .designation(DEFAULT_DESIGNATION)
             .entrepriseId(DEFAULT_ENTREPRISE_ID)
             .code(DEFAULT_CODE)
@@ -132,24 +137,25 @@ public class ChannelResourceIntTest {
 
     @Before
     public void initTest() {
-        channelRepository.deleteAll();
+        ZChannelRepository.deleteAll();
         channel = createEntity();
     }
 
     @Test
     public void createChannel() throws Exception {
-        int databaseSizeBeforeCreate = channelRepository.findAll().size();
+        int databaseSizeBeforeCreate = ZChannelRepository.findAll().size();
 
-        // Create the Channel
+        // Create the ZChannel
+        ZChannelDTO channelDTO = channelMapper.toDto(channel);
         restChannelMockMvc.perform(post("/api/channels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(channel)))
+            .content(TestUtil.convertObjectToJsonBytes(channelDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the Channel in the database
-        List<Channel> channelList = channelRepository.findAll();
+        // Validate the ZChannel in the database
+        List<ZChannel> channelList = ZChannelRepository.findAll();
         assertThat(channelList).hasSize(databaseSizeBeforeCreate + 1);
-        Channel testChannel = channelList.get(channelList.size() - 1);
+        ZChannel testChannel = channelList.get(channelList.size() - 1);
         assertThat(testChannel.getDesignation()).isEqualTo(DEFAULT_DESIGNATION);
         assertThat(testChannel.getEntrepriseId()).isEqualTo(DEFAULT_ENTREPRISE_ID);
         assertThat(testChannel.getCode()).isEqualTo(DEFAULT_CODE);
@@ -157,35 +163,36 @@ public class ChannelResourceIntTest {
         assertThat(testChannel.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
         assertThat(testChannel.getDeletedAt()).isEqualTo(DEFAULT_DELETED_AT);
 
-        // Validate the Channel in Elasticsearch
-        verify(mockChannelSearchRepository, times(1)).save(testChannel);
+        // Validate the ZChannel in Elasticsearch
+        verify(mockZChannelSearchRepository, times(1)).save(testChannel);
     }
 
     @Test
     public void createChannelWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = channelRepository.findAll().size();
+        int databaseSizeBeforeCreate = ZChannelRepository.findAll().size();
 
-        // Create the Channel with an existing ID
+        // Create the ZChannel with an existing ID
         channel.setId("existing_id");
+        ZChannelDTO channelDTO = channelMapper.toDto(channel);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restChannelMockMvc.perform(post("/api/channels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(channel)))
+            .content(TestUtil.convertObjectToJsonBytes(channelDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the Channel in the database
-        List<Channel> channelList = channelRepository.findAll();
+        // Validate the ZChannel in the database
+        List<ZChannel> channelList = ZChannelRepository.findAll();
         assertThat(channelList).hasSize(databaseSizeBeforeCreate);
 
-        // Validate the Channel in Elasticsearch
-        verify(mockChannelSearchRepository, times(0)).save(channel);
+        // Validate the ZChannel in Elasticsearch
+        verify(mockZChannelSearchRepository, times(0)).save(channel);
     }
 
     @Test
     public void getAllChannels() throws Exception {
         // Initialize the database
-        channelRepository.save(channel);
+        ZChannelRepository.save(channel);
 
         // Get all the channelList
         restChannelMockMvc.perform(get("/api/channels?sort=id,desc"))
@@ -199,11 +206,11 @@ public class ChannelResourceIntTest {
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
             .andExpect(jsonPath("$.[*].deletedAt").value(hasItem(DEFAULT_DELETED_AT.toString())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllChannelsWithEagerRelationshipsIsEnabled() throws Exception {
-        ChannelResource channelResource = new ChannelResource(channelServiceMock);
-        when(channelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ChannelResource channelResource = new ChannelResource(ZChannelServiceMock);
+        when(ZChannelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
         MockMvc restChannelMockMvc = MockMvcBuilders.standaloneSetup(channelResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -214,13 +221,13 @@ public class ChannelResourceIntTest {
         restChannelMockMvc.perform(get("/api/channels?eagerload=true"))
         .andExpect(status().isOk());
 
-        verify(channelServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(ZChannelServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({"unchecked"})
     public void getAllChannelsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        ChannelResource channelResource = new ChannelResource(channelServiceMock);
-            when(channelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        ChannelResource channelResource = new ChannelResource(ZChannelServiceMock);
+            when(ZChannelServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
             MockMvc restChannelMockMvc = MockMvcBuilders.standaloneSetup(channelResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -230,13 +237,13 @@ public class ChannelResourceIntTest {
         restChannelMockMvc.perform(get("/api/channels?eagerload=true"))
         .andExpect(status().isOk());
 
-            verify(channelServiceMock, times(1)).findAllWithEagerRelationships(any());
+            verify(ZChannelServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
     public void getChannel() throws Exception {
         // Initialize the database
-        channelRepository.save(channel);
+        ZChannelRepository.save(channel);
 
         // Get the channel
         restChannelMockMvc.perform(get("/api/channels/{id}", channel.getId()))
@@ -261,14 +268,12 @@ public class ChannelResourceIntTest {
     @Test
     public void updateChannel() throws Exception {
         // Initialize the database
-        channelService.save(channel);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockChannelSearchRepository);
+        ZChannelRepository.save(channel);
 
-        int databaseSizeBeforeUpdate = channelRepository.findAll().size();
+        int databaseSizeBeforeUpdate = ZChannelRepository.findAll().size();
 
         // Update the channel
-        Channel updatedChannel = channelRepository.findById(channel.getId()).get();
+        ZChannel updatedChannel = ZChannelRepository.findById(channel.getId()).get();
         updatedChannel
             .designation(UPDATED_DESIGNATION)
             .entrepriseId(UPDATED_ENTREPRISE_ID)
@@ -276,16 +281,17 @@ public class ChannelResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        ZChannelDTO channelDTO = channelMapper.toDto(updatedChannel);
 
         restChannelMockMvc.perform(put("/api/channels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedChannel)))
+            .content(TestUtil.convertObjectToJsonBytes(channelDTO)))
             .andExpect(status().isOk());
 
-        // Validate the Channel in the database
-        List<Channel> channelList = channelRepository.findAll();
+        // Validate the ZChannel in the database
+        List<ZChannel> channelList = ZChannelRepository.findAll();
         assertThat(channelList).hasSize(databaseSizeBeforeUpdate);
-        Channel testChannel = channelList.get(channelList.size() - 1);
+        ZChannel testChannel = channelList.get(channelList.size() - 1);
         assertThat(testChannel.getDesignation()).isEqualTo(UPDATED_DESIGNATION);
         assertThat(testChannel.getEntrepriseId()).isEqualTo(UPDATED_ENTREPRISE_ID);
         assertThat(testChannel.getCode()).isEqualTo(UPDATED_CODE);
@@ -293,36 +299,37 @@ public class ChannelResourceIntTest {
         assertThat(testChannel.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
         assertThat(testChannel.getDeletedAt()).isEqualTo(UPDATED_DELETED_AT);
 
-        // Validate the Channel in Elasticsearch
-        verify(mockChannelSearchRepository, times(1)).save(testChannel);
+        // Validate the ZChannel in Elasticsearch
+        verify(mockZChannelSearchRepository, times(1)).save(testChannel);
     }
 
     @Test
     public void updateNonExistingChannel() throws Exception {
-        int databaseSizeBeforeUpdate = channelRepository.findAll().size();
+        int databaseSizeBeforeUpdate = ZChannelRepository.findAll().size();
 
-        // Create the Channel
+        // Create the ZChannel
+        ZChannelDTO channelDTO = channelMapper.toDto(channel);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restChannelMockMvc.perform(put("/api/channels")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(channel)))
+            .content(TestUtil.convertObjectToJsonBytes(channelDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the Channel in the database
-        List<Channel> channelList = channelRepository.findAll();
+        // Validate the ZChannel in the database
+        List<ZChannel> channelList = ZChannelRepository.findAll();
         assertThat(channelList).hasSize(databaseSizeBeforeUpdate);
 
-        // Validate the Channel in Elasticsearch
-        verify(mockChannelSearchRepository, times(0)).save(channel);
+        // Validate the ZChannel in Elasticsearch
+        verify(mockZChannelSearchRepository, times(0)).save(channel);
     }
 
     @Test
     public void deleteChannel() throws Exception {
         // Initialize the database
-        channelService.save(channel);
+        ZChannelRepository.save(channel);
 
-        int databaseSizeBeforeDelete = channelRepository.findAll().size();
+        int databaseSizeBeforeDelete = ZChannelRepository.findAll().size();
 
         // Get the channel
         restChannelMockMvc.perform(delete("/api/channels/{id}", channel.getId())
@@ -330,18 +337,18 @@ public class ChannelResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<Channel> channelList = channelRepository.findAll();
+        List<ZChannel> channelList = ZChannelRepository.findAll();
         assertThat(channelList).hasSize(databaseSizeBeforeDelete - 1);
 
-        // Validate the Channel in Elasticsearch
-        verify(mockChannelSearchRepository, times(1)).deleteById(channel.getId());
+        // Validate the ZChannel in Elasticsearch
+        verify(mockZChannelSearchRepository, times(1)).deleteById(channel.getId());
     }
 
     @Test
     public void searchChannel() throws Exception {
         // Initialize the database
-        channelService.save(channel);
-        when(mockChannelSearchRepository.search(queryStringQuery("id:" + channel.getId()), PageRequest.of(0, 20)))
+        ZChannelRepository.save(channel);
+        when(mockZChannelSearchRepository.search(queryStringQuery("id:" + channel.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(channel), PageRequest.of(0, 1), 1));
         // Search the channel
         restChannelMockMvc.perform(get("/api/_search/channels?query=id:" + channel.getId()))
@@ -358,15 +365,30 @@ public class ChannelResourceIntTest {
 
     @Test
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Channel.class);
-        Channel channel1 = new Channel();
+        TestUtil.equalsVerifier(ZChannel.class);
+        ZChannel channel1 = new ZChannel();
         channel1.setId("id1");
-        Channel channel2 = new Channel();
+        ZChannel channel2 = new ZChannel();
         channel2.setId(channel1.getId());
         assertThat(channel1).isEqualTo(channel2);
         channel2.setId("id2");
         assertThat(channel1).isNotEqualTo(channel2);
         channel1.setId(null);
         assertThat(channel1).isNotEqualTo(channel2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(ZChannelDTO.class);
+        ZChannelDTO channelDTO1 = new ZChannelDTO();
+        channelDTO1.setId("id1");
+        ZChannelDTO channelDTO2 = new ZChannelDTO();
+        assertThat(channelDTO1).isNotEqualTo(channelDTO2);
+        channelDTO2.setId(channelDTO1.getId());
+        assertThat(channelDTO1).isEqualTo(channelDTO2);
+        channelDTO2.setId("id2");
+        assertThat(channelDTO1).isNotEqualTo(channelDTO2);
+        channelDTO1.setId(null);
+        assertThat(channelDTO1).isNotEqualTo(channelDTO2);
     }
 }

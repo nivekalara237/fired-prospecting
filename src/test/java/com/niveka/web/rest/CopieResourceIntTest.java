@@ -6,6 +6,8 @@ import com.niveka.domain.Copie;
 import com.niveka.repository.CopieRepository;
 import com.niveka.repository.search.CopieSearchRepository;
 import com.niveka.service.CopieService;
+import com.niveka.service.dto.CopieDTO;
+import com.niveka.service.mapper.CopieMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -53,6 +55,9 @@ public class CopieResourceIntTest {
 
     @Autowired
     private CopieRepository copieRepository;
+
+    @Autowired
+    private CopieMapper copieMapper;
 
     @Autowired
     private CopieService copieService;
@@ -117,9 +122,10 @@ public class CopieResourceIntTest {
         int databaseSizeBeforeCreate = copieRepository.findAll().size();
 
         // Create the Copie
+        CopieDTO copieDTO = copieMapper.toDto(copie);
         restCopieMockMvc.perform(post("/api/copies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(copie)))
+            .content(TestUtil.convertObjectToJsonBytes(copieDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Copie in the database
@@ -139,11 +145,12 @@ public class CopieResourceIntTest {
 
         // Create the Copie with an existing ID
         copie.setId("existing_id");
+        CopieDTO copieDTO = copieMapper.toDto(copie);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCopieMockMvc.perform(post("/api/copies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(copie)))
+            .content(TestUtil.convertObjectToJsonBytes(copieDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Copie in the database
@@ -192,9 +199,7 @@ public class CopieResourceIntTest {
     @Test
     public void updateCopie() throws Exception {
         // Initialize the database
-        copieService.save(copie);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockCopieSearchRepository);
+        copieRepository.save(copie);
 
         int databaseSizeBeforeUpdate = copieRepository.findAll().size();
 
@@ -203,10 +208,11 @@ public class CopieResourceIntTest {
         updatedCopie
             .email(UPDATED_EMAIL)
             .createdAt(UPDATED_CREATED_AT);
+        CopieDTO copieDTO = copieMapper.toDto(updatedCopie);
 
         restCopieMockMvc.perform(put("/api/copies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedCopie)))
+            .content(TestUtil.convertObjectToJsonBytes(copieDTO)))
             .andExpect(status().isOk());
 
         // Validate the Copie in the database
@@ -225,11 +231,12 @@ public class CopieResourceIntTest {
         int databaseSizeBeforeUpdate = copieRepository.findAll().size();
 
         // Create the Copie
+        CopieDTO copieDTO = copieMapper.toDto(copie);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCopieMockMvc.perform(put("/api/copies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(copie)))
+            .content(TestUtil.convertObjectToJsonBytes(copieDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Copie in the database
@@ -243,7 +250,7 @@ public class CopieResourceIntTest {
     @Test
     public void deleteCopie() throws Exception {
         // Initialize the database
-        copieService.save(copie);
+        copieRepository.save(copie);
 
         int databaseSizeBeforeDelete = copieRepository.findAll().size();
 
@@ -263,7 +270,7 @@ public class CopieResourceIntTest {
     @Test
     public void searchCopie() throws Exception {
         // Initialize the database
-        copieService.save(copie);
+        copieRepository.save(copie);
         when(mockCopieSearchRepository.search(queryStringQuery("id:" + copie.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(copie), PageRequest.of(0, 1), 1));
         // Search the copie
@@ -287,5 +294,20 @@ public class CopieResourceIntTest {
         assertThat(copie1).isNotEqualTo(copie2);
         copie1.setId(null);
         assertThat(copie1).isNotEqualTo(copie2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(CopieDTO.class);
+        CopieDTO copieDTO1 = new CopieDTO();
+        copieDTO1.setId("id1");
+        CopieDTO copieDTO2 = new CopieDTO();
+        assertThat(copieDTO1).isNotEqualTo(copieDTO2);
+        copieDTO2.setId(copieDTO1.getId());
+        assertThat(copieDTO1).isEqualTo(copieDTO2);
+        copieDTO2.setId("id2");
+        assertThat(copieDTO1).isNotEqualTo(copieDTO2);
+        copieDTO1.setId(null);
+        assertThat(copieDTO1).isNotEqualTo(copieDTO2);
     }
 }

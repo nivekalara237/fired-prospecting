@@ -6,6 +6,8 @@ import com.niveka.domain.CompteRenduSuivi;
 import com.niveka.repository.CompteRenduSuiviRepository;
 import com.niveka.repository.search.CompteRenduSuiviSearchRepository;
 import com.niveka.service.CompteRenduSuiviService;
+import com.niveka.service.dto.CompteRenduSuiviDTO;
+import com.niveka.service.mapper.CompteRenduSuiviMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -62,6 +64,9 @@ public class CompteRenduSuiviResourceIntTest {
 
     @Autowired
     private CompteRenduSuiviRepository compteRenduSuiviRepository;
+
+    @Autowired
+    private CompteRenduSuiviMapper compteRenduSuiviMapper;
 
     @Autowired
     private CompteRenduSuiviService compteRenduSuiviService;
@@ -129,9 +134,10 @@ public class CompteRenduSuiviResourceIntTest {
         int databaseSizeBeforeCreate = compteRenduSuiviRepository.findAll().size();
 
         // Create the CompteRenduSuivi
+        CompteRenduSuiviDTO compteRenduSuiviDTO = compteRenduSuiviMapper.toDto(compteRenduSuivi);
         restCompteRenduSuiviMockMvc.perform(post("/api/compte-rendu-suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuivi)))
+            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuiviDTO)))
             .andExpect(status().isCreated());
 
         // Validate the CompteRenduSuivi in the database
@@ -154,11 +160,12 @@ public class CompteRenduSuiviResourceIntTest {
 
         // Create the CompteRenduSuivi with an existing ID
         compteRenduSuivi.setId("existing_id");
+        CompteRenduSuiviDTO compteRenduSuiviDTO = compteRenduSuiviMapper.toDto(compteRenduSuivi);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCompteRenduSuiviMockMvc.perform(post("/api/compte-rendu-suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuivi)))
+            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuiviDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the CompteRenduSuivi in the database
@@ -213,9 +220,7 @@ public class CompteRenduSuiviResourceIntTest {
     @Test
     public void updateCompteRenduSuivi() throws Exception {
         // Initialize the database
-        compteRenduSuiviService.save(compteRenduSuivi);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockCompteRenduSuiviSearchRepository);
+        compteRenduSuiviRepository.save(compteRenduSuivi);
 
         int databaseSizeBeforeUpdate = compteRenduSuiviRepository.findAll().size();
 
@@ -227,10 +232,11 @@ public class CompteRenduSuiviResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        CompteRenduSuiviDTO compteRenduSuiviDTO = compteRenduSuiviMapper.toDto(updatedCompteRenduSuivi);
 
         restCompteRenduSuiviMockMvc.perform(put("/api/compte-rendu-suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedCompteRenduSuivi)))
+            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuiviDTO)))
             .andExpect(status().isOk());
 
         // Validate the CompteRenduSuivi in the database
@@ -252,11 +258,12 @@ public class CompteRenduSuiviResourceIntTest {
         int databaseSizeBeforeUpdate = compteRenduSuiviRepository.findAll().size();
 
         // Create the CompteRenduSuivi
+        CompteRenduSuiviDTO compteRenduSuiviDTO = compteRenduSuiviMapper.toDto(compteRenduSuivi);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompteRenduSuiviMockMvc.perform(put("/api/compte-rendu-suivis")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuivi)))
+            .content(TestUtil.convertObjectToJsonBytes(compteRenduSuiviDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the CompteRenduSuivi in the database
@@ -270,7 +277,7 @@ public class CompteRenduSuiviResourceIntTest {
     @Test
     public void deleteCompteRenduSuivi() throws Exception {
         // Initialize the database
-        compteRenduSuiviService.save(compteRenduSuivi);
+        compteRenduSuiviRepository.save(compteRenduSuivi);
 
         int databaseSizeBeforeDelete = compteRenduSuiviRepository.findAll().size();
 
@@ -290,7 +297,7 @@ public class CompteRenduSuiviResourceIntTest {
     @Test
     public void searchCompteRenduSuivi() throws Exception {
         // Initialize the database
-        compteRenduSuiviService.save(compteRenduSuivi);
+        compteRenduSuiviRepository.save(compteRenduSuivi);
         when(mockCompteRenduSuiviSearchRepository.search(queryStringQuery("id:" + compteRenduSuivi.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(compteRenduSuivi), PageRequest.of(0, 1), 1));
         // Search the compteRenduSuivi
@@ -317,5 +324,20 @@ public class CompteRenduSuiviResourceIntTest {
         assertThat(compteRenduSuivi1).isNotEqualTo(compteRenduSuivi2);
         compteRenduSuivi1.setId(null);
         assertThat(compteRenduSuivi1).isNotEqualTo(compteRenduSuivi2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(CompteRenduSuiviDTO.class);
+        CompteRenduSuiviDTO compteRenduSuiviDTO1 = new CompteRenduSuiviDTO();
+        compteRenduSuiviDTO1.setId("id1");
+        CompteRenduSuiviDTO compteRenduSuiviDTO2 = new CompteRenduSuiviDTO();
+        assertThat(compteRenduSuiviDTO1).isNotEqualTo(compteRenduSuiviDTO2);
+        compteRenduSuiviDTO2.setId(compteRenduSuiviDTO1.getId());
+        assertThat(compteRenduSuiviDTO1).isEqualTo(compteRenduSuiviDTO2);
+        compteRenduSuiviDTO2.setId("id2");
+        assertThat(compteRenduSuiviDTO1).isNotEqualTo(compteRenduSuiviDTO2);
+        compteRenduSuiviDTO1.setId(null);
+        assertThat(compteRenduSuiviDTO1).isNotEqualTo(compteRenduSuiviDTO2);
     }
 }

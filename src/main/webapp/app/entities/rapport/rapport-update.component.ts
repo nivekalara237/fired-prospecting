@@ -7,6 +7,7 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IRapport } from 'app/shared/model/rapport.model';
 import { RapportService } from './rapport.service';
 import { IUser, UserService } from 'app/core';
+import { AccountService, Account } from 'app/core';
 
 @Component({
     selector: 'jhi-rapport-update',
@@ -15,13 +16,14 @@ import { IUser, UserService } from 'app/core';
 export class RapportUpdateComponent implements OnInit {
     rapport: IRapport;
     isSaving: boolean;
-
+    account: Account;
     users: IUser[];
 
     constructor(
         protected jhiAlertService: JhiAlertService,
         protected rapportService: RapportService,
         protected userService: UserService,
+        protected accountService: AccountService,
         protected activatedRoute: ActivatedRoute
     ) {}
 

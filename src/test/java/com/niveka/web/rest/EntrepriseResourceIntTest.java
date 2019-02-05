@@ -6,6 +6,8 @@ import com.niveka.domain.Entreprise;
 import com.niveka.repository.EntrepriseRepository;
 import com.niveka.repository.search.EntrepriseSearchRepository;
 import com.niveka.service.EntrepriseService;
+import com.niveka.service.dto.EntrepriseDTO;
+import com.niveka.service.mapper.EntrepriseMapper;
 import com.niveka.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -67,6 +69,9 @@ public class EntrepriseResourceIntTest {
 
     @Mock
     private EntrepriseRepository entrepriseRepositoryMock;
+
+    @Autowired
+    private EntrepriseMapper entrepriseMapper;
 
     @Mock
     private EntrepriseService entrepriseServiceMock;
@@ -137,9 +142,10 @@ public class EntrepriseResourceIntTest {
         int databaseSizeBeforeCreate = entrepriseRepository.findAll().size();
 
         // Create the Entreprise
+        EntrepriseDTO entrepriseDTO = entrepriseMapper.toDto(entreprise);
         restEntrepriseMockMvc.perform(post("/api/entreprises")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(entreprise)))
+            .content(TestUtil.convertObjectToJsonBytes(entrepriseDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Entreprise in the database
@@ -162,11 +168,12 @@ public class EntrepriseResourceIntTest {
 
         // Create the Entreprise with an existing ID
         entreprise.setId("existing_id");
+        EntrepriseDTO entrepriseDTO = entrepriseMapper.toDto(entreprise);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEntrepriseMockMvc.perform(post("/api/entreprises")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(entreprise)))
+            .content(TestUtil.convertObjectToJsonBytes(entrepriseDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Entreprise in the database
@@ -254,9 +261,7 @@ public class EntrepriseResourceIntTest {
     @Test
     public void updateEntreprise() throws Exception {
         // Initialize the database
-        entrepriseService.save(entreprise);
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mockEntrepriseSearchRepository);
+        entrepriseRepository.save(entreprise);
 
         int databaseSizeBeforeUpdate = entrepriseRepository.findAll().size();
 
@@ -268,10 +273,11 @@ public class EntrepriseResourceIntTest {
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT)
             .deletedAt(UPDATED_DELETED_AT);
+        EntrepriseDTO entrepriseDTO = entrepriseMapper.toDto(updatedEntreprise);
 
         restEntrepriseMockMvc.perform(put("/api/entreprises")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(updatedEntreprise)))
+            .content(TestUtil.convertObjectToJsonBytes(entrepriseDTO)))
             .andExpect(status().isOk());
 
         // Validate the Entreprise in the database
@@ -293,11 +299,12 @@ public class EntrepriseResourceIntTest {
         int databaseSizeBeforeUpdate = entrepriseRepository.findAll().size();
 
         // Create the Entreprise
+        EntrepriseDTO entrepriseDTO = entrepriseMapper.toDto(entreprise);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEntrepriseMockMvc.perform(put("/api/entreprises")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(entreprise)))
+            .content(TestUtil.convertObjectToJsonBytes(entrepriseDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Entreprise in the database
@@ -311,7 +318,7 @@ public class EntrepriseResourceIntTest {
     @Test
     public void deleteEntreprise() throws Exception {
         // Initialize the database
-        entrepriseService.save(entreprise);
+        entrepriseRepository.save(entreprise);
 
         int databaseSizeBeforeDelete = entrepriseRepository.findAll().size();
 
@@ -331,7 +338,7 @@ public class EntrepriseResourceIntTest {
     @Test
     public void searchEntreprise() throws Exception {
         // Initialize the database
-        entrepriseService.save(entreprise);
+        entrepriseRepository.save(entreprise);
         when(mockEntrepriseSearchRepository.search(queryStringQuery("id:" + entreprise.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(entreprise), PageRequest.of(0, 1), 1));
         // Search the entreprise
@@ -358,5 +365,20 @@ public class EntrepriseResourceIntTest {
         assertThat(entreprise1).isNotEqualTo(entreprise2);
         entreprise1.setId(null);
         assertThat(entreprise1).isNotEqualTo(entreprise2);
+    }
+
+    @Test
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(EntrepriseDTO.class);
+        EntrepriseDTO entrepriseDTO1 = new EntrepriseDTO();
+        entrepriseDTO1.setId("id1");
+        EntrepriseDTO entrepriseDTO2 = new EntrepriseDTO();
+        assertThat(entrepriseDTO1).isNotEqualTo(entrepriseDTO2);
+        entrepriseDTO2.setId(entrepriseDTO1.getId());
+        assertThat(entrepriseDTO1).isEqualTo(entrepriseDTO2);
+        entrepriseDTO2.setId("id2");
+        assertThat(entrepriseDTO1).isNotEqualTo(entrepriseDTO2);
+        entrepriseDTO1.setId(null);
+        assertThat(entrepriseDTO1).isNotEqualTo(entrepriseDTO2);
     }
 }

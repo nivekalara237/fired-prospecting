@@ -31,8 +31,8 @@
                 </dd>
                 <dt><span jhiTranslate="fireDApp.channel.entreprise">Entreprise</span></dt>
                 <dd>
-                    <div *ngIf="channel.entreprise">
-                        <a [routerLink]="['/entreprise', channel.entreprise?.id, 'view']">{{channel.entreprise?.id}}</a>
+                    <div *ngIf="channel.entrepriseId">
+                        <a [routerLink]="['/entreprise', channel.entrepriseId, 'view']">{{channel.entrepriseId}}</a>
                     </div>
                 </dd>
                 <dt><span jhiTranslate="fireDApp.channel.user">User</span></dt>

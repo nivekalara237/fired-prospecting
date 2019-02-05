@@ -32,10 +32,10 @@
     ],
     "changelogDate": "20190108061425",
     "entityTableName": "compte_rendu_suivi",
-    "dto": "no",
     "pagination": "infinite-scroll",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
+    "service": "serviceClass",
+    "dto": "mapstruct",
+    "jpaMetamodelFiltering": true,
     "fluentMethods": true,
     "clientRootFolder": "",
     "applications": "*"
