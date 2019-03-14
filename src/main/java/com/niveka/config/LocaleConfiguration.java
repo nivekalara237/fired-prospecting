@@ -24,4 +24,10 @@ public class LocaleConfiguration implements WebMvcConfigurer {
         localeChangeInterceptor.setParamName("language");
         registry.addInterceptor(localeChangeInterceptor);
     }
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/uploads/**")
+            .addResourceLocations("file://"+ System.getProperty("user.dir") + "/src/main/uploads/");
+    }
 }

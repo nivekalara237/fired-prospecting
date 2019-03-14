@@ -169,6 +169,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+    compile group: 'org.springframework.data', name: 'spring-data-rest-core', version: '2.1.0.RELEASE'
     // Spring Data Jest dependencies for Elasticsearch
     compile ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: 'commons-logging'

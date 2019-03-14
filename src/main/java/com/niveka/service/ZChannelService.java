@@ -2,15 +2,21 @@ package com.niveka.service;
 
 import com.niveka.domain.ZChannel;
 import com.niveka.repository.ZChannelRepository;
+import com.niveka.repository.search.ZChannelSearchRepository;
 import com.niveka.service.dto.ZChannelDTO;
 import com.niveka.service.mapper.ChannelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing ZChannel.
@@ -24,12 +30,14 @@ public class ZChannelService {
 
     private final ChannelMapper channelMapper;
 
-    //private final ZChannelSearchRepository ZChannelSearchRepository;
+    private final ZChannelSearchRepository ZChannelSearchRepository;
+    @Resource
+    private MongoTemplate mongoTemplate;
 
-    public ZChannelService(ZChannelRepository ZChannelRepository, ChannelMapper channelMapper/*, ZChannelSearchRepository ZChannelSearchRepository*/) {
+    public ZChannelService(ZChannelRepository ZChannelRepository, ChannelMapper channelMapper, ZChannelSearchRepository ZChannelSearchRepository) {
         this.ZChannelRepository = ZChannelRepository;
         this.channelMapper = channelMapper;
-        //this.ZChannelSearchRepository = ZChannelSearchRepository;
+        this.ZChannelSearchRepository = ZChannelSearchRepository;
     }
 
     /**
@@ -42,9 +50,10 @@ public class ZChannelService {
         log.debug("Request to save ZChannel : {}", channelDTO);
 
         ZChannel channel = channelMapper.toEntity(channelDTO);
+        log.debug("######################### : {}", channel.getEntreprise());
         channel = ZChannelRepository.save(channel);
         ZChannelDTO result = channelMapper.toDto(channel);
-        //ZChannelSearchRepository.save(channel);
+        ZChannelSearchRepository.save(channel);
         return result;
     }
 
@@ -90,7 +99,7 @@ public class ZChannelService {
     public void delete(String id) {
         log.debug("Request to delete ZChannel : {}", id);
         ZChannelRepository.deleteById(id);
-        //ZChannelSearchRepository.deleteById(id);
+        ZChannelSearchRepository.deleteById(id);
     }
 
     /**
@@ -102,8 +111,11 @@ public class ZChannelService {
      */
     public Page<ZChannelDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Channels for query {}", query);
-        /*return ZChannelSearchRepository.search(queryStringQuery(query), pageable)
-            .map(channelMapper::toDto);*/
-        return null;
+        return ZChannelSearchRepository.search(queryStringQuery(query), pageable)
+            .map(channelMapper::toDto);
+    }
+
+    public List<ZChannel> findAllChannelForEntreprise(String eId) {
+        return ZChannelRepository.findByEntreprise_Id(eId);
     }
 }

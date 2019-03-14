@@ -10,6 +10,9 @@ export interface IRapport {
     deletedAt?: string;
     userId?: string;
     seen?: boolean;
+    haveFile?: boolean;
+    checked?: boolean;
+    fileArr?: any;
 }
 
 export class Rapport implements IRapport {
@@ -24,6 +27,9 @@ export class Rapport implements IRapport {
         public updatedAt?: string,
         public deletedAt?: string,
         public userId?: string,
-        public seen?: boolean
+        public seen?: boolean,
+        public checked?: boolean,
+        public haveFile?: boolean,
+        public fileArr?: any
     ) {}
 }

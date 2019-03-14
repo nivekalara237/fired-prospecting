@@ -17,6 +17,7 @@ public class SuiviDTO implements Serializable {
     private String updatedAt;
 
     private String deletedAt;
+    private String userId;
 
     public String getId() {
         return id;
@@ -56,6 +57,14 @@ public class SuiviDTO implements Serializable {
 
     public void setDeletedAt(String deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

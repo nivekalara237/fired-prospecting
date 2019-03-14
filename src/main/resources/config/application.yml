@@ -70,7 +70,17 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
+    servlet:
+        multipart:
+          enabled: true
+          max-file-size: 209715200 #200Mo
+          max-request-size: 262144000 #250Mo
+          file-size-threshold: 2048 #2ko
+    jmx:
+      default-domain: fireD
 
+file:
+    upload-dir: ./uploads
 server:
     servlet:
         session:

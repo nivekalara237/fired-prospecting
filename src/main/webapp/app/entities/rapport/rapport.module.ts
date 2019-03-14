@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { FireDSharedModule } from 'app/shared';
 import { FireDAdminModule } from 'app/admin/admin.module';
@@ -16,7 +17,7 @@ import {
 const ENTITY_STATES = [...rapportRoute, ...rapportPopupRoute];
 
 @NgModule({
-    imports: [FireDSharedModule, FireDAdminModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [FireDSharedModule, FileUploadModule, FireDAdminModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         RapportComponent,
         RapportDetailComponent,

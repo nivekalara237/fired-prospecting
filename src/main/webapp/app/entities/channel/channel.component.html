@@ -34,8 +34,8 @@
             <th jhiSortBy="entrepriseId"><span jhiTranslate="fireDApp.channel.entrepriseId">Entreprise Id</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="code"><span jhiTranslate="fireDApp.channel.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="createdAt"><span jhiTranslate="fireDApp.channel.createdAt">Created At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.channel.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.channel.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <!--<th jhiSortBy="updatedAt"><span jhiTranslate="fireDApp.channel.updatedAt">Updated At</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="deletedAt"><span jhiTranslate="fireDApp.channel.deletedAt">Deleted At</span> <fa-icon [icon]="'sort'"></fa-icon></th>-->
             <th jhiSortBy="entrepriseId"><span jhiTranslate="fireDApp.channel.entreprise">Entreprise</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
@@ -47,11 +47,11 @@
                 <td>{{channel.entrepriseId}}</td>
                 <td>{{channel.code}}</td>
                 <td>{{channel.createdAt}}</td>
-                <td>{{channel.updatedAt}}</td>
-                <td>{{channel.deletedAt}}</td>
+                <!--<td>{{channel.updatedAt}}</td>
+                <td>{{channel.deletedAt}}</td>-->
                 <td>
                     <div *ngIf="channel.entrepriseId">
-                        <a [routerLink]="['../entreprise', channel.entrepriseId , 'view' ]" >{{channel.entrepriseId}}</a>
+                        <a [routerLink]="['../entreprise', channel.entrepriseId , 'view' ]" >{{channel.designation}}</a>
                     </div>
                 </td>
                 <td class="text-right">

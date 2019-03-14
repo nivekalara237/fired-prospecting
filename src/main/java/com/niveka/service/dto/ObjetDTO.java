@@ -16,6 +16,10 @@ public class ObjetDTO implements Serializable {
 
     private String encode;
 
+    private String type;
+
+    private long taille;
+
     private String rapportId;
 
     public String getId() {
@@ -58,6 +62,22 @@ public class ObjetDTO implements Serializable {
         this.rapportId = rapportId;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public long getTaille() {
+        return taille;
+    }
+
+    public void setTaille(long taille) {
+        this.taille = taille;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,6 +105,8 @@ public class ObjetDTO implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", lien='" + getLien() + "'" +
+            ", type='" + getType() + "'" +
+            ", taille='" + getTaille() + "'" +
             ", encode='" + getEncode() + "'" +
             ", rapport=" + getRapportId() +
             "}";

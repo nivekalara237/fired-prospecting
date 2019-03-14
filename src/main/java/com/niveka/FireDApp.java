@@ -2,6 +2,7 @@ package com.niveka;
 
 import com.niveka.config.ApplicationProperties;
 import com.niveka.config.DefaultProfileUtil;
+import com.niveka.config.FileStorageProperties;
 import io.github.jhipster.config.JHipsterConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import java.util.Collection;
 @EnableAutoConfiguration(exclude = {ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class })
 //@EnableConfigurationProperties({ JHipsterProperties.class,ApplicationProperties.class, MongoProperties.class })
 @SpringBootApplication
-@EnableConfigurationProperties({ApplicationProperties.class})
+@EnableConfigurationProperties({ApplicationProperties.class,FileStorageProperties.class})
 @EnableDiscoveryClient
 public class FireDApp {
 

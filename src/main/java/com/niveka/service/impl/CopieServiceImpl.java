@@ -75,6 +75,7 @@ public class CopieServiceImpl{
     public void delete(String id) {
         log.debug("Request to delete Copie : {}", id);
         copieRepository.deleteById(id);
+
         //copieSearchRepository.deleteById(id);
     }
 

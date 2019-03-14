@@ -27,6 +27,9 @@ public class Copie implements Serializable {
     @Field("created_at")
     private String createdAt;
 
+    @Field("rapport_at")
+    private String rapportId;
+
     @DBRef
     @Field("rapport")
     @JsonIgnoreProperties("")
@@ -61,6 +64,19 @@ public class Copie implements Serializable {
     public Copie createdAt(String createdAt) {
         this.createdAt = createdAt;
         return this;
+    }
+
+    public Copie rapportId(String rapportId){
+        this.rapportId = rapportId;
+        return this;
+    }
+
+    public String getRapportId() {
+        return rapportId;
+    }
+
+    public void setRapportId(String rapportId) {
+        this.rapportId = rapportId;
     }
 
     public void setCreatedAt(String createdAt) {

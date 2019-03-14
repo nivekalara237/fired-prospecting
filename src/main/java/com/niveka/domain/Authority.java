@@ -2,6 +2,8 @@ package com.niveka.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -20,12 +22,23 @@ public class Authority implements Serializable {
     @Id
     private String name;
 
+    @Field("entreprise_id")
+    private String entrepriseId;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
     }
 
     @Override
@@ -51,6 +64,7 @@ public class Authority implements Serializable {
     public String toString() {
         return "Authority{" +
             "name='" + name + '\'' +
+            "entreprise_id='" + entrepriseId + '\'' +
             "}";
     }
 }

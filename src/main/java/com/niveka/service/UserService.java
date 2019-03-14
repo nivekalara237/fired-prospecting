@@ -1,7 +1,9 @@
 package com.niveka.service;
 
+import com.mongodb.client.result.UpdateResult;
 import com.niveka.config.Constants;
 import com.niveka.domain.Authority;
+import com.niveka.domain.Entreprise;
 import com.niveka.domain.User;
 import com.niveka.repository.AuthorityRepository;
 import com.niveka.repository.UserRepository;
@@ -16,9 +18,14 @@ import com.niveka.web.rest.errors.LoginAlreadyUsedException;
 import com.niveka.web.rest.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +52,9 @@ public class UserService {
     private final AuthorityRepository authorityRepository;
 
     private final CacheManager cacheManager;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
@@ -97,7 +107,6 @@ public class UserService {
                 return user;
             });
     }
-
     public User registerUser(UserDTO userDTO, String password) {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
@@ -128,8 +137,13 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findById(AuthoritiesConstants.COMMERCIAL).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
+        newUser.setEntreprise(userDTO.getEntreprise());
+        newUser.setEntrepriseId(userDTO.getEntrepriseId());
+        newUser.setIosFcmToken(userDTO.getIosFcmToken());
+        newUser.setWebFcmToken(userDTO.getWebFcmToken());
+        newUser.setAndroidFcmToken(userDTO.getAndroidFcmToken());
         userRepository.save(newUser);
         userSearchRepository.save(newUser);
         this.clearUserCaches(newUser);
@@ -173,6 +187,18 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
+        if (userDTO.getEntreprise()!=null){
+            user.setEntreprise(userDTO.getEntreprise());
+        }
+
+        if (userDTO.getAndroidFcmToken()!=null)
+            user.setAndroidFcmToken(userDTO.getAndroidFcmToken());
+
+        if (userDTO.getWebFcmToken()!=null)
+            user.setWebFcmToken(userDTO.getWebFcmToken());
+
+        if (userDTO.getIosFcmToken()!=null)
+            user.setIosFcmToken(userDTO.getAndroidFcmToken());
         userRepository.save(user);
         userSearchRepository.save(user);
         this.clearUserCaches(user);
@@ -189,7 +215,7 @@ public class UserService {
      * @param langKey language key
      * @param imageUrl image URL of user
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl,String entrepriseId) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -198,6 +224,7 @@ public class UserService {
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setEntrepriseId(entrepriseId);
                 user.setUpdatedAt(Utils.currentJodaDateStr());
                 userRepository.save(user);
                 userSearchRepository.save(user);
@@ -226,6 +253,16 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+                user.setUpdatedAt(Utils.currentJodaDateStr());
+                user.setEntrepriseId(userDTO.getEntrepriseId());
+                if (userDTO.getAndroidFcmToken()!=null)
+                    user.setAndroidFcmToken(userDTO.getAndroidFcmToken());
+
+                if (userDTO.getWebFcmToken()!=null)
+                    user.setWebFcmToken(userDTO.getWebFcmToken());
+
+                if (userDTO.getIosFcmToken()!=null)
+                    user.setIosFcmToken(userDTO.getAndroidFcmToken());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
@@ -273,8 +310,16 @@ public class UserService {
     }
 
     public List<User> getCommercials(){
-        return userRepository.findAll();
-    }
+        final List<User>[] commerciaux = new List[]{new ArrayList<>()};
+        SecurityUtils.getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user->{
+                commerciaux[0] = userRepository.findAllByEntrepriseId(user.getEntrepriseId());
+                //log.debug("USER@@@@@@@@ {}",commerciaux[0]);
+                //log.debug("ENTREPRISE_ID@@@@@@@@@@@@ {}",user.getEntrepriseId());
+            });
+        return commerciaux.length!=0?commerciaux[0]:new ArrayList<>();
+    }//aclave 1g;otipasse
 
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login);
@@ -315,5 +360,32 @@ public class UserService {
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+    }
+
+    public User findOne(String id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElse(null);
+    }
+
+    public Entreprise findEntreprise(String id){
+        Query query = new Query();
+
+        log.debug("ENT_: {}", SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin));
+        //Query query = new Query(where("user.$id").is(user.getId()));
+        //Entreprise e = mongoTemplate.findOne(query, Entreprise.class);
+        return null;
+    }
+
+    public boolean updateToken(String userId,String token,String type){
+        Query query1 = new Query(Criteria.where("id").is(userId));
+        Update update1 = new Update();
+        if (type.equals("web"))
+            update1.set("web_fcm_token", token);
+        else if (type.equals("ios"))
+            update1.set("ios_fcm_token",token);
+        else
+            update1.set("android_fcm_token",token);
+        UpdateResult res = mongoTemplate.updateFirst(query1, update1, User.class);
+        return res.getModifiedCount()>0;
     }
 }

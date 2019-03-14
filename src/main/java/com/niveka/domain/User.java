@@ -5,6 +5,7 @@ import com.niveka.config.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Email;
@@ -86,9 +87,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("activatedAt")
     private String activatedAt=null;
 
+    @Field("entreprise_id")
+    private String entrepriseId;
+
+    @Field("android_fcm_token")
+    private String androidFcmToken;
+
+    @Field("ios_fcm_token")
+    private String iosFcmToken;
+
+    @Field("web_fcm_token")
+    private String webFcmToken;
+
+    @DBRef
     @Field("entreprise")
     @JsonIgnore
-    private Set<Entreprise> entreprises = new HashSet<>();
+    private Entreprise entreprise = new Entreprise();
 
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
@@ -116,7 +130,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public User() {
     }
 
-    public User(String id, String login, String password, String firstName, String lastName, String email, boolean activated, String langKey, String imageUrl, String activationKey, String resetKey, Instant resetDate, String createdAt, String updatedAt, String activatedAt, Set<Entreprise> entreprises, Set<Authority> authorities) {
+    public User(String id, String login, String password, String firstName, String lastName, String email, boolean activated, String langKey, String imageUrl, String activationKey, String resetKey, Instant resetDate, String createdAt, String updatedAt, String activatedAt, Entreprise entreprise, Set<Authority> authorities) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -132,7 +146,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.activatedAt = activatedAt;
-        this.entreprises = entreprises;
+        this.entreprise = entreprise;
         this.authorities = authorities;
     }
 
@@ -240,12 +254,21 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
-    public Set<Entreprise> getEntreprises() {
-        return entreprises;
+
+    public Entreprise getEntreprise() {
+        return entreprise;
     }
 
-    public void setEntreprises(Set<Entreprise> entreprises) {
-        this.entreprises = entreprises;
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
     }
 
     public Set<Suivi> getSuivis() {
@@ -280,6 +303,30 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.activatedAt = activatedAt;
     }
 
+    public String getAndroidFcmToken() {
+        return androidFcmToken;
+    }
+
+    public void setAndroidFcmToken(String androidFcmToken) {
+        this.androidFcmToken = androidFcmToken;
+    }
+
+    public String getIosFcmToken() {
+        return iosFcmToken;
+    }
+
+    public void setIosFcmToken(String iosFcmToken) {
+        this.iosFcmToken = iosFcmToken;
+    }
+
+    public String getWebFcmToken() {
+        return webFcmToken;
+    }
+
+    public void setWebFcmToken(String webFcmToken) {
+        this.webFcmToken = webFcmToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -301,16 +348,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            ", createdAt='" + createdAt + '\'' +
-            ", updatedAt='" + updatedAt + '\'' +
+                "id='" + id + '\'' +
+                "login='" + login + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", activated='" + activated + '\'' +
+                ", langKey='" + langKey + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                ", entreprise='" + entreprise + '\'' +
+                ", entrepriseID='" + entrepriseId + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
             "}";
     }
 }

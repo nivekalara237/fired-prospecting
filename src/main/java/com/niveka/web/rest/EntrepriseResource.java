@@ -1,14 +1,18 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.niveka.domain.User;
 import com.niveka.service.EntrepriseService;
+import com.niveka.service.UserService;
+import com.niveka.service.dto.EntrepriseDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
-import com.niveka.service.dto.EntrepriseDTO;
+import com.niveka.web.rest.util.Utils;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -18,12 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Entreprise.
@@ -37,6 +38,9 @@ public class EntrepriseResource {
     private static final String ENTITY_NAME = "entreprise";
 
     private final EntrepriseService entrepriseService;
+
+    @Autowired
+    private UserService userService;
 
     public EntrepriseResource(EntrepriseService entrepriseService) {
         this.entrepriseService = entrepriseService;
@@ -56,6 +60,8 @@ public class EntrepriseResource {
         if (entrepriseDTO.getId() != null) {
             throw new BadRequestAlertException("A new entreprise cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        entrepriseDTO.setCreatedAt(Utils.currentJodaDateStr());
+        entrepriseDTO.setUpdatedAt(Utils.currentJodaDateStr());
         EntrepriseDTO result = entrepriseService.save(entrepriseDTO);
         return ResponseEntity.created(new URI("/api/entreprises/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -78,6 +84,7 @@ public class EntrepriseResource {
         if (entrepriseDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        entrepriseDTO.setUpdatedAt(Utils.currentJodaDateStr());
         EntrepriseDTO result = entrepriseService.save(entrepriseDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, entrepriseDTO.getId().toString()))
@@ -103,6 +110,35 @@ public class EntrepriseResource {
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/entreprises?eagerload=%b", eagerload));
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("entreprises/all/{id}")
+    @Timed
+    public ResponseEntity<List<EntrepriseDTO>> getEnterpriseOfUserConnected(@PathVariable String id){
+        User user = userService.findOne(id);
+        log.debug("USERRRRRRRRR: {}",user);
+        if (user==null){
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        List<EntrepriseDTO> entreprises = new ArrayList<>();
+        entreprises.add(user.getEntreprise()==null?null:user.getEntreprise().toDTO());
+        return ResponseEntity.ok().body(entreprises);
+    }
+
+    @GetMapping("/entreprises/range-users")
+    @Timed
+    public ResponseEntity<List<String>> getRangeU(){
+        List<String> ranges = new ArrayList<>();
+        ranges.add("1-5");
+        ranges.add("6-10");
+        ranges.add("11-25");
+        ranges.add("26-50");
+        ranges.add("51-100");
+        ranges.add("101-250");
+        ranges.add("250-X");
+        ranges.add("CUSTOM");
+        log.debug("RANGE : {}",ranges);
+        return ResponseEntity.ok().body(ranges);
     }
 
     /**

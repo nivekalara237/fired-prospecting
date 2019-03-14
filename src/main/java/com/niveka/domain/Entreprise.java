@@ -1,14 +1,15 @@
 package com.niveka.domain;
 
+import com.niveka.service.dto.EntrepriseDTO;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Entreprise.
@@ -22,11 +23,21 @@ public class Entreprise implements Serializable {
     @Id
     private String id;
 
+    @Indexed
     @Field("designation")
     private String designation;
 
     @Field("logo")
     private String logo;
+
+    @Field("range_utilisateur")
+    private String range_utilisateur;
+
+    @Field("nombre_utilisateur")
+    private int nombre_utilisteur;
+
+    @Field("status")
+    private String status;
 
     @Field("created_at")
     private String createdAt;
@@ -37,7 +48,6 @@ public class Entreprise implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
-    @DBRef
     @Field("users")
     private Set<User> users = new HashSet<>();
 
@@ -57,6 +67,30 @@ public class Entreprise implements Serializable {
     public Entreprise designation(String designation) {
         this.designation = designation;
         return this;
+    }
+
+    public String getRange_utilisateur() {
+        return range_utilisateur;
+    }
+
+    public void setRange_utilisateur(String range_utilisateur) {
+        this.range_utilisateur = range_utilisateur;
+    }
+
+    public int getNombre_utilisteur() {
+        return nombre_utilisteur;
+    }
+
+    public void setNombre_utilisteur(int nombre_utilisteur) {
+        this.nombre_utilisteur = nombre_utilisteur;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setDesignation(String designation) {
@@ -126,14 +160,25 @@ public class Entreprise implements Serializable {
 
     public Entreprise addUser(User user) {
         this.users.add(user);
-        user.getEntreprises().add(this);
+        //user.getEntreprise().addUser(user);
         return this;
     }
 
     public Entreprise removeUser(User user) {
         this.users.remove(user);
-        user.getEntreprises().remove(this);
+        //user.getEntreprises().remove(this);
         return this;
+    }
+
+    public EntrepriseDTO toDTO(){
+        EntrepriseDTO e = new EntrepriseDTO();
+        e.setId(this.id);
+        e.setLogo(this.logo);
+        e.setDesignation(this.designation);
+        e.setRange_utilisateur(this.range_utilisateur);
+        e.setNombre_utilisateur(this.nombre_utilisteur);
+        e.setCreatedAt(this.createdAt);
+        return e;
     }
 
     public void setUsers(Set<User> users) {

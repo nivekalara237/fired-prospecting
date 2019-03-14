@@ -51,6 +51,11 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
+            user.setEntrepriseId(userDTO.getEntrepriseId());
+            user.setEntreprise(userDTO.getEntreprise());
+            user.setAndroidFcmToken(userDTO.getAndroidFcmToken());
+            user.setWebFcmToken(userDTO.getWebFcmToken());
+            user.setIosFcmToken(userDTO.getIosFcmToken());
             return user;
         }
     }

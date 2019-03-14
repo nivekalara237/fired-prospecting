@@ -21,7 +21,9 @@
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "deletedAt": "Deleted At",
-            "user": "User"
+            "user": "User",
+            "range_utilisateur": "Nombre potentiel nombre d'utilisateur",
+            "nombre_utilisateur": "Nombre d'utilisateur"
         }
     }
 }

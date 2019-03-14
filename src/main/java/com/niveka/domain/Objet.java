@@ -30,6 +30,15 @@ public class Objet implements Serializable {
     @Field("encode")
     private String encode;
 
+    @Field("taille")
+    private long taille;
+
+    @Field("type")
+    private String type;
+
+    @Field("rapport_id")
+    private String rapportId;
+
     @DBRef
     @Field("rapport")
     @JsonIgnoreProperties("")
@@ -66,6 +75,19 @@ public class Objet implements Serializable {
         return this;
     }
 
+    public Objet rapportId(String rapportId){
+        this.rapportId = rapportId;
+        return this;
+    }
+
+    public String getRapportId() {
+        return rapportId;
+    }
+
+    public void setRapportId(String rapportId) {
+        this.rapportId = rapportId;
+    }
+
     public void setLien(String lien) {
         this.lien = lien;
     }
@@ -90,6 +112,22 @@ public class Objet implements Serializable {
     public Objet rapport(Rapport rapport) {
         this.rapport = rapport;
         return this;
+    }
+
+    public long getTaille() {
+        return taille;
+    }
+
+    public void setTaille(long taille) {
+        this.taille = taille;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setRapport(Rapport rapport) {
@@ -123,6 +161,8 @@ public class Objet implements Serializable {
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", lien='" + getLien() + "'" +
+            ", size='" + getTaille() + "'" +
+            ", filetype='" + getType() + "'" +
             ", encode='" + getEncode() + "'" +
             "}";
     }

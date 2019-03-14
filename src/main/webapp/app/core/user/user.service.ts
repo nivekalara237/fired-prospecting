@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
+import { IEntreprise } from '../../shared/model/entreprise.model';
 
 type EntityResponseType = HttpResponse<IUser>;
 type EntityArrayResponseType = HttpResponse<IUser[]>;
@@ -19,8 +20,20 @@ export class UserService {
         return this.http.post<IUser>(this.resourceUrl, user, { observe: 'response' });
     }
 
+    createWithEnterpriseAsString(eId: string, user: IUser): Observable<HttpResponse<IUser>> {
+        return this.http.post<IUser>(`${this.resourceUrl}/${eId}`, user, { observe: 'response' });
+    }
+
+    findEnterprise(id: string): Observable<HttpResponse<IEntreprise[]>> {
+        return this.http.get<IEntreprise[]>(SERVER_API_URL + '/api/entreprises/all/' + id, { observe: 'response' });
+    }
+
     update(user: IUser): Observable<HttpResponse<IUser>> {
         return this.http.put<IUser>(this.resourceUrl, user, { observe: 'response' });
+    }
+
+    updateWithEnterpriseAsString(eId: string, user: IUser): Observable<HttpResponse<IUser>> {
+        return this.http.put<IUser>(`${this.resourceUrl}/${eId}`, user, { observe: 'response' });
     }
 
     find(login: string): Observable<HttpResponse<IUser>> {

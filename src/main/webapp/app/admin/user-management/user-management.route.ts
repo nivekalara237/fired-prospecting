@@ -38,6 +38,7 @@ export const userMgmtRoute: Routes = [
         },
         data: {
             pageTitle: 'userManagement.home.title',
+            //authorities: ['ROLE_ADMIN',"ROLE_AMBASSADOR"],
             defaultSort: 'id,asc'
         }
     },

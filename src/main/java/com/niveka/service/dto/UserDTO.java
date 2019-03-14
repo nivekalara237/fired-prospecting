@@ -1,14 +1,14 @@
 package com.niveka.service.dto;
 
 import com.niveka.config.Constants;
-
 import com.niveka.domain.Authority;
+import com.niveka.domain.Entreprise;
 import com.niveka.domain.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +53,14 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private String entrepriseId;
+
+    private Entreprise entreprise;
+
+    private String androidFcmToken;
+    private String iosFcmToken;
+    private String webFcmToken;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -70,6 +78,10 @@ public class UserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.entreprise = user.getEntreprise();
+        this.androidFcmToken = user.getAndroidFcmToken();
+        this.webFcmToken = user.getWebFcmToken();
+        this.iosFcmToken = user.getIosFcmToken();
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -131,6 +143,14 @@ public class UserDTO {
         this.activated = activated;
     }
 
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
+
     public String getLangKey() {
         return langKey;
     }
@@ -179,6 +199,38 @@ public class UserDTO {
         this.authorities = authorities;
     }
 
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
+    public String getAndroidFcmToken() {
+        return androidFcmToken;
+    }
+
+    public void setAndroidFcmToken(String androidFcmToken) {
+        this.androidFcmToken = androidFcmToken;
+    }
+
+    public String getIosFcmToken() {
+        return iosFcmToken;
+    }
+
+    public void setIosFcmToken(String iosFcmToken) {
+        this.iosFcmToken = iosFcmToken;
+    }
+
+    public String getWebFcmToken() {
+        return webFcmToken;
+    }
+
+    public void setWebFcmToken(String webFcmToken) {
+        this.webFcmToken = webFcmToken;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -193,6 +245,7 @@ public class UserDTO {
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
+            ", entreprise=" + entreprise +
             ", authorities=" + authorities +
             "}";
     }

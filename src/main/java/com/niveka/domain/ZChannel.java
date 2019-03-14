@@ -1,15 +1,14 @@
 package com.niveka.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A ZChannel.
@@ -26,9 +25,6 @@ public class ZChannel implements Serializable {
     @Field("designation")
     private String designation;
 
-    @Field("entreprise_id")
-    private String entrepriseId;
-
     @Field("code")
     private String code;
 
@@ -41,14 +37,37 @@ public class ZChannel implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
-    @DBRef
+    @Field("entreprise_id")
+    private String entrepriseId;
+
     @Field("entreprise")
-    @JsonIgnoreProperties("")
     private Entreprise entreprise;
 
     @DBRef
     @Field("users")
     private Set<User> users = new HashSet<>();
+
+    public ZChannel(String id, String designation, String code, String createdAt, String updatedAt, String deletedAt, Entreprise entreprise, Set<User> users) {
+        this.id = id;
+        this.designation = designation;
+        this.code = code;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.entreprise = entreprise;
+        this.users = users;
+    }
+
+    public ZChannel(String id, String designation, String code, Entreprise entreprise, Set<User> users) {
+        this.id = id;
+        this.designation = designation;
+        this.code = code;
+        this.entreprise = entreprise;
+        this.users = users;
+    }
+
+    public ZChannel() {
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -70,19 +89,6 @@ public class ZChannel implements Serializable {
 
     public void setDesignation(String designation) {
         this.designation = designation;
-    }
-
-    public String getEntrepriseId() {
-        return entrepriseId;
-    }
-
-    public ZChannel entrepriseId(String entrepriseId) {
-        this.entrepriseId = entrepriseId;
-        return this;
-    }
-
-    public void setEntrepriseId(String entrepriseId) {
-        this.entrepriseId = entrepriseId;
     }
 
     public String getCode() {
@@ -171,6 +177,19 @@ public class ZChannel implements Serializable {
         return this;
     }
 
+    public ZChannel entrepriseId(String entrepriseId){
+        this.entrepriseId = entrepriseId;
+        return this;
+    }
+
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
     public void setUsers(Set<User> users) {
         this.users = users;
     }
@@ -201,7 +220,6 @@ public class ZChannel implements Serializable {
         return "ZChannel{" +
             "id=" + getId() +
             ", designation='" + getDesignation() + "'" +
-            ", entrepriseId='" + getEntrepriseId() + "'" +
             ", code='" + getCode() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +

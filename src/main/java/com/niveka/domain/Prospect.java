@@ -54,6 +54,12 @@ public class Prospect implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
+    @Field("suivi_id")
+    private String suiviId;
+
+    @Field("user_id")
+    private String userId;
+
     @DBRef
     @Field("suivi")
     private Suivi suivi;
@@ -235,6 +241,32 @@ public class Prospect implements Serializable {
     public Prospect user(User user) {
         this.user = user;
         return this;
+    }
+
+    public Prospect userId(String userId){
+        this.userId = userId;
+        return this;
+    }
+
+    public Prospect suiviId(String suiviId){
+        this.suiviId = suiviId;
+        return this;
+    }
+
+    public String getSuiviId() {
+        return suiviId;
+    }
+
+    public void setSuiviId(String suiviId) {
+        this.suiviId = suiviId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setUser(User user) {

@@ -13,45 +13,47 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { JhiAlertService, JhiEventManager } from 'ng-jhipster';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { Moment } from 'moment';
-import * as moment from 'moment';
-import { NgbDateAdapter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { IUser, UserService } from 'app/core';
 import { AccountService, Account } from 'app/core';
+import { NgbDatepickerConfig, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateMomentAdapter } from 'app/shared';
 
 import { IProspect } from 'app/shared/model/prospect.model';
 import { CompteRenduSuivi, ICompteRenduSuivi } from 'app/shared/model/compte-rendu-suivi.model';
 import { CompteRenduSuiviService } from 'app/entities/compte-rendu-suivi/compte-rendu-suivi.service';
+import { AmazingTimePickerService } from 'amazing-time-picker';
+import { NgbDateFRParserFormatter } from '../../shared/util/ngb-date-fr-parser-formatter';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-prospect-detail',
     templateUrl: './prospect-detail.component.html',
-    styleUrls: ['./prospect.component.css']
+    styleUrls: ['./prospect.component.css'],
+    providers: [{ provide: NgbDateParserFormatter, useClass: NgbDateFRParserFormatter }]
 })
 export class ProspectDetailComponent implements OnInit, AfterViewInit, AfterContentInit, AfterContentChecked, DoCheck, AfterViewChecked {
     compteRenduSuivi: ICompteRenduSuivi = { dateProchaineRdv: '', contenu: '' };
     prospect: IProspect;
     isSaving: boolean;
     account: Account;
-    hourStep: string = '00';
-    minuteStep: string = '00';
+    hourStep: string;
     compteRendu: string;
     dateRdv: string;
     formGroup: FormGroup;
     compteRendus: ICompteRenduSuivi[];
     contenu: string;
-    dateProchainRdv: String;
+    dateProchainRdv: string;
     eventSubscriber: Subscription;
     public loading = false;
+    public selectedTime: string;
     constructor(
         protected cdref: ChangeDetectorRef,
         protected activatedRoute: ActivatedRoute,
         protected accountService: AccountService,
         protected eventManager: JhiEventManager,
         protected jhiAlertService: JhiAlertService,
-        protected compteRenduService: CompteRenduSuiviService
+        protected compteRenduService: CompteRenduSuiviService,
+        private atp: AmazingTimePickerService
     ) {}
 
     ngAfterViewInit() {
@@ -98,10 +100,7 @@ export class ProspectDetailComponent implements OnInit, AfterViewInit, AfterCont
                 Validators.minLength(10),
                 Validators.maxLength(12)
             ]),
-            HourStep: new FormControl('0', [
-                //Validators.required,
-            ]),
-            MinuteStep: new FormControl('0', [
+            HourStep: new FormControl('', [
                 //Validators.required,
             ]),
             Contenu: new FormControl('', [
@@ -131,14 +130,14 @@ export class ProspectDetailComponent implements OnInit, AfterViewInit, AfterCont
     }
 
     getAll() {
-        this.loading = true;
+        this.loading = true; /*
         this.compteRenduService.query().subscribe(
             (res: HttpResponse<ICompteRenduSuivi[]>) => {
                 //this.compteRendus = res.body;
                 //console.log(res.body);
             },
             (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        );*/
 
         this.compteRenduService.findByProspect(this.prospect.id).subscribe(
             (res: HttpResponse<ICompteRenduSuivi[]>) => {
@@ -155,16 +154,9 @@ export class ProspectDetailComponent implements OnInit, AfterViewInit, AfterCont
 
     saveCRS() {
         this.loading = true;
-        console.log(this.contenu);
-        console.log(this.compteRenduSuivi);
         this.isSaving = true;
-        // if ("id" in this.compteRenduSuivi && this.compteRenduSuivi.id !== undefined) {
-        //     this.subscribeToSaveResponse(this.compteRenduService.update(this.compteRenduSuivi));
-        // } else {
-        //alert("OK");
-        let date = '';
-        console.log('PROPECT', this.prospect);
-        //date = (typeof this.dateProchainRdv !== "string")?this.dateProchainRdv.format("YYYY/MM/DD")+" "+this.parseHour():"";
+
+        let date = moment(this.dateProchainRdv).format('YYYY-MM-DD') + ' ' + this.selectedTime;
         this.compteRenduSuivi = { dateProchaineRdv: date, prospectId: this.prospect.id, contenu: this.contenu };
         this.subscribeToSaveResponse(this.compteRenduService.createInProspectPage(this.compteRenduSuivi));
         //}
@@ -202,17 +194,10 @@ export class ProspectDetailComponent implements OnInit, AfterViewInit, AfterCont
         else return str === '';
     }
 
-    extractDate() {
-        if (this.isEmpty(this.prospect.dateRdv)) return null;
-        else {
-            //console.log("RDV",this.prospect.dateRdv.format("YYYY/DD/MM"));
-            return this.prospect.dateRdv;
-        }
-    }
-
-    parseHour(): string {
-        let hour = parseInt(this.hourStep) < 10 ? '0' + parseInt(this.hourStep) : this.hourStep;
-        let minute = parseInt(this.minuteStep) < 10 ? '0' + parseInt(this.minuteStep) : this.minuteStep;
-        return hour + ':' + minute;
+    openTimeModal() {
+        const amazingTimePicker = this.atp.open();
+        amazingTimePicker.afterClose().subscribe(time => {
+            this.selectedTime = time;
+        });
     }
 }

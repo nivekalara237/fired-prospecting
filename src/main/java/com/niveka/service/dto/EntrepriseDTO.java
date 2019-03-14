@@ -1,9 +1,11 @@
 package com.niveka.service.dto;
 
+import com.niveka.domain.Entreprise;
+
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the Entreprise entity.
@@ -21,6 +23,12 @@ public class EntrepriseDTO implements Serializable {
     private String updatedAt;
 
     private String deletedAt;
+
+    private String range_utilisateur;
+
+    private int nombre_utilisateur;
+
+    private String status;
 
     private Set<UserDTO> users = new HashSet<>();
 
@@ -72,12 +80,47 @@ public class EntrepriseDTO implements Serializable {
         this.deletedAt = deletedAt;
     }
 
+    public String getRange_utilisateur() {
+        return range_utilisateur;
+    }
+
+    public void setRange_utilisateur(String range_utilisateur) {
+        this.range_utilisateur = range_utilisateur;
+    }
+
+    public int getNombre_utilisateur() {
+        return nombre_utilisateur;
+    }
+
+    public void setNombre_utilisateur(int nombre_utilisateur) {
+        this.nombre_utilisateur = nombre_utilisateur;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Set<UserDTO> getUsers() {
         return users;
     }
 
     public void setUsers(Set<UserDTO> users) {
         this.users = users;
+    }
+
+    public Entreprise toEntity(){
+        Entreprise e = new Entreprise();
+        e.setId(this.id);
+        e.setLogo(this.logo);
+        e.setDesignation(this.designation);
+        e.setRange_utilisateur(this.range_utilisateur);
+        e.setNombre_utilisteur(this.nombre_utilisateur);
+        e.setCreatedAt(this.createdAt);
+        return e;
     }
 
     @Override

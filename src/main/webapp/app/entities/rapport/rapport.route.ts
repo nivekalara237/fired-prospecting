@@ -37,7 +37,7 @@ export const rapportRoute: Routes = [
             pagingParams: JhiResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_AMBASSADOR'],
             defaultSort: 'id,asc',
             pageTitle: 'fireDApp.rapport.home.title'
         },
@@ -50,7 +50,7 @@ export const rapportRoute: Routes = [
             rapport: RapportResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_AMBASSADOR'],
             pageTitle: 'fireDApp.rapport.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -62,7 +62,7 @@ export const rapportRoute: Routes = [
             rapport: RapportResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_AMBASSADOR'],
             pageTitle: 'fireDApp.rapport.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -74,7 +74,7 @@ export const rapportRoute: Routes = [
             rapport: RapportResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_AMBASSADOR'],
             pageTitle: 'fireDApp.rapport.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -89,7 +89,7 @@ export const rapportPopupRoute: Routes = [
             rapport: RapportResolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_AMBASSADOR'],
             pageTitle: 'fireDApp.rapport.home.title'
         },
         canActivate: [UserRouteAccessService],

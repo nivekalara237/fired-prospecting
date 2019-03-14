@@ -18,6 +18,7 @@ logging:
         ROOT: DEBUG
         io.github.jhipster: DEBUG
         com.niveka: DEBUG
+        org.mongodb: ERROR
 
 eureka:
     instance:
@@ -65,15 +66,43 @@ spring:
         #jest:
             #readTimeout: 10000
             #uri: ${SEARCHBOX_SSL_URL}
+#    mail:
+#        host: smtp.gmail.com
+#        port: 587
+#        username: nivekalara237@gmail.com
+#        password: nivekaDev001
+#        protocol: smtp
+#        tls: true
+#        properties:
+#            mail:
+#                smtp:
+#                    auth: true
+#                    starttls:
+#                        enable: true
+#                        required: true
+#                    ssl:
+#                        enable: true
+#                        trust: smtp.gmail.com
+#                    socketFactory:
+#                        class: javax.net.ssl.SSLSocketFactory
+#                        fallback: true
+#        test-connection: false
     mail:
         host: smtp.gmail.com
         port: 587
-        username: nivekalara237@gmail.com
-        password: nivekaDev001
+        username: nivekalara237@gmail.com  #Replace this field with your Gmail username.
+        password: nivekaDev001           #Replace this field with your Gmail password.
+        protocol: smtp
+        tls: true
+        properties.mail.smtp:
+            auth: true
+            starttls.enable: true
+            ssl.trust: smtp.gmail.com
+
     messages:
         cache-duration: PT1S # 1 second, see the ISO 8601 standard
     thymeleaf:
-        cache: false
+        cache: false #
     sleuth:
         sampler:
             probability: 1 # report 100% of traces
@@ -83,6 +112,8 @@ spring:
         locator:
             discovery:
                 enabled: true
+    jmx:
+        default-domain: fireD
 
 server:
     port: 8080
@@ -133,6 +164,7 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
+
 
 # ===================================================================
 # Application specific properties

@@ -37,11 +37,16 @@ public class CompteRenduSuivi implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
+    @Field("suivi_id")
+    private String suiviId;
+
+    @Field("prospect_id")
+    private String prospectId;
+
     @DBRef
     @Field("suivi")
     @JsonIgnoreProperties("")
     private Suivi suivi;
-
 
     @DBRef
     @Field("prospect")
@@ -49,6 +54,34 @@ public class CompteRenduSuivi implements Serializable {
     private Prospect prospect;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+
+    public String getSuiviId() {
+        return suiviId;
+    }
+
+    public void setSuiviId(String suiviId) {
+        this.suiviId = suiviId;
+    }
+
+    public CompteRenduSuivi suiviId(String suiviId){
+        this.suiviId = suiviId;
+        return this;
+    }
+
+    public String getProspectId() {
+        return prospectId;
+    }
+
+    public void setProspectId(String prospectId) {
+        this.prospectId = prospectId;
+    }
+
+    public CompteRenduSuivi prospectId(String prospectId){
+        this.prospectId = suiviId;
+        return this;
+    }
+
     public String getId() {
         return id;
     }

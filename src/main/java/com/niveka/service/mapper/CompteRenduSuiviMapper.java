@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * Mapper for the entity CompteRenduSuivi and its DTO CompteRenduSuiviDTO.
  */
-@Mapper(componentModel = "spring", uses = {SuiviMapper.class,ProspectMapper.class})
+@Mapper(componentModel = "spring", uses = {SuiviMapper.class,ProspectMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 @Service
 public interface CompteRenduSuiviMapper extends EntityMapper<CompteRenduSuiviDTO, CompteRenduSuivi> {
 
@@ -24,7 +24,6 @@ public interface CompteRenduSuiviMapper extends EntityMapper<CompteRenduSuiviDTO
         @Mapping(source = "prospectId", target = "prospect")
     })
     CompteRenduSuivi toEntity(CompteRenduSuiviDTO compteRenduSuiviDTO);
-
     default CompteRenduSuivi fromId(String id) {
         if (id == null) {
             return null;

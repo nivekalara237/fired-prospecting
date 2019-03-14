@@ -58,6 +58,7 @@ export class ChannelUpdateComponent implements OnInit {
         if (this.channel.id !== undefined) {
             this.subscribeToSaveResponse(this.channelService.update(this.channel));
         } else {
+            //console.log("ENTREPRISE",this.channel);
             this.subscribeToSaveResponse(this.channelService.create(this.channel));
         }
     }
@@ -80,7 +81,7 @@ export class ChannelUpdateComponent implements OnInit {
     }
 
     trackEntrepriseById(index: number, item: IEntreprise) {
-        return item.id;
+        return item;
     }
 
     trackUserById(index: number, item: IUser) {

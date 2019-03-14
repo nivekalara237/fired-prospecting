@@ -28,6 +28,10 @@ export class ChannelService {
         return this.http.get<IChannel>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
+    findForUser(id: string): Observable<EntityArrayResponseType> {
+        return this.http.get<IChannel[]>(`${this.resourceUrl}/by_entreprise/${id}`, { observe: 'response' });
+    }
+
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<IChannel[]>(this.resourceUrl, { params: options, observe: 'response' });

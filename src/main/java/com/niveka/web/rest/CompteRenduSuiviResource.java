@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +60,11 @@ public class CompteRenduSuiviResource {
         compteRenduSuiviDTO.setUpdatedAt(Utils.currentJodaDateStr());
 
         CompteRenduSuiviDTO result = compteRenduSuiviService.save(compteRenduSuiviDTO);
-        return ResponseEntity.created(new URI("/api/prospects/" + result.getProspectId()))
+        /*return ResponseEntity.created(new URI("/api/prospects/" + result.getProspectId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getProspectId()))
-            .body(result);
+            .body(result);*/
+        Optional<CompteRenduSuiviDTO> optional = Optional.ofNullable(result);
+        return ResponseUtil.wrapOrNotFound(optional);
     }
 
     /**

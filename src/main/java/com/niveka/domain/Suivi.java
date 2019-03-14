@@ -34,6 +34,9 @@ public class Suivi implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
+    @Field("user_id")
+    private String userId;
+
     @DBRef
     @Field("user")
     private Set<User> users = new HashSet<>();
@@ -117,6 +120,19 @@ public class Suivi implements Serializable {
         this.users.remove(user);
         user.getSuivis().remove(this);
         return this;
+    }
+
+    public Suivi userId(String userId){
+        this.userId = userId;
+        return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setUsers(Set<User> users) {

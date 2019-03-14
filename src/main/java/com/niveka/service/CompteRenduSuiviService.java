@@ -37,6 +37,7 @@ public class CompteRenduSuiviService {
     public CompteRenduSuiviService(CompteRenduSuiviRepository compteRenduSuiviRepository, CompteRenduSuiviMapper compteRenduSuiviMapper, CompteRenduSuiviSearchRepository compteRenduSuiviSearchRepository) {
         this.compteRenduSuiviRepository = compteRenduSuiviRepository;
         this.compteRenduSuiviMapper = compteRenduSuiviMapper;
+
         this.compteRenduSuiviSearchRepository = compteRenduSuiviSearchRepository;
     }
 

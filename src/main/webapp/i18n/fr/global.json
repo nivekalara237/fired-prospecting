@@ -4,6 +4,7 @@
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
+            "forum": "Forum",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entités",
@@ -53,7 +54,9 @@
             "confirmpassword": "Confirmation du nouveau mot de passe",
             "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
             "email": "Email",
-            "email.placeholder": "Votre email"
+            "email.placeholder": "Votre email",
+            "entreprise": "Identifiant FireD",
+            "entreprise.placeholder": "saisissez l'identifiant FireD de l'entreprise"
         },
         "messages": {
             "info": {
@@ -87,6 +90,12 @@
                     "minlength": "Votre email doit comporter au moins 5 caractères.",
                     "maxlength": "Votre email ne doit pas comporter plus de 50 caractères.",
                     "invalid": "Votre email n'est pas valide."
+                },
+                "entreprise": {
+                    "required": "l'ID FireD de l'entreprise est requis.",
+                    "minlength": "l'ID FireD de l'entreprise doit comporter au moins 5 caractères.",
+                    "maxlength": "l'ID FireD de l'entreprise doit pas comporter plus de 50 caractères.",
+                    "invalid": "l'ID FireD de l'entreprise n'est pas valide."
                 }
             }
         },

@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(ChannelService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Channel('ID', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+            //elemDefault = new Channel('ID', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', null,null);
         });
 
         describe('Service methods', async () => {
@@ -78,7 +78,7 @@ describe('Service Tests', () => {
                 const returnedFromService = Object.assign(
                     {
                         designation: 'BBBBBB',
-                        entrepriseId: 'BBBBBB',
+                        //entrepriseId: 'BBBBBB',
                         code: 'BBBBBB',
                         createdAt: 'BBBBBB',
                         updatedAt: 'BBBBBB',

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -72,6 +73,19 @@ public class ObjetService {
         return objetRepository.findById(id)
             .map(objetMapper::toDto);
     }
+
+    /**
+     * Get one objet by rapportId.
+     *
+     * @param id the id of the rapport
+     * @return the list of entity
+     */
+
+    public List<Objet> findAllByRapport(String id){
+        log.debug("Request to get Objets bay Rapport : {}", id);
+        return objetRepository.findAllByRapportId(id);
+    }
+
 
     /**
      * Delete the objet by id.

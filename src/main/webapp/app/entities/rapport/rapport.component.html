@@ -69,14 +69,14 @@
             </tbody>
         </table>
     </div>
-    <div class="hide" *ngIf="rapports && rapports.length">
+    <!--<div class="hide" *ngIf="rapports && rapports.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
-    </div>
+    </div>-->
 
     <div class="row">
         <div class="col-12">
@@ -108,7 +108,7 @@
                         </ul>
                         <ul *ngIf="commercials && commercials.length" class="commerciaux-list labels-info">
                             <li *ngFor="let comm of commercials">
-                                <a (click)="_displayDetails()" class="clearfix mx-auto">
+                                <a (click)="_displayList(false,comm)" class="clearfix mx-auto">
                                     <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
                                     <div class="friend-name">
                                         <strong><a href="javascript:void(0)">{{comm.login}}</a> </strong>
@@ -139,106 +139,96 @@
                             </div>
                         </div>
                         <div *ngIf="displayList===true" class="inbox-body">
-                            <div class="heading-inbox row">
-                                <div class="col-md-8">
-                                    <div class="compose-btn compose-btn1">
-                                        <div class="col-auto my-1">
-                                            <div class="custom-control custom-checkbox mr-sm-2">
-                                                <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline">
-                                                <label class="custom-control-label" for="customControlInline">All</label>
+                            <div *ngIf="rapports && rapports.length!==0;else NotRapport">
+                                <div class="heading-inbox row">
+                                    <div class="col-md-8">
+                                        <div class="compose-btn compose-btn1">
+                                            <div class="col-auto my-1">
+                                                <div class="custom-control custom-checkbox mr-sm-2">
+                                                    <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline">
+                                                    <label class="custom-control-label" for="customControlInline">All</label>
+                                                </div>
                                             </div>
+                                            <button title="" data-placement="top" data-toggle="tooltip" type="button" data-original-title="Print" class="btn  btn-sm tooltips"><i class="fa fa-print"></i> </button>
+                                            <button title="" data-placement="top" data-toggle="tooltip" data-original-title="Trash" class="btn btn-sm tooltips"><i class="fa fa-trash-o"></i></button>
                                         </div>
-                                        <button title="" data-placement="top" data-toggle="tooltip" type="button" data-original-title="Print" class="btn  btn-sm tooltips"><i class="fa fa-print"></i> </button>
-                                        <button title="" data-placement="top" data-toggle="tooltip" data-original-title="Trash" class="btn btn-sm tooltips"><i class="fa fa-trash-o"></i></button>
+                                    </div>
+                                </div>
+                                <table class="table table-inbox table-hover">
+                                    <tbody>
+                                    <tr class="" *ngFor="let rapport of rapports" (click)="_displayDetails(rapport)">
+                                        <td class="inbox-small-cells">
+                                            <div class="custom-control custom-checkbox mr-sm-2">
+                                                <input type="checkbox" (click)="checked(rapport)" *ngIf="rapport.checked===true;else unchecked" checked name="checkAll" class="custom-control-input" [id]="'customControlInline1'+rapport.id">
+                                                <ng-template #unchecked>
+                                                    <input type="checkbox" (click)="checked(rapport)" name="checkAll" class="custom-control-input" [id]="'customControlInline1'+rapport.id">
+                                                </ng-template>
+                                                <label class="custom-control-label" [for]="'customControlInline1'+rapport.id"></label>
+                                            </div>
+                                        </td>
+                                        <td class="view-message  dont-show">{{rapport.objet}}</td>
+                                        <td class="view-message ">{{trimText(rapport.contenu)}}</td>
+                                        <td class="view-message  inbox-small-cells" *ngIf="rapport.haveFile;else notFile"><i class="fa fa-paperclip"></i></td>
+                                        <ng-template #notFile>
+                                            <td></td>
+                                        </ng-template>
+                                        <td class="view-message  text-right" *ngIf="isToday(rapport.createdAt);else notToday">{{rapport.createdAt | date:"h:mm a"}}</td>
+                                        <ng-template #notToday>
+                                            <td class="view-message  text-right">{{rapport.createdAt | date:'d MMM y, h:mm a'}}</td>
+                                        </ng-template>
+                                    </tr>
+                                    <!--<tr class="unread">
+                                        <td class="inbox-small-cells">
+                                            <input type="checkbox" class="mail-checkbox">
+                                        </td>
+
+                                        <td class="view-message dont-show">Daemon nikiwa</td>
+                                        <td class="view-message">Lorem ipsum dolor sit amet</td>
+                                        <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td>
+                                        <td class="view-message text-right">June 16</td>
+                                    </tr>-->
+                                    </tbody>
+                                </table>
+                                <div class="hide" *ngIf="rapports && rapports.length">
+                                    <div class="row justify-content-center">
+                                        <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
                                     </div>
                                 </div>
                             </div>
-                            <table class="table table-inbox table-hover">
-                                <tbody>
-                                <tr class="unread">
-                                    <td class="inbox-small-cells">
-                                        <div class="custom-control custom-checkbox mr-sm-2">
-                                            <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline1">
-                                            <label class="custom-control-label" for="customControlInline1"></label>
-                                        </div>
-                                    </td>
-                                    <td class="view-message  dont-show">Arjuna Admin</td>
-                                    <td class="view-message ">Lorem ipsum dolor imit set.</td>
-                                    <td class="view-message  inbox-small-cells"><i class="fa fa-paperclip"></i></td>
-                                    <td class="view-message  text-right">9:27 AM</td>
-                                </tr>
-                                <tr class="unread">
-                                    <td class="inbox-small-cells">
-                                        <div class="custom-control custom-checkbox mr-sm-2">
-                                            <input type="checkbox" name="checkAll" class="custom-control-input" id="customControlInline2">
-                                            <label class="custom-control-label" for="customControlInline2"></label>
-                                        </div>
-                                    </td>
-
-                                    <td class="view-message dont-show">John Doe</td>
-                                    <td class="view-message">Hi Bro, How are you?</td>
-                                    <td class="view-message inbox-small-cells"></td>
-                                    <td class="view-message text-right">March 15</td>
-                                </tr>
-                                <tr class="">
-                                    <td class="inbox-small-cells">
-                                        <input type="checkbox" class="mail-checkbox">
-                                    </td>
-
-                                    <td class="view-message dont-show">Daemon nikiwa</td>
-                                    <td class="view-message">Lorem ipsum dolor sit amet</td>
-                                    <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td>
-                                    <td class="view-message text-right">June 16</td>
-                                </tr>
-                                <tr class="">
-                                    <td class="inbox-small-cells">
-                                        <input type="checkbox" class="mail-checkbox">
-                                    </td>
-
-                                    <td class="view-message dont-show">Sumomonosuke</td>
-                                    <td class="view-message">Lorem ipsum dolor sit amet</td>
-                                    <td class="view-message inbox-small-cells"></td>
-                                    <td class="view-message text-right">August 10</td>
-                                </tr>
-                                <tr class="">
-                                    <td class="inbox-small-cells">
-                                        <input type="checkbox" class="mail-checkbox">
-                                    </td>
-
-                                    <td class="view-message dont-show">Facebook</td>
-                                    <td class="view-message view-message">Dolor sit amet, consectetuer adipiscing</td>
-                                    <td class="view-message inbox-small-cells"><i class="fa fa-paperclip"></i></td>
-                                    <td class="view-message text-right">April 14</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="hide" *ngIf="rapports && rapports.length">
-                                <div class="row justify-content-center">
-                                    <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
-                                </div>
-                            </div>
                         </div>
+                        <ng-template #NotRapport>
+                            <div class="container" style="margin-top: 40px">
+                                <h6 style="color: #6a6a6a;text-align: center;font-style: italic;font-weight: lighter">
+                                    <i>
+                                        Aucun rapport pour <span *ngIf="commercialSelected" style="font-weight: bold">{{commercialSelected.login}}</span>, veuillez selectionner un autre utilisateur dans le paneau de
+                                        gauche.
+                                    </i>
+                                </h6>
+                            </div>
+                        </ng-template>
                         <div *ngIf="displayDetails===true" class="inbox-body">
                             <div class="heading-inbox row">
                                 <div class="col-md-8">
                                     <div class="compose-btn">
-                                        <a class="btn btn-sm btn-primary" href="mail_compose.html" data-original-title="" title=""><i class="fa fa-reply"></i> return</a>
-                                        <button title="" data-placement="top" data-toggle="tooltip" data-original-title="Trash" class="btn btn-sm tooltips"><i class="fa fa-trash-o"></i></button>
+                                        <a class="btn btn-sm btn-primary" (click)="backToList()" [routerLink]="" data-original-title="" title=""><i class="fa fa-reply"></i> return</a>
                                     </div>
                                 </div>
                                 <div class="col-md-4 text-right">
-                                    <p class="date"> 8:02 PM 12 FEB 2014</p>
+                                    <p class="date" *ngIf="isToday(rapportSelected.createdAt)===false;else isTd" > {{rapportSelected.createdAt | date:'d MMMM yyyy, h:mm a'}}</p>
+                                    <ng-template #isTd>
+                                        <p class="date"> {{rapportSelected.createdAt | date:'h:mm a'}}</p>
+                                    </ng-template>
                                 </div>
                                 <div class="col-md-12">
-                                    <h4> Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum.</h4>
+                                    <h4> {{rapportSelected.objet}} </h4>
                                 </div>
                             </div>
                             <div class="sender-info">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" style="display: none;">
                                         <img alt="" src="https://bootdey.com/img/Content/avatar/avatar6.png">
                                         <strong>John Doe</strong>
                                         <span>[johndoe@gmail.com]</span>
@@ -251,70 +241,42 @@
                                 </div>
                             </div>
                             <div class="view-mail">
-                                <p>Faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
-                                <p>Consequat risus. Mauris sed congue orci. Donec ultrices <a href="#">flatlab</a>. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec
-                                    <a href="#">vitae leo at sem lobortis porttitor eu consequat risus</a>. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
-                                <p>Modales vulputate urna, vel <a href="#">thevectorlab.net</a>. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. Donec ultrices faucibus rutrum. Phasellus sodales vulputate urna, vel accumsan augue egestas ac. Donec vitae leo at sem lobortis porttitor eu consequat risus. Mauris sed congue orci. </p>
-                            </div>
-                            <div class="attachment-mail">
                                 <p>
-                                    <span><i class="fa fa-paperclip"></i> 3 attachments — </span>
-                                    <a href="#">Download all attachments</a>
-                                    |
-                                    <a href="#">View all images</a>
+
+                                    {{rapportSelected.contenu}}
+
                                 </p>
-                                <ul>
-                                    <li>
-                                        <a href="#" class="atch-thumb">
-                                            <img src="https://lorempixel.com/128/100/nature/5">
-                                        </a>
-                                        <div class="file-name">
-                                            image-name.jpg
-                                        </div>
-                                        <span>12KB</span>
-                                        <div class="links">
-                                            <a href="#">View</a> -
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="atch-thumb">
-                                            <img src="https://lorempixel.com/128/100/nature/4">
-                                        </a>
-                                        <div class="file-name">
-                                            img_name.jpg
-                                        </div>
-                                        <span>40KB</span>
-                                        <div class="links">
-                                            <a href="#">View</a> -
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="atch-thumb">
-                                            <img src="https://lorempixel.com/128/100/nature/2">
-                                        </a>
-                                        <div class="file-name">
-                                            img_name.jpg
-                                        </div>
-                                        <span>30KB</span>
-                                        <div class="links">
-                                            <a href="#">View</a> -
-                                            <a href="#">Download</a>
-                                        </div>
-                                    </li>
-                                </ul>
                             </div>
-                            <div class="compose-btn pull-left">
-                                <a class="btn btn-sm btn-primary" href="mail_compose.html" data-original-title="" title=""><i class="fa fa-reply"></i> return</a>
-                                <button title="" data-placement="top" data-toggle="tooltip" type="button" data-original-title="Print" class="btn  btn-sm tooltips"><i class="fa fa-print"></i> </button>
+                            <div class="attachment-mail" *ngIf="rapportSelected.haveFile===true">
+                                <div *ngIf="files && files.length!==0;else notFiles">
+                                    <p>
+                                        <span><i class="fa fa-paperclip"></i> {{files.length}} attachments — </span>
+                                        <a href="javascript:void(0)">Download all attachments</a>
+                                    </p>
+                                    <ul>
+                                        <li *ngFor="let file of files">
+                                            <a href="#" class="atch-thumb" style="display: none">
+                                                <img src="https://lorempixel.com/128/100/nature/5">
+                                            </a>
+                                            <div class="links">
+                                                <span class="file-name">
+                                                    {{file.nom}} : {{fileConvertSize(file.taille)}} - <a target="_blank" [href]="file.lien" (click)="download(file.nom)">Download</a>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <ng-template #notFiles>
+                                    <span style="color: indianred;font-weight: lighter"> Error de chargement des fichiers joints!
+                                         rechargez le page a nouveau ou contactez l'equipe technique. </span>
+                                </ng-template>
                             </div>
                         </div>
                         <div class="inbox-body mx-auto" *ngIf="compose===true">
-                            <form class="form-horizontal" novalidate #editForm="ngForm" role="form">
+                            <form class="form-horizontal" (ngSubmit)="saveOnlyRepport();" enctype="multipart/form-data" name="composeForm" novalidate #editForm="ngForm" role="form">
                                 <div class="form-group">
                                     <label class="form-control-label" jhiTranslate="fireDApp.rapport.objet" for="field_objet">Objet</label>
-                                    <input required type="text" class="form-control" name="objet" id="field_objet"
+                                    <input required type="text"  class="form-control" name="objet" id="field_objet"
                                            [(ngModel)]="objet" />
                                 </div>
                                 <div class="form-group">
@@ -324,13 +286,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label" jhiTranslate="fireDApp.rapport.contenu" for="field_contenu">Contenu</label>
-                                    <textarea required rows="8" type="text" class="form-control" name="contenu" id="field_contenu"
+                                    <textarea required rows="8"  type="text" class="form-control" name="contenu" id="field_contenu"
                                               [(ngModel)]="contenu"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-offset-2 col-lg-10">
-                                        <input type="file"  (change)="onFileChange($event)" name="files" id="file-1" class="input-file" data-multiple-caption="{count} files selected" multiple />
-                                        <label for="file-1"  class="label-file"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Choose a file&hellip;</span></label>
+                                        <input [accept]="acceptExt" type="file" [(ngModel)]="fs"  (change)="onFileChange($event)" name="fs" id="file-1" class="input-file" data-multiple-caption="{count} files selected" multiple />
+                                        <label for="file-1"  class="label-file"> <i class="fa fa-attachment"></i> <span>Choose a file&hellip;</span></label>
                                         <div class="filenames"></div>
                                     </div>
                                 </div>
@@ -345,6 +307,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

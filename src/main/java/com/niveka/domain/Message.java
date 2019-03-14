@@ -2,9 +2,9 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -33,9 +33,6 @@ public class Message implements Serializable {
     @Field("time")
     private String time;
 
-    @Field("channel_id")
-    private Long channelId;
-
     @Field("created_at")
     private String createdAt;
 
@@ -44,6 +41,12 @@ public class Message implements Serializable {
 
     @Field("deleted_at")
     private String deletedAt;
+
+    @Field("channel_id")
+    private String channelId;
+
+    @Field("user_id")
+    private String userId;
 
     @DBRef
     @Field("channel")
@@ -86,6 +89,28 @@ public class Message implements Serializable {
         return this;
     }
 
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Message userId(String userId){
+        this.userId = userId;
+        return this;
+    }
+
+    public Message channelId(String channelId){
+        this.channelId = channelId;
+        return this;
+    }
+
     public void setKey(String key) {
         this.key = key;
     }
@@ -114,19 +139,6 @@ public class Message implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public Long getChannelId() {
-        return channelId;
-    }
-
-    public Message channelId(Long channelId) {
-        this.channelId = channelId;
-        return this;
-    }
-
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
     }
 
     public String getCreatedAt() {
@@ -175,6 +187,10 @@ public class Message implements Serializable {
     public Message channel(ZChannel channel) {
         this.channel = channel;
         return this;
+    }
+
+    public String getChannelId() {
+        return channelId;
     }
 
     public void setChannel(ZChannel channel) {

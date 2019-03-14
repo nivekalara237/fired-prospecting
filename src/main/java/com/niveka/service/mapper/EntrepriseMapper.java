@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EntrepriseMapper extends EntityMapper<EntrepriseDTO, Entreprise> {
 
-
-
     default Entreprise fromId(String id) {
         if (id == null) {
             return null;

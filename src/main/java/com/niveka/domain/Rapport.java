@@ -2,9 +2,8 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -14,6 +13,7 @@ import java.util.Set;
 /**
  * A Rapport.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Document(collection = "rapport")
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "rapport")
 public class Rapport implements Serializable {
@@ -41,16 +41,21 @@ public class Rapport implements Serializable {
     @Field("deleted_at")
     private String deletedAt;
 
-    @DBRef
+    @Field("user_id")
+    private String userId;
+
+    @Field("objet")
+    private String objet;
+
+    @Field("have_file")
+    private String haveFile;
+
     @Field("user")
-    @JsonIgnoreProperties("")
     private User user;
 
-    @DBRef
     @Field("objets")
     private Set<Objet> objets = new HashSet<>();
 
-    @DBRef
     @Field("copies")
     private Set<Copie> copies = new HashSet<>();
 
@@ -72,7 +77,30 @@ public class Rapport implements Serializable {
         return this;
     }
 
+    public String getObjet() {
+        return objet;
+    }
 
+    public String getHaveFile() {
+        return haveFile;
+    }
+
+    public void setHaveFile(String haveFile) {
+        this.haveFile = haveFile;
+    }
+    public Rapport haveFile(String haveFile) {
+        this.haveFile = haveFile;
+        return this;
+    }
+
+    public void setObjet(String objet) {
+        this.objet = objet;
+    }
+
+    public Rapport objet(String objet) {
+        this.objet = objet;
+        return this;
+    }
 
     public void setCopies(Set<Copie> copies) {
         this.copies = copies;
@@ -178,6 +206,19 @@ public class Rapport implements Serializable {
         return this;
     }
 
+    public Rapport userId(String userId){
+        this.userId = userId;
+        return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -215,6 +256,7 @@ public class Rapport implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", objets='" + getObjets() + "'" +
+            ", user='" + getUser() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
             "}";
     }

@@ -9,6 +9,8 @@ export class Register {
     constructor(private http: HttpClient) {}
 
     save(account: any): Observable<any> {
-        return this.http.post(SERVER_API_URL + 'api/register', account);
+        let eId = account.entreprise;
+        account.entreprise = null;
+        return this.http.post(SERVER_API_URL + 'api/register/' + eId, account);
     }
 }

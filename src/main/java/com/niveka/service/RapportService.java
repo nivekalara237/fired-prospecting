@@ -2,6 +2,7 @@ package com.niveka.service;
 
 import com.niveka.domain.Rapport;
 import com.niveka.repository.RapportRepository;
+import com.niveka.repository.search.RapportSearchRepository;
 import com.niveka.service.dto.RapportDTO;
 import com.niveka.service.mapper.RapportMapper;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Rapport.
@@ -24,12 +27,12 @@ public class RapportService {
 
     private final RapportMapper rapportMapper;
 
-    //private final RapportSearchRepository rapportSearchRepository;
+    private final RapportSearchRepository rapportSearchRepository;
 
-    public RapportService(RapportRepository rapportRepository, RapportMapper rapportMapper/*, RapportSearchRepository rapportSearchRepository*/) {
+    public RapportService(RapportRepository rapportRepository, RapportMapper rapportMapper, RapportSearchRepository rapportSearchRepository) {
         this.rapportRepository = rapportRepository;
         this.rapportMapper = rapportMapper;
-        //this.rapportSearchRepository = rapportSearchRepository;
+        this.rapportSearchRepository = rapportSearchRepository;
     }
 
     /**
@@ -39,12 +42,15 @@ public class RapportService {
      * @return the persisted entity
      */
     public RapportDTO save(RapportDTO rapportDTO) {
-        log.debug("Request to save Rapport : {}", rapportDTO);
+        log.debug("Request to save Rapport: {}", rapportDTO);
 
         Rapport rapport = rapportMapper.toEntity(rapportDTO);
+        rapport.setUser(rapportDTO.getUser());
+        rapport.setUserId(rapportDTO.getUserId());
+        //log.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXX : {}", rapport);
         rapport = rapportRepository.save(rapport);
         RapportDTO result = rapportMapper.toDto(rapport);
-        //rapportSearchRepository.save(rapport);
+        rapportSearchRepository.save(rapport);
         return result;
     }
 
@@ -57,6 +63,12 @@ public class RapportService {
     public Page<RapportDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Rapports");
         return rapportRepository.findAll(pageable)
+            .map(rapportMapper::toDto);
+    }
+
+    public Page<RapportDTO> findAllByUser(Pageable pageable,String uId){
+        log.debug("Request to get all Rapports by particular user");
+        return rapportRepository.findAllByUserId(pageable,uId)
             .map(rapportMapper::toDto);
     }
 
@@ -81,7 +93,7 @@ public class RapportService {
     public void delete(String id) {
         log.debug("Request to delete Rapport : {}", id);
         rapportRepository.deleteById(id);
-        //rapportSearchRepository.deleteById(id);
+        rapportSearchRepository.deleteById(id);
     }
 
     /**
@@ -93,8 +105,7 @@ public class RapportService {
      */
     public Page<RapportDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Rapports for query {}", query);
-        /*return rapportSearchRepository.search(queryStringQuery(query), pageable)
-            .map(rapportMapper::toDto);*/
-        return null;
+        return rapportSearchRepository.search(queryStringQuery(query), pageable)
+            .map(rapportMapper::toDto);
     }
 }

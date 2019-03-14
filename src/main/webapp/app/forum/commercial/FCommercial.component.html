@@ -1,0 +1,165 @@
+<div>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="container-fluid">
+            <div class="panel messages-panel">
+                <div class="contacts-list">
+                    <div class="tab-content">
+                        <div id="inbox" class="contacts-outter-wrapper tab-pane active">
+                            <div class="contacts-outter">
+                                <ul class="list-unstyled contacts">
+                                    <li *ngFor="let channel of channels" [id]="channel.id" class="channelItem" data-toggle="tab" (click)="channelSelected(channel)">
+                                        <div class="message-count"> +9 </div>
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> {{channel.designation}} </h3>
+                                            <!--<h5> Of course, just call me before that, in case I forget. </h5>-->
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 3:56 <sup>AM</sup></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="sent" class="contacts-outter-wrapper tab-pane">
+                            <form class="panel-search-form success form-group has-feedback no-margin-bottom">
+                                <input type="text" class="form-control" name="search" placeholder="Search">
+                                <span class="fa fa-search form-control-feedback"></span>
+                            </form>
+                            <div class="contacts-outter">
+                                <ul class="list-unstyled contacts success">
+                                    <li data-toggle="tab" data-target="#sent-message-1">
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> David Beckham </h3>
+                                            <h5> I would like to take a look at it this evening, is it possible ? </h5>
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 2:24 <sup>AM</sup></span>
+                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa fa-paperclip"></i>
+                                        </div>
+                                    </li>
+                                    <li data-toggle="tab" data-target="#sent-message-2">
+                                        <div class="message-count"> 7 </div>
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> Jeff Williams </h3>
+                                            <h5> Hello, Dennis. I will take a look at it tomorrow, because I'm </h5>
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 12:41 <sup>AM</sup></span>
+                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa fa-paperclip"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="marked" class="contacts-outter-wrapper tab-pane">
+                            <form class="panel-search-form warning form-group has-feedback no-margin-bottom">
+                                <input type="text" class="form-control" name="search" placeholder="Search">
+                                <span class="fa fa-search form-control-feedback"></span>
+                            </form>
+                            <div class="contacts-outter">
+                                <ul class="list-unstyled contacts warning">
+                                    <li data-toggle="tab" data-target="#marked-message-1">
+                                        <div class="message-count"> 2 </div>
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> Jessica Franco </h3>
+                                            <h5> Hello, Dennis. I wanted to let you know we reviewed your proposal and decided  </h5>
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 1:44 <sup>AM</sup></span>
+                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa fa-paperclip"></i>
+                                        </div>
+                                    </li>
+                                    <li data-toggle="tab" data-target="#marked-message-2">
+                                        <div class="message-count"> 1 </div>
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> Pavel Durov </h3>
+                                            <h5> Hey, we need your help for our next Telegram re-design. </h5>
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 3:23 <sup>AM</sup></span>
+                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa fa-paperclip"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="drafts" class="contacts-outter-wrapper tab-pane">
+                            <form class="panel-search-form dark form-group has-feedback no-margin-bottom">
+                                <input type="text" class="form-control" name="search" placeholder="Search">
+                                <span class="fa fa-search form-control-feedback"></span>
+                            </form>
+                            <div class="contacts-outter">
+                                <ul class="list-unstyled contacts dark">
+                                    <li data-toggle="tab" data-target="#draft-message-1">
+                                        <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+
+                                        <div class="vcentered info-combo">
+                                            <h3 class="no-margin-bottom name"> Milla Shiffman </h3>
+                                            <h5> Hello, Mila, can you send me the latest pack of icons, I need </h5>
+                                        </div>
+                                        <div class="contacts-add">
+                                            <span class="message-time"> 4:22 <sup>AM</sup></span>
+                                            <i class="fa fa-trash-o"></i>
+                                            <i class="fa fa-paperclip"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane message-body active" id="inbox-message-1">
+                        <div class="message-chat">
+                            <div class="chat-body" (scroll)="setScrollTo($event)">
+                                <div *ngFor="let message of messages" [class]="currentAccount.id!==message.userId?'message info':'message my-message'">
+                                    <img alt="" class="img-circle medium-image" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                                    <div class="message-body">
+                                        <div class="message-info">
+                                            <h4> {{message.user.login}} </h4>
+                                            <h5> <i class="fa fa-clock-o"></i> {{ message.time | date:'medium' }} </h5>
+                                        </div>
+                                        <hr>
+                                        <div class="message-text">
+                                            {{message.contenu}}
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+
+                            <div class="chat-footer">
+                                <form (ngSubmit)="saveMessage()" name="editForm" role="form" novalidate #editForm="ngForm">
+                                    <textarea rows="4" placeholder="{{'forum.form.content'|translate}}" class="send-message-text"  name="contenu" id="field_contenu"
+                                              [(ngModel)]="newMessage.contenu"></textarea>
+                                    <label class="upload-file">
+                                        <input type="file">
+                                        <i class="fa fa-paperclip"></i>
+                                    </label>
+                                    <button type="submit" class="send-message-button btn-info">
+                                        <i class="fa fa-send"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

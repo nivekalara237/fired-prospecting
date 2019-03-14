@@ -4,6 +4,9 @@
 /src/main/webapp/content/css/main.css
 /build/www/**
 /src/test/javascript/coverage/
+/src/main/uploads/
+/upload/
+/uploads/
 
 ######################
 # Node

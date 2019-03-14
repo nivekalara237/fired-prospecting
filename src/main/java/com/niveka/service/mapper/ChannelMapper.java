@@ -1,9 +1,9 @@
 package com.niveka.service.mapper;
 
-import com.niveka.domain.*;
+import com.niveka.domain.ZChannel;
 import com.niveka.service.dto.ZChannelDTO;
-
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Service;
 
 /**

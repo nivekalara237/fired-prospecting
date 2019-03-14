@@ -20,16 +20,24 @@ import { FireDAppRoutingModule } from './app-routing.module';
 import { FireDHomeModule } from './home/home.module';
 import { FireDAccountModule } from './account/account.module';
 import { FireDEntityModule } from './entities/entity.module';
+import { FireDForumModule } from './forum/forum.module';
 import * as moment from 'moment';
 // import { MaterialModule } from './material.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
-// import {MaterialModule} from "./material.module";
+//import {MaterialModule} from "./material.module";
+import { MultiSelectAllModule } from '@syncfusion/ej2-angular-dropdowns';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { NbThemeModule } from '@nebular/theme';
 import { NgxLoadingModule } from 'ngx-loading';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { environment } from './envs/env';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AmazingTimePickerModule } from 'amazing-time-picker'; // this line you need
 @NgModule({
     imports: [
         BrowserModule,
@@ -40,6 +48,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
         NgbModule,
         FormsModule,
         ReactiveFormsModule,
+        MultiSelectAllModule,
         NgBootstrapFormValidationModule.forRoot(),
         NgxLoadingModule.forRoot({}),
         NgJhipsterModule.forRoot({
@@ -55,10 +64,16 @@ import { EditorModule } from '@tinymce/tinymce-angular';
         FireDAccountModule,
         EditorModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
-        FireDEntityModule
+        FireDEntityModule,
+        FireDForumModule,
+        LoadingBarHttpClientModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireDatabaseModule,
+        AmazingTimePickerModule
     ],
     declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
     providers: [
+        AngularFirestore,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,

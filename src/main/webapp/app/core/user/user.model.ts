@@ -7,6 +7,8 @@ export interface IUser {
     activated?: boolean;
     langKey?: string;
     authorities?: any[];
+    entreprise?: any;
+    entrepriseId?: string;
     createdBy?: string;
     createdDate?: Date;
     lastModifiedBy?: string;
@@ -24,6 +26,8 @@ export class User implements IUser {
         public activated?: boolean,
         public langKey?: string,
         public authorities?: any[],
+        public entreprise?: any,
+        public entrepriseId?: string,
         public createdBy?: string,
         public createdDate?: Date,
         public lastModifiedBy?: string,
@@ -38,6 +42,8 @@ export class User implements IUser {
         this.activated = activated ? activated : false;
         this.langKey = langKey ? langKey : null;
         this.authorities = authorities ? authorities : null;
+        this.entreprise = entreprise ? entreprise : null;
+        this.entrepriseId = entrepriseId ? entrepriseId : null;
         this.createdBy = createdBy ? createdBy : null;
         this.createdDate = createdDate ? createdDate : null;
         this.lastModifiedBy = lastModifiedBy ? lastModifiedBy : null;

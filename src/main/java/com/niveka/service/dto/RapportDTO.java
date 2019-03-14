@@ -1,5 +1,7 @@
 package com.niveka.service.dto;
 
+import com.niveka.domain.User;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -25,6 +27,10 @@ public class RapportDTO implements Serializable {
     private String deletedAt;
 
     private String userId;
+
+    private boolean haveFile;
+
+    private User user;
 
     public String getId() {
         return id;
@@ -98,6 +104,22 @@ public class RapportDTO implements Serializable {
         this.userId = userId;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public boolean isHaveFile() {
+        return haveFile;
+    }
+
+    public void setHaveFile(boolean haveFile) {
+        this.haveFile = haveFile;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -130,7 +152,7 @@ public class RapportDTO implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
-            ", user=" + getUserId() +
+            ", user=" + getUser() +
             "}";
     }
 }

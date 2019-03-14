@@ -15,6 +15,7 @@ export interface IProspect {
     updatedAt?: string;
     deletedAt?: string;
     userId?: string;
+    suiviId?: string;
     suivi?: ISuivi;
     user?: IUser;
 }
@@ -34,6 +35,7 @@ export class Prospect implements IProspect {
         public updatedAt?: string,
         public deletedAt?: string,
         public userId?: string,
+        public suiviId?: string,
         public suivi?: ISuivi,
         public user?: IUser
     ) {}

@@ -4,9 +4,12 @@ import com.codahale.metrics.annotation.Timed;
 import com.niveka.config.Constants;
 import com.niveka.domain.User;
 import com.niveka.repository.UserRepository;
+import com.niveka.repository.search.UserSearchRepository;
 import com.niveka.security.AuthoritiesConstants;
+import com.niveka.service.EntrepriseService;
 import com.niveka.service.MailService;
 import com.niveka.service.UserService;
+import com.niveka.service.dto.EntrepriseDTO;
 import com.niveka.service.dto.UserDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.errors.EmailAlreadyUsedException;
@@ -16,7 +19,7 @@ import com.niveka.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -30,8 +33,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * REST controller for managing users.
@@ -69,14 +77,16 @@ public class UserResource {
 
     private final MailService mailService;
 
-    //private final UserSearchRepository userSearchRepository;
+    @Autowired
+    private EntrepriseService entrepriseService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService/*, UserSearchRepository userSearchRepository*/) {
+    private final UserSearchRepository userSearchRepository;
 
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, UserSearchRepository userSearchRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
-        //this.userSearchRepository = userSearchRepository;
+        this.userSearchRepository = userSearchRepository;
     }
 
     /**
@@ -93,7 +103,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @Timed
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
@@ -113,6 +123,33 @@ public class UserResource {
         }
     }
 
+    @PostMapping("/users/{entreprise}")
+    @Timed
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<User> createUserForEntreprise(@Valid @RequestBody UserDTO userDTO,@PathVariable String entreprise) throws URISyntaxException {
+
+        Optional<EntrepriseDTO> entrep = entrepriseService.findOne(entreprise);
+        if (entrep==null || !entrep.isPresent()){
+             throw new BadRequestAlertException("Invalid id", "Entreprise", "idnull");
+        }
+        if (userDTO.getId() != null) {
+            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException();
+        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        } else {
+            log.debug("ENTREPRISE: {}",entrep.get());
+            userDTO.setEntreprise(entrep.get().toEntity());
+            User newUser = userService.createUser(userDTO);
+            mailService.sendCreationEmail(newUser);
+            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+                .headers(HeaderUtil.createAlert( "userManagement.created", newUser.getLogin()))
+                .body(newUser);
+        }
+    }
+
     /**
      * PUT /users : Updates an existing User.
      *
@@ -123,7 +160,7 @@ public class UserResource {
      */
     @PutMapping("/users")
     @Timed
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -134,6 +171,35 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
+
+        if (userDTO.getEntrepriseId()==null || userDTO.getEntrepriseId().equals(""))
+            userDTO.setEntrepriseId(userDTO.getEntreprise().getId());
+
+        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+
+        return ResponseUtil.wrapOrNotFound(updatedUser,
+            HeaderUtil.createAlert("userManagement.updated", userDTO.getLogin()));
+    }
+
+    @PutMapping("/users/{entreprise}")
+    @Timed
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<UserDTO> updateUserForEntreprise(@Valid @RequestBody UserDTO userDTO,@PathVariable String entreprise){
+        log.debug("REST request to update User : {}", userDTO);
+        Optional<EntrepriseDTO> entrep = entrepriseService.findOne(entreprise);
+        if (entrep.isPresent()){
+            throw new BadRequestAlertException("Invalid id", "Entreprise", "idnull");
+        }
+
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new EmailAlreadyUsedException();
+        }
+        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
+        userDTO.setEntreprise(entrep.get().toEntity());
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
@@ -183,7 +249,7 @@ public class UserResource {
      */
     @GetMapping("/users/authorities")
     @Timed
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
     }
@@ -211,7 +277,7 @@ public class UserResource {
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\") or hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
@@ -228,9 +294,16 @@ public class UserResource {
     @GetMapping("/_search/users/{query}")
     @Timed
     public List<User> search(@PathVariable String query) {
-        return null;
-        //return StreamSupport
-          //  .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            //.collect(Collectors.toList());
+        return StreamSupport
+            .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .collect(Collectors.toList());
+    }
+
+    @PostMapping("/users/fcm/change_token/{id}")
+    @Timed
+    public ResponseEntity<Void> changeToken(@RequestBody Map<String, String> params,@PathVariable String id){
+        User userDTO = userService.findOne(id);
+        userService.updateToken(id,params.get("token"),params.get("type"));
+        return ResponseEntity.ok().build();
     }
 }

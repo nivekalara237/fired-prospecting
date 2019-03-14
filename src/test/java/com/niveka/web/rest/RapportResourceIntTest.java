@@ -107,7 +107,7 @@ public class RapportResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RapportResource rapportResource = new RapportResource(rapportService);
+        final RapportResource rapportResource = new RapportResource(rapportService, objetService);
         this.restRapportMockMvc = MockMvcBuilders.standaloneSetup(rapportResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

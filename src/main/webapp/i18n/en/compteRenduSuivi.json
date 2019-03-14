@@ -17,7 +17,7 @@
                 "title": "Compte Rendu Suivi"
             },
             "contenu": "Contenu",
-            "dateProchaineRdv": "Date Prochaine Rdv",
+            "dateProchaineRdv": "Date next meeting",
             "createdAt": "Created At",
             "updatedAt": "Updated At",
             "deletedAt": "Deleted At",

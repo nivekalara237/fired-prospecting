@@ -2,6 +2,7 @@ package com.niveka.service;
 
 import com.niveka.domain.Message;
 import com.niveka.repository.MessageRepository;
+import com.niveka.repository.search.MessageSearchRepository;
 import com.niveka.service.dto.MessageDTO;
 import com.niveka.service.mapper.MessageMapper;
 import org.slf4j.Logger;
@@ -12,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
 /**
  * Service Implementation for managing Message.
  */
+
 @Service
 public class MessageService {
 
@@ -24,12 +28,12 @@ public class MessageService {
 
     private final MessageMapper messageMapper;
 
-    //private final MessageSearchRepository messageSearchRepository;
+    private final MessageSearchRepository messageSearchRepository;
 
-    public MessageService(MessageRepository messageRepository, MessageMapper messageMapper/*, MessageSearchRepository messageSearchRepository*/) {
+    public MessageService(MessageRepository messageRepository, MessageMapper messageMapper, MessageSearchRepository messageSearchRepository) {
         this.messageRepository = messageRepository;
         this.messageMapper = messageMapper;
-        //this.messageSearchRepository = messageSearchRepository;
+        this.messageSearchRepository = messageSearchRepository;
     }
 
     /**
@@ -40,11 +44,11 @@ public class MessageService {
      */
     public MessageDTO save(MessageDTO messageDTO) {
         log.debug("Request to save Message : {}", messageDTO);
-
         Message message = messageMapper.toEntity(messageDTO);
         message = messageRepository.save(message);
         MessageDTO result = messageMapper.toDto(message);
-        //messageSearchRepository.save(message);
+        messageSearchRepository.save(message);
+
         return result;
     }
 
@@ -81,7 +85,7 @@ public class MessageService {
     public void delete(String id) {
         log.debug("Request to delete Message : {}", id);
         messageRepository.deleteById(id);
-        //messageSearchRepository.deleteById(id);
+        messageSearchRepository.deleteById(id);
     }
 
     /**
@@ -93,9 +97,8 @@ public class MessageService {
      */
     public Page<MessageDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Messages for query {}", query);
-        //return messageSearchRepository.search(queryStringQuery(query), pageable)
-          //  .map(messageMapper::toDto);
+        return messageSearchRepository.search(queryStringQuery(query), pageable)
+            .map(messageMapper::toDto);
 
-        return null;
     }
 }

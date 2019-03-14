@@ -41,7 +41,7 @@
                             <div class="author-card-avatar"><img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Daniel Adams">
                             </div>
                             <div class="author-card-details">
-                                <h5 class="author-card-name text-lg">{{prospect.nom}}</h5><span class="author-card-position">{{'fireDApp.prospect.le'|translate}}: {{prospect.createdAt}}</span>
+                                <h5 class="author-card-name text-lg">{{prospect.nom}}</h5><span class="author-card-position">{{'fireDApp.prospect.le'|translate}}: {{prospect.createdAt| date:'medium'}}</span>
                             </div>
                         </div>
                     </div>
@@ -61,16 +61,11 @@
                     </div>
                 </div>
                 <div class="col-9" style="padding-left: 5%;padding-right: 1%;">
-                    <div style="display: none" *ngFor="let compteRenduSuivi of compteRendus"  class="bd-callout bd-callout-primary">
-                        <h6> <fa-icon [icon]="'clock'"></fa-icon> Date: <span class="label label-primary"> {{compteRenduSuivi.createdAt}} </span> </h6>
-                        <h6> <fa-icon [icon]="'clock'"></fa-icon> Prochain RDV: <span class="label label-danger"> {{compteRenduSuivi.dateProchaineRdv}} </span> </h6>
-                        <p> {{ compteRenduSuivi.contenu }} </p>
-                    </div>
                     <div class="row CRS justify-content-center">
                         <div class="col-xl-10 col-12">
                             <div class="timeline timeline-line-solid">
                                 <span class="timeline-label">
-                                    <span class="label">{{prospect.createdAt}}</span>
+                                    <span class="label">{{prospect.createdAt | date:'medium'}}</span>
                                 </span>
                                 <div class="timeline-item">
                                     <div class="timeline-point timeline-point"></div>
@@ -104,18 +99,21 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-10 col-md-10 col-10 no-padding d-flex justify-content-end" style="color: #e07313bf;">
+                                                <div class=" col-md-10 col-10 no-padding d-flex justify-content-end" style="color: #e07313bf;">
                                                     <div class="meta">
                                                         <ul>
-                                                            <li> <i class="la la-clock-o"></i> <span class="numb">du {{prospect.dateRdv}}</span></li>
+                                                            <li> <i class="la la-clock-o"></i> <span class="numb">Next-RDV {{prospect.dateRdv | date:'medium'}}</span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="time-right">{{prospect.createdAt}}</div>
+                                        <div class="time-right">{{prospect.createdAt | date:'medium'}}</div>
                                     </div>
                                 </div>
+                                <span class="timeline-label">
+                                    <span class="label bg-primary" *ngIf="compteRendus && compteRendus.length!==0">Suivi : {{compteRendus[compteRendus.length-1].dateProchaineRdv | date:'medium'}}</span>
+                                </span>
                                 <div *ngFor="let compteRenduSuivi of compteRendus" class="timeline-item">
                                     <div class="timeline-point timeline-point"></div>
                                     <div class="timeline-event">
@@ -151,7 +149,7 @@
                                                 <div class="col-xl-10 col-md-10 col-10 no-padding d-flex justify-content-end" style="color: #e07313bf;">
                                                     <div class="meta">
                                                         <ul>
-                                                            <li> <i class="la la-clock-o"></i> <span class="numb">du {{compteRenduSuivi.dateProchaineRdv | date:'medium'}}</span></li>
+                                                            <li> <i class="la la-clock-o"></i> <span class="numb">NEXT-RDV {{compteRenduSuivi.dateProchaineRdv | date:'medium'}}</span></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -160,21 +158,19 @@
                                         <div class="time-right">{{compteRenduSuivi.createdAt | date:'medium'}}</div>
                                     </div>
                                 </div>
-                                <span class="timeline-label">
-                                    <span class="label bg-primary" *ngIf="compteRendus">{{compteRendus[compteRendus.length-1].dateProchaineRdv | date:'medium'}}</span>
-                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-3"></div>
+
                 <div class="col-9" style="padding-left: 5%;padding-right: 1%;">
                     <form class="form-horizontal" [formGroup]="formGroup" name="editForm" role="form" novalidate (ngSubmit)="saveCRS()" #editForm="ngForm">
                         <legend jhiTranslate="fireDApp.compteRenduSuivi.formName">Form Name</legend>
                         <div class="form-group">
-                            <label class="form-control-label" jhiTranslate="fireDApp.compteRenduSuivi.dateProchaineRdv">Date Prochaine Rdv</label>
+                            <label class="form-control-label">Date Prochaine Rdv</label>
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-6">
                                     <div class="input-group">
                                         <input type="text" placeholder="{{'fireDApp.prospect.time.date'|translate}}" class="form-control" (click)="d.toggle()" name="dateRdv" id="field_dateRdv"
                                                [(ngModel)]="dateProchainRdv" formControlName="DateRdv" ngbDatepicker #d="ngbDatepicker"/>
@@ -183,11 +179,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-2">
-                                    <input id="changeMinuteStep" type="number" formControlName="HourStep" class="form-control" max="23" min="00" placeholder="{{'fireDApp.prospect.time.hour'|translate}}" [(ngModel)]="hourStep" />
-                                </div>
-                                <div class="col-2">
-                                    <input id="changeSecondStep" type="number" formControlName="MinuteStep" class="form-control" min="00" placeholder="{{'fireDApp.prospect.time.minute'|translate}}" max="59" [(ngModel)]="minuteStep" />
+                                <div class="col-4 row">
+                                    <div class="col-sm-4">
+                                        <button type="button" class="btn btn-primary" (click)="openTimeModal()">{{'fireDApp.prospect.time.hour'|translate}}</button>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input type="time" formControlName="HourStep" atp-time-picker class="form-control" value="{{selectedTime}}" [(ngModel)]="hourStep" >
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,27 +1,31 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-
+import com.niveka.domain.Entreprise;
 import com.niveka.domain.User;
 import com.niveka.repository.UserRepository;
 import com.niveka.security.SecurityUtils;
+import com.niveka.service.EntrepriseService;
 import com.niveka.service.MailService;
 import com.niveka.service.UserService;
+import com.niveka.service.dto.EntrepriseDTO;
 import com.niveka.service.dto.PasswordChangeDTO;
 import com.niveka.service.dto.UserDTO;
 import com.niveka.web.rest.errors.*;
 import com.niveka.web.rest.vm.KeyAndPasswordVM;
 import com.niveka.web.rest.vm.ManagedUserVM;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -29,17 +33,19 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
-
+    private static final String ENTITY_NAME = "Account";
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
 
     private final UserService userService;
 
+    @Autowired
+    private EntrepriseService entrepriseService;
+
     private final MailService mailService;
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
-
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
@@ -53,15 +59,27 @@ public class AccountResource {
      * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already used
      * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already used
      */
-    @PostMapping("/register")
+    @PostMapping("/register/{entreprise}")
     @Timed
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public ResponseEntity<UserDTO> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, @PathVariable("entreprise") String entrepriseId) {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+        Optional<EntrepriseDTO> entrepriseDTOOptional = entrepriseService.findOne(entrepriseId);
+        if (entrepriseDTOOptional==null || !entrepriseDTOOptional.isPresent()){
+            throw new BadRequestAlertException("This enterprise not exist", ENTITY_NAME, "idnotexists");
+        }
+        Entreprise entreprise = entrepriseDTOOptional.get().toEntity();
+        //log.debug("EntrepriseDTO: {} ", entreprise);
+
+        managedUserVM.setEntreprise(entreprise);
+        managedUserVM.setEntrepriseId(entrepriseId);
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user,userDTO);
+        return ResponseEntity.ok().body(userDTO);
     }
 
     /**
@@ -123,10 +141,10 @@ public class AccountResource {
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
-            throw new InternalServerErrorException("User could not be found");
+            throw new InternalServerErrorException("User could not be found ");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+            userDTO.getLangKey(), userDTO.getImageUrl(),userDTO.getEntrepriseId());
     }
 
     /**

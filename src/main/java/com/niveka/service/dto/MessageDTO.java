@@ -18,7 +18,7 @@ public class MessageDTO implements Serializable {
 
     private String time;
 
-    private Long channelId;
+    private String channelId;
 
     private String createdAt;
 
@@ -68,11 +68,11 @@ public class MessageDTO implements Serializable {
         this.time = time;
     }
 
-    public Long getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
-    public void setChannelId(Long channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 

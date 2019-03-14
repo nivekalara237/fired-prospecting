@@ -38,6 +38,10 @@ export class RapportUpdateComponent implements OnInit {
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+
+        this.accountService.identity().then(account => {
+            this.account = account;
+        });
     }
 
     previousState() {
@@ -45,6 +49,7 @@ export class RapportUpdateComponent implements OnInit {
     }
 
     save() {
+        this.rapport.userId = this.account.id;
         this.isSaving = true;
         if (this.rapport.id !== undefined) {
             this.subscribeToSaveResponse(this.rapportService.update(this.rapport));

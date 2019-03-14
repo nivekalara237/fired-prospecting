@@ -21,7 +21,7 @@ describe('Service Tests', () => {
             service = injector.get(MessageService);
             httpMock = injector.get(HttpTestingController);
 
-            elemDefault = new Message('ID', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+            elemDefault = new Message('ID', 'AAAAAAA', 'AAAAAAA', true, 'AAAAAAA', 'AAAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
         });
 
         describe('Service methods', async () => {
@@ -57,7 +57,7 @@ describe('Service Tests', () => {
                     {
                         contenu: 'BBBBBB',
                         key: 'BBBBBB',
-                        vu: 'BBBBBB',
+                        vu: true,
                         time: 'BBBBBB',
                         channelId: 1,
                         createdAt: 'BBBBBB',

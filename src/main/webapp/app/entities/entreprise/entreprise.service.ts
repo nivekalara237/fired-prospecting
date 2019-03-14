@@ -20,6 +20,14 @@ export class EntrepriseService {
         return this.http.post<IEntreprise>(this.resourceUrl, entreprise, { observe: 'response' });
     }
 
+    getRangeUser(): Observable<HttpResponse<string[]>> {
+        return this.http.get<any>(this.resourceUrl + '/range-users', { observe: 'response' });
+    }
+
+    uploadLogo(enterpriseId: string, file: FormData): Observable<any> {
+        return this.http.post<any>(this.resourceUrl + `/${enterpriseId}/updlogo`, file, { observe: 'response' });
+    }
+
     update(entreprise: IEntreprise): Observable<EntityResponseType> {
         return this.http.put<IEntreprise>(this.resourceUrl, entreprise, { observe: 'response' });
     }

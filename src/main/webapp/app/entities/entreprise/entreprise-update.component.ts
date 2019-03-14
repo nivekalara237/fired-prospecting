@@ -17,6 +17,7 @@ export class EntrepriseUpdateComponent implements OnInit {
     isSaving: boolean;
 
     users: IUser[];
+    rangeU: string[];
 
     constructor(
         protected jhiAlertService: JhiAlertService,
@@ -35,6 +36,15 @@ export class EntrepriseUpdateComponent implements OnInit {
                 this.users = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
+        );
+
+        this.entrepriseService.getRangeUser().subscribe(
+            (res: HttpResponse<string[]>) => {
+                this.rangeU = res.body;
+            },
+            (res: HttpErrorResponse) => {
+                this.onError(res.message);
+            }
         );
     }
 
