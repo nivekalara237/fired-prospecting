@@ -8,7 +8,7 @@ import { ObjetDetailComponent } from 'app/entities/objet/objet-detail.component'
 import { Objet } from 'app/shared/model/objet.model';
 
 describe('Component Tests', () => {
-    describe('Objet Management Detail Component', () => {
+    describe('PieceJointe Management Detail Component', () => {
         let comp: ObjetDetailComponent;
         let fixture: ComponentFixture<ObjetDetailComponent>;
         const route = ({ data: of({ objet: new Objet('123') }) } as any) as ActivatedRoute;

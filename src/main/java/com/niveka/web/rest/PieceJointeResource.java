@@ -1,11 +1,11 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.service.ObjetService;
+import com.niveka.service.PieceJointeService;
+import com.niveka.service.dto.PieceJointeDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
-import com.niveka.service.dto.ObjetDTO;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,45 +18,41 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
- * REST controller for managing Objet.
+ * REST controller for managing PieceJointe.
  */
 @RestController
 @RequestMapping("/api")
-public class ObjetResource {
+public class PieceJointeResource {
 
-    private final Logger log = LoggerFactory.getLogger(ObjetResource.class);
+    private final Logger log = LoggerFactory.getLogger(PieceJointeResource.class);
 
     private static final String ENTITY_NAME = "objet";
 
-    private final ObjetService objetService;
+    private final PieceJointeService pieceJointeService;
 
-    public ObjetResource(ObjetService objetService) {
-        this.objetService = objetService;
+    public PieceJointeResource(PieceJointeService pieceJointeService) {
+        this.pieceJointeService = pieceJointeService;
     }
 
     /**
      * POST  /objets : Create a new objet.
      *
-     * @param objetDTO the objetDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new objetDTO, or with status 400 (Bad Request) if the objet has already an ID
+     * @param pieceJointeDTO the pieceJointeDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new pieceJointeDTO, or with status 400 (Bad Request) if the objet has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/objets")
     @Timed
-    public ResponseEntity<ObjetDTO> createObjet(@RequestBody ObjetDTO objetDTO) throws URISyntaxException {
-        log.debug("REST request to save Objet : {}", objetDTO);
-        if (objetDTO.getId() != null) {
+    public ResponseEntity<PieceJointeDTO> createObjet(@RequestBody PieceJointeDTO pieceJointeDTO) throws URISyntaxException {
+        log.debug("REST request to save PieceJointe : {}", pieceJointeDTO);
+        if (pieceJointeDTO.getId() != null) {
             throw new BadRequestAlertException("A new objet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ObjetDTO result = objetService.save(objetDTO);
+        PieceJointeDTO result = pieceJointeService.save(pieceJointeDTO);
         return ResponseEntity.created(new URI("/api/objets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +61,22 @@ public class ObjetResource {
     /**
      * PUT  /objets : Updates an existing objet.
      *
-     * @param objetDTO the objetDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated objetDTO,
-     * or with status 400 (Bad Request) if the objetDTO is not valid,
-     * or with status 500 (Internal Server Error) if the objetDTO couldn't be updated
+     * @param pieceJointeDTO the pieceJointeDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated pieceJointeDTO,
+     * or with status 400 (Bad Request) if the pieceJointeDTO is not valid,
+     * or with status 500 (Internal Server Error) if the pieceJointeDTO couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/objets")
     @Timed
-    public ResponseEntity<ObjetDTO> updateObjet(@RequestBody ObjetDTO objetDTO) throws URISyntaxException {
-        log.debug("REST request to update Objet : {}", objetDTO);
-        if (objetDTO.getId() == null) {
+    public ResponseEntity<PieceJointeDTO> updateObjet(@RequestBody PieceJointeDTO pieceJointeDTO) throws URISyntaxException {
+        log.debug("REST request to update PieceJointe : {}", pieceJointeDTO);
+        if (pieceJointeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ObjetDTO result = objetService.save(objetDTO);
+        PieceJointeDTO result = pieceJointeService.save(pieceJointeDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, objetDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, pieceJointeDTO.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +88,9 @@ public class ObjetResource {
      */
     @GetMapping("/objets")
     @Timed
-    public ResponseEntity<List<ObjetDTO>> getAllObjets(Pageable pageable) {
+    public ResponseEntity<List<PieceJointeDTO>> getAllObjets(Pageable pageable) {
         log.debug("REST request to get a page of Objets");
-        Page<ObjetDTO> page = objetService.findAll(pageable);
+        Page<PieceJointeDTO> page = pieceJointeService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/objets");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -107,9 +103,9 @@ public class ObjetResource {
      */
     @GetMapping("/objets/{id}")
     @Timed
-    public ResponseEntity<ObjetDTO> getObjet(@PathVariable String id) {
-        log.debug("REST request to get Objet : {}", id);
-        Optional<ObjetDTO> objetDTO = objetService.findOne(id);
+    public ResponseEntity<PieceJointeDTO> getObjet(@PathVariable String id) {
+        log.debug("REST request to get PieceJointe : {}", id);
+        Optional<PieceJointeDTO> objetDTO = pieceJointeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(objetDTO);
     }
 
@@ -122,8 +118,8 @@ public class ObjetResource {
     @DeleteMapping("/objets/{id}")
     @Timed
     public ResponseEntity<Void> deleteObjet(@PathVariable String id) {
-        log.debug("REST request to delete Objet : {}", id);
-        objetService.delete(id);
+        log.debug("REST request to delete PieceJointe : {}", id);
+        pieceJointeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 
@@ -137,9 +133,9 @@ public class ObjetResource {
      */
     @GetMapping("/_search/objets")
     @Timed
-    public ResponseEntity<List<ObjetDTO>> searchObjets(@RequestParam String query, Pageable pageable) {
+    public ResponseEntity<List<PieceJointeDTO>> searchObjets(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Objets for query {}", query);
-        Page<ObjetDTO> page = objetService.search(query, pageable);
+        Page<PieceJointeDTO> page = pieceJointeService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/objets");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

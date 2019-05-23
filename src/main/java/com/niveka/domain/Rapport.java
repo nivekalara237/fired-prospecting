@@ -27,7 +27,7 @@ public class Rapport implements Serializable {
     private String contenu;
 
     @Field("type")
-    private Integer type;
+    private int type;
 
     @Field("position")
     private String position;
@@ -52,10 +52,14 @@ public class Rapport implements Serializable {
 
     @Field("user")
     private User user;
+/*
+    @OneToMany(fetch= FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinProperty(name="piece_jointes")*/
+    @Field("piece_jointes")
+    private Set<PieceJointe> pieceJointes = new HashSet<>();
 
-    @Field("objets")
-    private Set<Objet> objets = new HashSet<>();
-
+/*    @OneToMany(fetch= FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinProperty(name="copies")*/
     @Field("copies")
     private Set<Copie> copies = new HashSet<>();
 
@@ -119,25 +123,25 @@ public class Rapport implements Serializable {
         this.contenu = contenu;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public Rapport type(Integer type) {
+    public Rapport type(int type) {
         this.type = type;
         return this;
     }
 
-    public Set<Objet> getObjets() {
-        return objets;
+    public Set<PieceJointe> getPieceJointes() {
+        return pieceJointes;
     }
 
-    public void setObjets(Set<Objet> objets) {
-        this.objets = objets;
+    public void setPieceJointes(Set<PieceJointe> pieceJointes) {
+        this.pieceJointes = pieceJointes;
     }
 
-    public Rapport objets(Set<Objet> objets){
-        this.objets = objets;
+    public Rapport objets(Set<PieceJointe> pieceJointes){
+        this.pieceJointes = pieceJointes;
         return this;
     }
 
@@ -248,14 +252,14 @@ public class Rapport implements Serializable {
     public String toString() {
         return "Rapport{" +
             "id=" + getId() +
-            ", objets='" + getObjets() + "'" +
+            ", pieceJointes='" + getPieceJointes() + "'" +
             ", copies='" + getCopies() + "'" +
             ", contenu='" + getContenu() + "'" +
             ", type=" + getType() +
             ", position='" + getPosition() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
-            ", objets='" + getObjets() + "'" +
+            ", pieceJointes='" + getPieceJointes() + "'" +
             ", user='" + getUser() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
             "}";

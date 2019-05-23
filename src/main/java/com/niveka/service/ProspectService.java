@@ -64,6 +64,18 @@ public class ProspectService {
             .map(prospectMapper::toDto);
     }
 
+    /**
+     * Get all the prospects by user.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    public Page<ProspectDTO> findAllByUser(String userId, Pageable pageable) {
+        log.debug("Request to get all Prospects");
+        return prospectRepository.findAllByUserId(pageable,userId)
+            .map(prospectMapper::toDto);
+    }
+
 
     /**
      * Get one prospect by id.

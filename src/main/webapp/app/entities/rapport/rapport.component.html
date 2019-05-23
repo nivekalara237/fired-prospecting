@@ -15,7 +15,7 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="objet"><span jhiTranslate="fireDApp.rapport.objet">Objet</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="pieceJointe"><span jhiTranslate="fireDApp.rapport.pieceJointe">Objet</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="copies"><span jhiTranslate="fireDApp.rapport.copies">Copies</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="contenu"><span jhiTranslate="fireDApp.rapport.contenu">Contenu</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="type"><span jhiTranslate="fireDApp.rapport.type">Type</span> <fa-icon [icon]="'sort'"></fa-icon></th>
@@ -30,7 +30,7 @@
             <tbody>
             <tr *ngFor="let rapport of rapports ;trackBy: trackId">
                 <td><a [routerLink]="['/rapport', rapport.id, 'view' ]">{{rapport.id}}</a></td>
-                <td>{{rapport.objet}}</td>
+                <td>{{rapport.pieceJointe}}</td>
                 <td>{{rapport.copies}}</td>
                 <td>{{rapport.contenu}}</td>
                 <td>{{rapport.type}}</td>
@@ -166,7 +166,7 @@
                                                 <label class="custom-control-label" [for]="'customControlInline1'+rapport.id"></label>
                                             </div>
                                         </td>
-                                        <td class="view-message  dont-show">{{rapport.objet}}</td>
+                                        <td class="view-message  dont-show">{{rapport.pieceJointe}}</td>
                                         <td class="view-message ">{{trimText(rapport.contenu)}}</td>
                                         <td class="view-message  inbox-small-cells" *ngIf="rapport.haveFile;else notFile"><i class="fa fa-paperclip"></i></td>
                                         <ng-template #notFile>
@@ -223,7 +223,7 @@
                                     </ng-template>
                                 </div>
                                 <div class="col-md-12">
-                                    <h4> {{rapportSelected.objet}} </h4>
+                                    <h4> {{rapportSelected.pieceJointe}} </h4>
                                 </div>
                             </div>
                             <div class="sender-info">
@@ -275,9 +275,9 @@
                         <div class="inbox-body mx-auto" *ngIf="compose===true">
                             <form class="form-horizontal" (ngSubmit)="saveOnlyRepport();" enctype="multipart/form-data" name="composeForm" novalidate #editForm="ngForm" role="form">
                                 <div class="form-group">
-                                    <label class="form-control-label" jhiTranslate="fireDApp.rapport.objet" for="field_objet">Objet</label>
-                                    <input required type="text"  class="form-control" name="objet" id="field_objet"
-                                           [(ngModel)]="objet" />
+                                    <label class="form-control-label" jhiTranslate="fireDApp.rapport.pieceJointe" for="field_objet">Objet</label>
+                                    <input required type="text"  class="form-control" name="pieceJointe" id="field_objet"
+                                           [(ngModel)]="pieceJointe" />
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label" jhiTranslate="fireDApp.rapport.copies" for="field_copies">Copies</label>

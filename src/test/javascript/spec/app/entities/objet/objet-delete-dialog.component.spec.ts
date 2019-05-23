@@ -9,7 +9,7 @@ import { ObjetDeleteDialogComponent } from 'app/entities/objet/objet-delete-dial
 import { ObjetService } from 'app/entities/objet/objet.service';
 
 describe('Component Tests', () => {
-    describe('Objet Management Delete Component', () => {
+    describe('PieceJointe Management Delete Component', () => {
         let comp: ObjetDeleteDialogComponent;
         let fixture: ComponentFixture<ObjetDeleteDialogComponent>;
         let service: ObjetService;

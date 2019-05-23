@@ -4,6 +4,7 @@ import com.niveka.config.ApplicationProperties;
 import com.niveka.config.DefaultProfileUtil;
 import com.niveka.config.FileStorageProperties;
 import io.github.jhipster.config.JHipsterConstants;
+import io.github.kaiso.relmongo.config.EnableRelMongo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import java.util.Collection;
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class,FileStorageProperties.class})
 @EnableDiscoveryClient
+@EnableRelMongo
 public class FireDApp {
 
     private static final Logger log = LoggerFactory.getLogger(FireDApp.class);

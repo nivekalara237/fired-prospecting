@@ -34,7 +34,7 @@ public class Entreprise implements Serializable {
     private String range_utilisateur;
 
     @Field("nombre_utilisateur")
-    private int nombre_utilisteur;
+    private int nombre_utilisateur;
 
     @Field("status")
     private String status;
@@ -77,12 +77,12 @@ public class Entreprise implements Serializable {
         this.range_utilisateur = range_utilisateur;
     }
 
-    public int getNombre_utilisteur() {
-        return nombre_utilisteur;
+    public int getNombre_utilisateur() {
+        return nombre_utilisateur;
     }
 
-    public void setNombre_utilisteur(int nombre_utilisteur) {
-        this.nombre_utilisteur = nombre_utilisteur;
+    public void setNombre_utilisateur(int nombre_utilisateur) {
+        this.nombre_utilisateur = nombre_utilisateur;
     }
 
     public String getStatus() {
@@ -176,7 +176,7 @@ public class Entreprise implements Serializable {
         e.setLogo(this.logo);
         e.setDesignation(this.designation);
         e.setRange_utilisateur(this.range_utilisateur);
-        e.setNombre_utilisateur(this.nombre_utilisteur);
+        e.setNombre_utilisateur(this.nombre_utilisateur);
         e.setCreatedAt(this.createdAt);
         return e;
     }

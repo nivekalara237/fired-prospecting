@@ -1,15 +1,15 @@
 package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.niveka.domain.Objet;
+import com.niveka.domain.PieceJointe;
 import com.niveka.domain.User;
 import com.niveka.payload.UploadFileResponse;
 import com.niveka.repository.UserRepository;
 import com.niveka.security.SecurityUtils;
 import com.niveka.service.FileStorageService;
-import com.niveka.service.ObjetService;
+import com.niveka.service.PieceJointeService;
 import com.niveka.service.RapportService;
-import com.niveka.service.dto.ObjetDTO;
+import com.niveka.service.dto.PieceJointeDTO;
 import com.niveka.service.dto.RapportDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
@@ -61,11 +61,11 @@ public class RapportResource {
     private UserRepository userRepository;
 
     private final RapportService rapportService;
-    private final ObjetService objetService;
+    private final PieceJointeService pieceJointeService;
 
-    public RapportResource(RapportService rapportService, ObjetService objetService) {
+    public RapportResource(RapportService rapportService, PieceJointeService pieceJointeService) {
         this.rapportService = rapportService;
-        this.objetService = objetService;
+        this.pieceJointeService = pieceJointeService;
     }
 
     /**
@@ -105,7 +105,7 @@ public class RapportResource {
             throw new BadRequestAlertException("A new rapport cannot already have an ID", ENTITY_NAME, "idnotexists");
         }
 
-        ObjetDTO objetDTO = new ObjetDTO();
+        PieceJointeDTO pieceJointeDTO = new PieceJointeDTO();
 //        RapportDTO result = rapportService.save(rapportDTO);
 //        return ResponseEntity.created(new URI("/api/rapports/" + result.getId()))
 //            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
@@ -131,16 +131,16 @@ public class RapportResource {
         UploadFileResponse uploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
             file.getContentType(), file.getSize());
 
-        Objet objet = new Objet();
-        objet.setLien(uploadFileResponse.getFileDownloadUri());
-        objet.setNom(uploadFileResponse.getFileName());
-        objet.setType(uploadFileResponse.getFileType());
-        objet.setTaille(uploadFileResponse.getSize());
-        ObjetDTO objetDTO = new ObjetDTO();
-        BeanUtils.copyProperties(objet, objetDTO);
-        objetDTO.setRapportId(repportId);
-        //objet.setRapport();
-        objetService.save(objetDTO);
+        PieceJointe pieceJointe = new PieceJointe();
+        pieceJointe.setLien(uploadFileResponse.getFileDownloadUri());
+        pieceJointe.setNom(uploadFileResponse.getFileName());
+        pieceJointe.setType(uploadFileResponse.getFileType());
+        pieceJointe.setTaille(uploadFileResponse.getSize());
+        PieceJointeDTO pieceJointeDTO = new PieceJointeDTO();
+        BeanUtils.copyProperties(pieceJointe, pieceJointeDTO);
+        pieceJointeDTO.setRapportId(repportId);
+        //pieceJointe.setRapport();
+        pieceJointeService.save(pieceJointeDTO);
         return uploadFileResponse;
     }
 
@@ -186,21 +186,21 @@ public class RapportResource {
     public @ResponseBody Map<String,Object> getDetails(@PathVariable String id){
         Map<String, Object> res= new HashMap<>();
         RapportDTO rapportDTO = rapportService.findOne(id).get();
-        List<Objet> objets = objetService.findAllByRapport(id);
-        List<ObjetDTO> objetDTOS = new ArrayList<>();
-        if (objets!=null && objets.size()!=0){
-            Consumer<Objet> consumer = new Consumer<Objet>() {
+        List<PieceJointe> pieceJointes = pieceJointeService.findAllByRapport(id);
+        List<PieceJointeDTO> pieceJointeDTOS = new ArrayList<>();
+        if (pieceJointes !=null && pieceJointes.size()!=0){
+            Consumer<PieceJointe> consumer = new Consumer<PieceJointe>() {
                 @Override
-                public void accept(Objet obj) {
-                    ObjetDTO o = new ObjetDTO();
+                public void accept(PieceJointe obj) {
+                    PieceJointeDTO o = new PieceJointeDTO();
                     BeanUtils.copyProperties(obj,o);
-                    objetDTOS.add(o);
+                    pieceJointeDTOS.add(o);
                 }
             };
-            objets.forEach(consumer);
+            pieceJointes.forEach(consumer);
         }
         res.put("rapport",rapportDTO);
-        res.put("files",objetDTOS);
+        res.put("files", pieceJointeDTOS);
         return res;
     }
 
@@ -209,6 +209,9 @@ public class RapportResource {
     public ResponseEntity<List<RapportDTO>> getAllRapportsByUser(@PathVariable String userId,Pageable pageable){
         log.debug("REST request to get Rapport by user : {}", userId);
         Page<RapportDTO> page = rapportService.findAllByUser(pageable,userId);
+        page.forEach(rapportDTO ->
+            rapportDTO.setPieceJointes(new HashSet<>(pieceJointeService.findAllByRapport(rapportDTO.getId())))
+        );
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rapports");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

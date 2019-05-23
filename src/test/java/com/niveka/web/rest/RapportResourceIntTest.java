@@ -5,6 +5,7 @@ import com.niveka.FireDApp;
 import com.niveka.domain.Rapport;
 import com.niveka.repository.RapportRepository;
 import com.niveka.repository.search.RapportSearchRepository;
+import com.niveka.service.PieceJointeService;
 import com.niveka.service.RapportService;
 import com.niveka.service.dto.RapportDTO;
 import com.niveka.service.mapper.RapportMapper;
@@ -99,6 +100,8 @@ public class RapportResourceIntTest {
 
     @Autowired
     private Validator validator;
+    @Autowired
+    private PieceJointeService pieceJointeService;
 
     private MockMvc restRapportMockMvc;
 
@@ -107,7 +110,7 @@ public class RapportResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RapportResource rapportResource = new RapportResource(rapportService, objetService);
+        final RapportResource rapportResource = new RapportResource(rapportService, pieceJointeService);
         this.restRapportMockMvc = MockMvcBuilders.standaloneSetup(rapportResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

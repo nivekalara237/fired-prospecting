@@ -41,7 +41,7 @@ public class InitialSetupMigration {
         entreprise.designation(AuthoritiesConstants.ENTERPRISE);
         entreprise.setCreatedAt(Utils.currentJodaDateStr());
         entreprise.setLogo("https://nivekaa.com/img/logo.png");
-        entreprise.setNombre_utilisteur(5);
+        entreprise.setNombre_utilisateur(5);
         entreprise.setRange_utilisateur("0-5");
         mongoTemplate.save(entreprise);
     }
@@ -62,7 +62,7 @@ public class InitialSetupMigration {
         entreprise.designation(AuthoritiesConstants.ENTERPRISE);
         entreprise.setCreatedAt(Utils.currentJodaDateStr());
         entreprise.setLogo("https://nivekaa.com/img/logo.png");
-        entreprise.setNombre_utilisteur(5);
+        entreprise.setNombre_utilisateur(5);
         entreprise.setRange_utilisateur("0-5");
 
         User systemUser = new User();

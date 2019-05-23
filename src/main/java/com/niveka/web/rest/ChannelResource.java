@@ -147,7 +147,7 @@ public class ChannelResource {
             channelWithLastMessages.add(clm);
         }
 
-        log.debug("USER_ENTREPRISE_FORUM: {}",channelWithLastMessages);
+        //log.debug("USER_ENTREPRISE_FORUM: {}",channelWithLastMessages);
         return ResponseEntity.ok().body(zChannels);
     }
 

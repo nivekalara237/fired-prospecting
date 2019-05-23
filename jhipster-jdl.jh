@@ -25,7 +25,7 @@ entity Prospect {
 }
 entity Rapport {
     id Long,
-    objet String,
+    pieceJointe String,
     copies String,
     contenu String,
     type Integer,

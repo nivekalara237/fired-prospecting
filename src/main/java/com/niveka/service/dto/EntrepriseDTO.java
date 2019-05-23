@@ -118,8 +118,10 @@ public class EntrepriseDTO implements Serializable {
         e.setLogo(this.logo);
         e.setDesignation(this.designation);
         e.setRange_utilisateur(this.range_utilisateur);
-        e.setNombre_utilisteur(this.nombre_utilisateur);
+        e.setNombre_utilisateur(this.nombre_utilisateur);
         e.setCreatedAt(this.createdAt);
+        e.setUpdatedAt(this.updatedAt);
+        e.deletedAt(this.deletedAt);
         return e;
     }
 

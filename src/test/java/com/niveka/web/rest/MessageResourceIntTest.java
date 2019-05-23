@@ -59,8 +59,8 @@ public class MessageResourceIntTest {
     private static final String DEFAULT_TIME = "AAAAAAAAAA";
     private static final String UPDATED_TIME = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_CHANNEL_ID = 1L;
-    private static final Long UPDATED_CHANNEL_ID = 2L;
+    private static final String DEFAULT_CHANNEL_ID = "MMMMMMMMM";
+    private static final String UPDATED_CHANNEL_ID = "MMMMMMMMM";
 
     private static final String DEFAULT_CREATED_AT = "AAAAAAAAAA";
     private static final String UPDATED_CREATED_AT = "BBBBBBBBBB";
@@ -205,12 +205,12 @@ public class MessageResourceIntTest {
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.toString())))
             .andExpect(jsonPath("$.[*].vu").value(hasItem(DEFAULT_VU.toString())))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].channelId").value(hasItem(DEFAULT_CHANNEL_ID.intValue())))
+            .andExpect(jsonPath("$.[*].channelId").value(hasItem(DEFAULT_CHANNEL_ID.toString())))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
             .andExpect(jsonPath("$.[*].deletedAt").value(hasItem(DEFAULT_DELETED_AT.toString())));
     }
-    
+
     @Test
     public void getMessage() throws Exception {
         // Initialize the database
@@ -225,7 +225,7 @@ public class MessageResourceIntTest {
             .andExpect(jsonPath("$.key").value(DEFAULT_KEY.toString()))
             .andExpect(jsonPath("$.vu").value(DEFAULT_VU.toString()))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
-            .andExpect(jsonPath("$.channelId").value(DEFAULT_CHANNEL_ID.intValue()))
+            .andExpect(jsonPath("$.channelId").value(DEFAULT_CHANNEL_ID.toString()))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
             .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
             .andExpect(jsonPath("$.deletedAt").value(DEFAULT_DELETED_AT.toString()));
@@ -336,7 +336,7 @@ public class MessageResourceIntTest {
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY)))
             .andExpect(jsonPath("$.[*].vu").value(hasItem(DEFAULT_VU)))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME)))
-            .andExpect(jsonPath("$.[*].channelId").value(hasItem(DEFAULT_CHANNEL_ID.intValue())))
+            .andExpect(jsonPath("$.[*].channelId").value(hasItem(DEFAULT_CHANNEL_ID)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT)))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT)))
             .andExpect(jsonPath("$.[*].deletedAt").value(hasItem(DEFAULT_DELETED_AT)));

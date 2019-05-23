@@ -2,9 +2,9 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,6 +30,7 @@ public class Copie implements Serializable {
     @Field("rapport_at")
     private String rapportId;
 
+    //@ManyToOne(mappedBy="rapport")
     @DBRef
     @Field("rapport")
     @JsonIgnoreProperties("")

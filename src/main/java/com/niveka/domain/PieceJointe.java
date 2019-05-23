@@ -2,19 +2,19 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A Objet.
+ * A PieceJointe.
  */
-@Document(collection = "objet")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "objet")
-public class Objet implements Serializable {
+@Document(collection = "piece_jointe")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "piece_jointe")
+public class PieceJointe implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,7 @@ public class Objet implements Serializable {
     @Field("rapport_id")
     private String rapportId;
 
+    //@ManyToOne(mappedBy="rapport")
     @DBRef
     @Field("rapport")
     @JsonIgnoreProperties("")
@@ -57,7 +58,7 @@ public class Objet implements Serializable {
         return nom;
     }
 
-    public Objet nom(String nom) {
+    public PieceJointe nom(String nom) {
         this.nom = nom;
         return this;
     }
@@ -70,12 +71,12 @@ public class Objet implements Serializable {
         return lien;
     }
 
-    public Objet lien(String lien) {
+    public PieceJointe lien(String lien) {
         this.lien = lien;
         return this;
     }
 
-    public Objet rapportId(String rapportId){
+    public PieceJointe rapportId(String rapportId){
         this.rapportId = rapportId;
         return this;
     }
@@ -96,7 +97,7 @@ public class Objet implements Serializable {
         return encode;
     }
 
-    public Objet encode(String encode) {
+    public PieceJointe encode(String encode) {
         this.encode = encode;
         return this;
     }
@@ -109,7 +110,7 @@ public class Objet implements Serializable {
         return rapport;
     }
 
-    public Objet rapport(Rapport rapport) {
+    public PieceJointe rapport(Rapport rapport) {
         this.rapport = rapport;
         return this;
     }
@@ -143,11 +144,11 @@ public class Objet implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Objet objet = (Objet) o;
-        if (objet.getId() == null || getId() == null) {
+        PieceJointe pieceJointe = (PieceJointe) o;
+        if (pieceJointe.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), objet.getId());
+        return Objects.equals(getId(), pieceJointe.getId());
     }
 
     @Override
@@ -157,7 +158,7 @@ public class Objet implements Serializable {
 
     @Override
     public String toString() {
-        return "Objet{" +
+        return "PieceJointe{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", lien='" + getLien() + "'" +

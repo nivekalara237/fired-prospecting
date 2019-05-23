@@ -31,9 +31,9 @@ public class ElasticsearchIndexService {
 
     private final MessageSearchRepository messageSearchRepository;
 
-    private final ObjetRepository objetRepository;
+    private final PieceJointeRepository objetRepository;
 
-    private final ObjetSearchRepository objetSearchRepository;
+    private final PieceJointeSearchRepository objetSearchRepository;
 
     private final ProspectRepository prospectRepository;
 
@@ -66,8 +66,8 @@ public class ElasticsearchIndexService {
         EntrepriseSearchRepository entrepriseSearchRepository,
         MessageRepository messageRepository,
         MessageSearchRepository messageSearchRepository,
-        ObjetRepository objetRepository,
-        ObjetSearchRepository objetSearchRepository,
+        PieceJointeRepository objetRepository,
+        PieceJointeSearchRepository objetSearchRepository,
         ProspectRepository prospectRepository,
         ProspectSearchRepository prospectSearchRepository,
         RapportRepository rapportRepository,
@@ -108,7 +108,7 @@ public class ElasticsearchIndexService {
                 reindexForClass(Copie.class, copieRepository, copieSearchRepository);
                 reindexForClass(Entreprise.class, entrepriseRepository, entrepriseSearchRepository);
                 reindexForClass(Message.class, messageRepository, messageSearchRepository);
-                reindexForClass(Objet.class, objetRepository, objetSearchRepository);
+                reindexForClass(PieceJointe.class, objetRepository, objetSearchRepository);
                 reindexForClass(Prospect.class, prospectRepository, prospectSearchRepository);
                 reindexForClass(Rapport.class, rapportRepository, rapportSearchRepository);
                 reindexForClass(Suivi.class, suiviRepository, suiviSearchRepository);

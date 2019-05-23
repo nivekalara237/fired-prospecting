@@ -1,33 +1,33 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-objet-heading" jhiTranslate="fireDApp.objet.home.createOrEditLabel">Create or edit a Objet</h2>
+            <h2 id="jhi-pieceJointe-heading" jhiTranslate="fireDApp.pieceJointe.home.createOrEditLabel">Create or edit a Objet</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!objet.id">
+                <div class="form-group" [hidden]="!pieceJointe.id">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="objet.id" readonly />
+                        [(ngModel)]="pieceJointe.id" readonly />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fireDApp.objet.nom" for="field_nom">Nom</label>
+                    <label class="form-control-label" jhiTranslate="fireDApp.pieceJointe.nom" for="field_nom">Nom</label>
                     <input type="text" class="form-control" name="nom" id="field_nom"
-                        [(ngModel)]="objet.nom" />
+                        [(ngModel)]="pieceJointe.nom" />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fireDApp.objet.lien" for="field_lien">Lien</label>
+                    <label class="form-control-label" jhiTranslate="fireDApp.pieceJointe.lien" for="field_lien">Lien</label>
                     <input type="text" class="form-control" name="lien" id="field_lien"
-                        [(ngModel)]="objet.lien" />
+                        [(ngModel)]="pieceJointe.lien" />
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fireDApp.objet.encode" for="field_encode">Encode</label>
+                    <label class="form-control-label" jhiTranslate="fireDApp.pieceJointe.encode" for="field_encode">Encode</label>
                     <input type="text" class="form-control" name="encode" id="field_encode"
-                        [(ngModel)]="objet.encode" />
+                        [(ngModel)]="pieceJointe.encode" />
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="fireDApp.objet.rapport" for="field_rapport">Rapport</label>
-                    <select class="form-control" id="field_rapport" name="rapport" [(ngModel)]="objet.rapportId" >
+                    <label class="form-control-label" jhiTranslate="fireDApp.pieceJointe.rapport" for="field_rapport">Rapport</label>
+                    <select class="form-control" id="field_rapport" name="rapport" [(ngModel)]="pieceJointe.rapportId" >
                         <option [ngValue]="null"></option>
                         <option [ngValue]="rapportOption.id" *ngFor="let rapportOption of rapports; trackBy: trackRapportById">{{rapportOption.id}}</option>
                     </select>

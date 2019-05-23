@@ -1,9 +1,9 @@
 <div>
     <h2 id="page-heading">
-        <span jhiTranslate="fireDApp.objet.home.title">Objets</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-objet" [routerLink]="['/objet/new']">
+        <span jhiTranslate="fireDApp.pieceJointe.home.title">Objets</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-pieceJointe" [routerLink]="['/pieceJointe/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span class="hidden-sm-down"  jhiTranslate="fireDApp.objet.home.createLabel">
+            <span class="hidden-sm-down"  jhiTranslate="fireDApp.pieceJointe.home.createLabel">
             Create new Objet
             </span>
         </button>
@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
-                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'fireDApp.objet.home.search' | translate }}">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'fireDApp.pieceJointe.home.search' | translate }}">
                     <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
                         <fa-icon [icon]="'search'"></fa-icon>
                     </button>
@@ -25,45 +25,45 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="objets">
+    <div class="table-responsive" *ngIf="pieceJointes">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="nom"><span jhiTranslate="fireDApp.objet.nom">Nom</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="lien"><span jhiTranslate="fireDApp.objet.lien">Lien</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="encode"><span jhiTranslate="fireDApp.objet.encode">Encode</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="rapportId"><span jhiTranslate="fireDApp.objet.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="nom"><span jhiTranslate="fireDApp.pieceJointe.nom">Nom</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="lien"><span jhiTranslate="fireDApp.pieceJointe.lien">Lien</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="encode"><span jhiTranslate="fireDApp.pieceJointe.encode">Encode</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rapportId"><span jhiTranslate="fireDApp.pieceJointe.rapport">Rapport</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
-            <tr *ngFor="let objet of objets ;trackBy: trackId">
-                <td><a [routerLink]="['/objet', objet.id, 'view' ]">{{objet.id}}</a></td>
-                <td>{{objet.nom}}</td>
-                <td>{{objet.lien}}</td>
-                <td>{{objet.encode}}</td>
+            <tr *ngFor="let pieceJointe of pieceJointes ;trackBy: trackId">
+                <td><a [routerLink]="['/pieceJointe', pieceJointe.id, 'view' ]">{{pieceJointe.id}}</a></td>
+                <td>{{pieceJointe.nom}}</td>
+                <td>{{pieceJointe.lien}}</td>
+                <td>{{pieceJointe.encode}}</td>
                 <td>
-                    <div *ngIf="objet.rapportId">
-                        <a [routerLink]="['../rapport', objet.rapportId , 'view' ]" >{{objet.rapportId}}</a>
+                    <div *ngIf="pieceJointe.rapportId">
+                        <a [routerLink]="['../rapport', pieceJointe.rapportId , 'view' ]" >{{pieceJointe.rapportId}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['/objet', objet.id, 'view' ]"
+                                [routerLink]="['/pieceJointe', pieceJointe.id, 'view' ]"
                                 class="btn btn-info btn-sm">
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/objet', objet.id, 'edit']"
+                                [routerLink]="['/pieceJointe', pieceJointe.id, 'edit']"
                                 class="btn btn-primary btn-sm">
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'objet/'+ objet.id + '/delete'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'pieceJointe/'+ pieceJointe.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

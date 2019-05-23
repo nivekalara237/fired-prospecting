@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the Objet entity.
+ * A DTO for the PieceJointe entity.
  */
-public class ObjetDTO implements Serializable {
+public class PieceJointeDTO implements Serializable {
 
     private String id;
 
@@ -87,11 +87,11 @@ public class ObjetDTO implements Serializable {
             return false;
         }
 
-        ObjetDTO objetDTO = (ObjetDTO) o;
-        if (objetDTO.getId() == null || getId() == null) {
+        PieceJointeDTO pieceJointeDTO = (PieceJointeDTO) o;
+        if (pieceJointeDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), objetDTO.getId());
+        return Objects.equals(getId(), pieceJointeDTO.getId());
     }
 
     @Override
@@ -101,7 +101,7 @@ public class ObjetDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ObjetDTO{" +
+        return "PieceJointeDTO{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
             ", lien='" + getLien() + "'" +

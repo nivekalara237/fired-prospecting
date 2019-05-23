@@ -8,7 +8,7 @@ import { ObjetService } from 'app/entities/objet/objet.service';
 import { IObjet, Objet } from 'app/shared/model/objet.model';
 
 describe('Service Tests', () => {
-    describe('Objet Service', () => {
+    describe('PieceJointe Service', () => {
         let injector: TestBed;
         let service: ObjetService;
         let httpMock: HttpTestingController;
@@ -36,7 +36,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should create a Objet', async () => {
+            it('should create a PieceJointe', async () => {
                 const returnedFromService = Object.assign(
                     {
                         id: 'ID'
@@ -52,7 +52,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should update a Objet', async () => {
+            it('should update a PieceJointe', async () => {
                 const returnedFromService = Object.assign(
                     {
                         nom: 'BBBBBB',
@@ -71,7 +71,7 @@ describe('Service Tests', () => {
                 req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should return a list of Objet', async () => {
+            it('should return a list of PieceJointe', async () => {
                 const returnedFromService = Object.assign(
                     {
                         nom: 'BBBBBB',
@@ -93,7 +93,7 @@ describe('Service Tests', () => {
                 httpMock.verify();
             });
 
-            it('should delete a Objet', async () => {
+            it('should delete a PieceJointe', async () => {
                 const rxPromise = service.delete('123').subscribe(resp => expect(resp.ok));
 
                 const req = httpMock.expectOne({ method: 'DELETE' });

@@ -1,5 +1,7 @@
 package com.niveka.service.dto;
 
+import com.niveka.domain.Suivi;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -33,8 +35,17 @@ public class ProspectDTO implements Serializable {
     private String deletedAt;
 
     private String suiviId;
+    private Suivi suivi;
 
     private String userId;
+
+    public Suivi getSuivi() {
+        return suivi;
+    }
+
+    public void setSuivi(Suivi suivi) {
+        this.suivi = suivi;
+    }
 
     public String getId() {
         return id;
@@ -112,14 +123,14 @@ public class ProspectDTO implements Serializable {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-    public ProspectDTO setCreated(String createdAt) {
+    public ProspectDTO setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
         return this;
     }
-
+    /*public ProspectDTO setCreated(String createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }*/
 
     public String getUpdatedAt() {
         return updatedAt;
@@ -189,7 +200,8 @@ public class ProspectDTO implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
-            ", suivi=" + getSuiviId() +
+            ", suiviID=" + getSuiviId() +
+            ", suivi=" + getSuivi() +
             ", user=" + getUserId() +
             "}";
     }

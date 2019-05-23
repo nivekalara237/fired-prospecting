@@ -10,7 +10,7 @@ import { ObjetService } from 'app/entities/objet/objet.service';
 import { Objet } from 'app/shared/model/objet.model';
 
 describe('Component Tests', () => {
-    describe('Objet Management Component', () => {
+    describe('PieceJointe Management Component', () => {
         let comp: ObjetComponent;
         let fixture: ComponentFixture<ObjetComponent>;
         let service: ObjetService;

@@ -197,6 +197,7 @@ dependencies {
     compile "org.springframework.security:spring-security-data"
     compile "org.springframework.security:spring-security-web"
     compile "org.springframework.security:spring-security-messaging"
+    //compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
     compile "io.jsonwebtoken:jjwt-api"
     runtime "io.jsonwebtoken:jjwt-impl"
     runtime "io.jsonwebtoken:jjwt-jackson"
@@ -230,6 +231,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.2'
+
+    // https://mvnrepository.com/artifact/io.github.kaiso.relmongo/relmongo
+    compile group: 'io.github.kaiso.relmongo', name: 'relmongo', version: '3.0.0'
+
 
 }
 

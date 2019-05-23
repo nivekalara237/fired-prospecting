@@ -15,6 +15,7 @@ import com.niveka.web.rest.util.Utils;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -124,7 +125,35 @@ public class ProspectResource {
         log.debug("REST request to get a page of Prospects");
         Page<ProspectDTO> page = prospectService.findAll(pageable);
         List<ProspectDTO> pages = new ArrayList<>();
-        page.map(prospectDTO -> pages.add(prospectDTO.setCreated(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
+        page.map(prospectDTO -> pages.add(prospectDTO.setCreatedAt(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
+        //log.error("PROSPECT1", pages);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prospects");
+        return ResponseEntity.ok().headers(headers).body(pages);
+    }
+
+    /**
+     * GET  /prospects/:userId : get all the prospects.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of prospects in body
+     */
+    @GetMapping("/prospects/by_user/{userId}")
+    @Timed
+    public ResponseEntity<List<ProspectDTO>> getAllProspectsByUser(@PathVariable String userId, Pageable pageable) {
+        log.debug("REST request to get a page of Prospects");
+        Page<ProspectDTO> page = prospectService.findAll(pageable);
+        List<ProspectDTO> pages = new ArrayList<>();
+        page.map(prospectDTO -> {
+            prospectDTO.setCreatedAt(Utils.getDateToJoda(prospectDTO.getCreatedAt()));
+            if (prospectDTO.getSuiviId()!=null){
+                Suivi suivi = new Suivi();
+                SuiviDTO suiviDTO = suiviService.findOne(prospectDTO.getSuiviId()).get();
+                BeanUtils.copyProperties(suiviDTO, suivi);
+                prospectDTO.setSuivi(suivi);
+            }
+            pages.add(prospectDTO);
+            return prospectDTO;
+        });
         //log.error("PROSPECT1", pages);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prospects");
         return ResponseEntity.ok().headers(headers).body(pages);
@@ -172,7 +201,7 @@ public class ProspectResource {
         log.debug("REST request to search for a page of Prospects for query {}", query);
         Page<ProspectDTO> page = prospectService.search(query, pageable);
         List<ProspectDTO> pages = new ArrayList<>();
-        page.map(prospectDTO -> pages.add(prospectDTO.setCreated(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
+        page.map(prospectDTO -> pages.add(prospectDTO.setCreatedAt(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
         log.error("PROSPECT_2", pages);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/prospects");
         return new ResponseEntity<>(pages, headers, HttpStatus.OK);

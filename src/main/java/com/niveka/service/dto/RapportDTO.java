@@ -1,9 +1,13 @@
 package com.niveka.service.dto;
 
+import com.niveka.domain.Copie;
+import com.niveka.domain.PieceJointe;
 import com.niveka.domain.User;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the Rapport entity.
@@ -16,7 +20,7 @@ public class RapportDTO implements Serializable {
 
     private String contenu;
 
-    private Integer type;
+    private int type;
 
     private String position;
 
@@ -31,6 +35,10 @@ public class RapportDTO implements Serializable {
     private boolean haveFile;
 
     private User user;
+
+    private Set<PieceJointe> pieceJointes = new HashSet<>();
+    private Set<Copie> copies = new HashSet<>();
+
 
     public String getId() {
         return id;
@@ -56,11 +64,11 @@ public class RapportDTO implements Serializable {
         this.contenu = contenu;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
@@ -120,6 +128,22 @@ public class RapportDTO implements Serializable {
         this.haveFile = haveFile;
     }
 
+    public Set<PieceJointe> getPieceJointes() {
+        return pieceJointes;
+    }
+
+    public void setPieceJointes(Set<PieceJointe> pieceJointes) {
+        this.pieceJointes = pieceJointes;
+    }
+
+    public Set<Copie> getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Set<Copie> copies) {
+        this.copies = copies;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -153,6 +177,8 @@ public class RapportDTO implements Serializable {
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
             ", user=" + getUser() +
+            ", copies=" + getCopies() +
+            ", pieceJointes=" + getPieceJointes() +
             "}";
     }
 }
