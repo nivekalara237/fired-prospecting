@@ -89,6 +89,32 @@ public class CompteRenduSuiviResource {
             .body(result);
     }
 
+
+    /**
+     * PUT  /compte-rendu-suivis/validate/:id : marking specific compteRenduSuivi as validate.
+     *
+     * @param id the compteRenduSuiviDTO ID to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated compteRenduSuiviDTO,
+     * or with status 400 (Bad Request) if the compteRenduSuiviDTO is not valid,
+     * or with status 500 (Internal Server Error) if the compteRenduSuiviDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/compte-rendu-suivis/validated/{id}")
+    @Timed
+    public ResponseEntity<CompteRenduSuiviDTO> validate(@PathVariable String id) throws URISyntaxException {
+        log.debug("REST request to update CompteRenduSuivi : {}", id);
+        Optional<CompteRenduSuiviDTO> compteRenduSuiviDTO = compteRenduSuiviService.findOne(id);
+        if (!compteRenduSuiviDTO.isPresent()) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        CompteRenduSuiviDTO crs = compteRenduSuiviDTO.get();
+        crs.setRdvHonore(true);
+        CompteRenduSuiviDTO result = compteRenduSuiviService.save(crs);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, compteRenduSuiviDTO.get().getId()))
+            .body(result);
+    }
+
     /**
      * GET  /compte-rendu-suivis : get all the compteRenduSuivis.
      *

@@ -84,8 +84,11 @@ public class ProspectResource {
         suivi.setUsers(users);
         suivi.setUpdatedAt(Utils.currentJodaDateStr());
         prospectDTO.setCreatedAt(Utils.currentJodaDateStr());
-        ProspectDTO result = prospectService.save(prospectDTO);
+        suivi.setUserId(prospectDTO.getUserId());
         SuiviDTO suiviDTO = suiviService.save(suivi);
+        //prospectDTO.setSuivi(suivi);
+        prospectDTO.setSuiviId(suiviDTO.getId());
+        ProspectDTO result = prospectService.save(prospectDTO);
         return ResponseEntity.created(new URI("/api/prospects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

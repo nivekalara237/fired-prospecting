@@ -25,6 +25,9 @@ public class CompteRenduSuivi implements Serializable {
     @Field("contenu")
     private String contenu;
 
+    @Field("rdv_honore")
+    private boolean rdvHonore;
+
     @Field("date_prochaine_rdv")
     private String dateProchaineRdv;
 
@@ -179,6 +182,19 @@ public class CompteRenduSuivi implements Serializable {
     public void setSuivi(Suivi suivi) {
         this.suivi = suivi;
     }
+
+    public CompteRenduSuivi rdvHonore(boolean rdvHonore) {
+        this.rdvHonore = rdvHonore;
+        return this;
+    }
+    public boolean isRdvHonore() {
+        return rdvHonore;
+    }
+
+    public void setRdvHonore(boolean rdvHonore) {
+        this.rdvHonore = rdvHonore;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

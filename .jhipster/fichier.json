@@ -1,0 +1,49 @@
+{
+    "name": "Fichier",
+    "fields": [
+        {
+            "fieldName": "path",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "size",
+            "fieldType": "int"
+        },
+        {
+            "fieldName": "model",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "modelId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedAt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deletedAt",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+
+    ],
+    "changelogDate": "201901080614203",
+    "entityTableName": "fichier",
+    "pagination": "infinite-scroll",
+    "service": "serviceClass",
+    "dto": "mapstruct",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

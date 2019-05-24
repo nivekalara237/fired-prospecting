@@ -24,6 +24,8 @@ public class CompteRenduSuiviDTO implements Serializable {
 
     private String prospectId;
 
+    private boolean rdvHonore;
+
     public String getId() {
         return id;
     }
@@ -91,6 +93,14 @@ public class CompteRenduSuiviDTO implements Serializable {
 
     public void setProspectId(String prospectId) {
         this.prospectId = prospectId;
+    }
+
+    public boolean isRdvHonore() {
+        return rdvHonore;
+    }
+
+    public void setRdvHonore(boolean rdvHonore) {
+        this.rdvHonore = rdvHonore;
     }
 
     @Override
