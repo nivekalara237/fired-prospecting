@@ -2,12 +2,14 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 
 /**
  * A Prospect.
@@ -21,51 +23,59 @@ public class Prospect implements Serializable {
     @Id
     private String id;
 
-    @Field("nom")
+    @Field(type = FieldType.Text, fielddata = true)
+    @org.springframework.data.mongodb.core.mapping.Field("name")
     private String nom;
 
-    @Field("email")
+    @Field(type = FieldType.Text, fielddata = true)
+    @org.springframework.data.mongodb.core.mapping.Field("email")
     private String email;
 
-    @Field("telephone")
+    @Field(type = FieldType.Text, fielddata = true)
+    @org.springframework.data.mongodb.core.mapping.Field("telephone")
     private String telephone;
 
-    @Field("type")
+    @org.springframework.data.mongodb.core.mapping.Field("type")
     private Integer type;
 
-    @Field("date_rdv")
+    @org.springframework.data.mongodb.core.mapping.Field("date_rdv")
     private String dateRdv;
 
-    @Field("compte_rendu")
+    @org.springframework.data.mongodb.core.mapping.Field("compte_rendu")
     private String compteRendu;
 
-    @Field("localisation")
+
+    @Field(type = FieldType.Text, fielddata = true)
+    @org.springframework.data.mongodb.core.mapping.Field("localisation")
     private String localisation;
 
-    @Field("position")
+    @org.springframework.data.mongodb.core.mapping.Field("position")
     private String position;
 
-    @Field("created_at")
+    @org.springframework.data.mongodb.core.mapping.Field("created_at")
     private String createdAt;
 
-    @Field("updated_at")
+    @org.springframework.data.mongodb.core.mapping.Field("updated_at")
     private String updatedAt;
 
-    @Field("deleted_at")
+    @org.springframework.data.mongodb.core.mapping.Field("deleted_at")
     private String deletedAt;
 
-    @Field("suivi_id")
+    @org.springframework.data.mongodb.core.mapping.Field("suivi_id")
     private String suiviId;
 
-    @Field("user_id")
+    @org.springframework.data.mongodb.core.mapping.Field("user_id")
     private String userId;
 
+    @org.springframework.data.mongodb.core.mapping.Field("entreprise_id")
+    private String entrepriseId;
+
     @DBRef
-    @Field("suivi")
+    @org.springframework.data.mongodb.core.mapping.Field("suivi")
     private Suivi suivi;
 
     @DBRef
-    @Field("user")
+    @org.springframework.data.mongodb.core.mapping.Field("user")
     @JsonIgnoreProperties("")
     private User user;
 
@@ -191,6 +201,19 @@ public class Prospect implements Serializable {
         return this;
     }
 
+    public Prospect entrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+        return this;
+    }
+
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
@@ -309,6 +332,7 @@ public class Prospect implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
+            ", entrepriseId='" + getEntrepriseId() + "'" +
             "}";
     }
 }

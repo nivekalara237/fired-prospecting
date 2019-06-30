@@ -2,8 +2,11 @@ package com.niveka.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.niveka.domain.CompteRenduSuivi;
+import com.niveka.repository.FichierRepository;
 import com.niveka.service.CompteRenduSuiviService;
+import com.niveka.service.FichierService;
 import com.niveka.service.dto.CompteRenduSuiviDTO;
+import com.niveka.service.dto.FichierDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
 import com.niveka.web.rest.util.HeaderUtil;
 import com.niveka.web.rest.util.PaginationUtil;
@@ -12,6 +15,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +41,13 @@ public class CompteRenduSuiviResource {
 
     private static final String ENTITY_NAME = "compteRenduSuivi";
 
+    @Autowired
+    private FichierRepository fichierRepository;
+
     private final CompteRenduSuiviService compteRenduSuiviService;
+
+    @Autowired
+    private FichierService fichierService;
 
     public CompteRenduSuiviResource(CompteRenduSuiviService compteRenduSuiviService) {
         this.compteRenduSuiviService = compteRenduSuiviService;
@@ -139,11 +150,6 @@ public class CompteRenduSuiviResource {
         List<CompteRenduSuivi> page = compteRenduSuiviService.findByProspect(prospect);
         List<CompteRenduSuiviDTO> dtoList = new ArrayList<>();
         log.debug("REST request PAGE{}",page);
-        //long start = pageable.getOffset();
-        //long end = (start + pageable.getPageSize()) > page.size() ? page.size() : (start + pageable.getPageSize());
-        //Page<CompteRenduSuivi> pages = new PageImpl<CompteRenduSuivi>(page.subList((int)start, (int)end), pageable, page.size());
-
-
         List<CompteRenduSuiviDTO> pagesDTO = new ArrayList<>();
         Consumer<CompteRenduSuivi> consumer = new Consumer<CompteRenduSuivi>() {
             @Override
@@ -151,6 +157,7 @@ public class CompteRenduSuiviResource {
                 CompteRenduSuiviDTO dto = new CompteRenduSuiviDTO();
                 compteRenduSuivi.setCreatedAt(String.valueOf(Utils.getJodaToLong(compteRenduSuivi.getCreatedAt())));
                 BeanUtils.copyProperties(compteRenduSuivi,dto);
+                dto.setFichiers(fichierRepository.findByModelAndModelId(Utils.TYPES_MODELS_FICHIER.COMPTE_RENDU_SUIVI,dto.getId()));
                 pagesDTO.add(dto);
             }
         };
@@ -172,6 +179,56 @@ public class CompteRenduSuiviResource {
         log.debug("REST request to get CompteRenduSuivi : {}", id);
         Optional<CompteRenduSuiviDTO> compteRenduSuiviDTO = compteRenduSuiviService.findOne(id);
         return ResponseUtil.wrapOrNotFound(compteRenduSuiviDTO);
+    }
+
+    /**
+     * GET  /compte-rendu-suivis/:id : get the "id" compteRenduSuivi.
+     *
+     * @param dateString the date
+     * @param id the id of the CommId(UserID) who have save
+     * @return the ResponseEntity with status 200 (OK) and with body the compteRenduSuiviDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/compte-rendu-suivis/by-date/{id}/{dateString}")
+    @Timed
+    public ResponseEntity<List<CompteRenduSuiviDTO>> getCompteRenduByDate(@PathVariable String id,@PathVariable String dateString) {
+        log.debug("REST request to get CompteRenduSuivi by date : {} - {}", id, dateString);
+        try {
+            List<CompteRenduSuiviDTO> compteRenduSuivis = compteRenduSuiviService.findByDate(id,dateString);
+            return ResponseEntity.ok().body(compteRenduSuivis);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * GET  /compte-rendu-suivis/:id/fichiers : get the fichier for "id" compteRenduSuivi.
+     *
+     * @param id the id of the compteRenduSuiviDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the List<FichierDTO>, or with status 404 (Not Found)
+     */
+    @GetMapping("/compte-rendu-suivis/{id}/fichiers")
+    @Timed
+    public ResponseEntity<List<FichierDTO>> getFichiersForCompteRenduSuivi(@PathVariable String id) {
+        log.debug("REST request to get CompteRenduSuivi : {}", id);
+        //Optional<CompteRenduSuiviDTO> compteRenduSuiviDTO = compteRenduSuiviService.findOne(id);
+        List<FichierDTO> fichierDTOS = fichierService.findAll(id,Utils.TYPES_MODELS_FICHIER.COMPTE_RENDU_SUIVI);
+        return ResponseEntity.ok().body(fichierDTOS);
+    }
+
+    /**
+     * GET  /compte-rendu-suivis/:id/:year/:month : get the fichier for "id" compteRenduSuivi.
+     *
+     * @param id the id of the user who have savet save
+     * @return the ResponseEntity with status 200 (OK) and with body the List<FichierDTO>, or with status 404 (Not Found)
+     */
+    @GetMapping("/compte-rendu-suivis/by-month/{id}/{year}/{month}")
+    @Timed
+    public ResponseEntity<List<CompteRenduSuiviDTO>> getCalendar(@PathVariable String id,@PathVariable int year,@PathVariable int month) {
+        log.debug("REST request to get Calendar : {}-{}-{}", id,year,month);
+        //Optional<CompteRenduSuiviDTO> compteRenduSuiviDTO = compteRenduSuiviService.findOne(id);
+        List<CompteRenduSuiviDTO> compteRenduSuivis = compteRenduSuiviService.getCalendar(id,year,month);
+        return ResponseEntity.ok().body(compteRenduSuivis);
     }
 
     /**

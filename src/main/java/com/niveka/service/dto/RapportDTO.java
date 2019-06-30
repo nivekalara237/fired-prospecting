@@ -30,6 +30,8 @@ public class RapportDTO implements Serializable {
 
     private String deletedAt;
 
+    private String entrepriseId;
+
     private String userId;
 
     private boolean haveFile;
@@ -144,6 +146,14 @@ public class RapportDTO implements Serializable {
         this.copies = copies;
     }
 
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -178,6 +188,7 @@ public class RapportDTO implements Serializable {
             ", deletedAt='" + getDeletedAt() + "'" +
             ", user=" + getUser() +
             ", copies=" + getCopies() +
+            ", entrepriseId=" + getEntrepriseId() +
             ", pieceJointes=" + getPieceJointes() +
             "}";
     }

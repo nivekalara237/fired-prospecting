@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -144,7 +143,7 @@ public class ProspectResource {
     @Timed
     public ResponseEntity<List<ProspectDTO>> getAllProspectsByUser(@PathVariable String userId, Pageable pageable) {
         log.debug("REST request to get a page of Prospects");
-        Page<ProspectDTO> page = prospectService.findAll(pageable);
+        Page<ProspectDTO> page = prospectService.findAllByUser(userId,pageable);
         List<ProspectDTO> pages = new ArrayList<>();
         page.map(prospectDTO -> {
             prospectDTO.setCreatedAt(Utils.getDateToJoda(prospectDTO.getCreatedAt()));
@@ -206,8 +205,8 @@ public class ProspectResource {
         List<ProspectDTO> pages = new ArrayList<>();
         page.map(prospectDTO -> pages.add(prospectDTO.setCreatedAt(Utils.getDateToJoda(prospectDTO.getCreatedAt()))));
         log.error("PROSPECT_2", pages);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/prospects");
-        return new ResponseEntity<>(pages, headers, HttpStatus.OK);
+        //HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/prospects");
+        return ResponseEntity.ok().body(page.getContent());//new ResponseEntity<>(pages, headers, HttpStatus.OK);
     }
 
 }

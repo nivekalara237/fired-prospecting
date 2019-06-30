@@ -7,6 +7,9 @@ buildscript {
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url 'https://jitpack.io' }
+        maven {
+            url "https://dl.bintray.com/michaelklishin/maven/"
+        }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -234,6 +237,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.github.kaiso.relmongo/relmongo
     compile group: 'io.github.kaiso.relmongo', name: 'relmongo', version: '3.0.0'
+
+    compile "com.novemberain:quartz-mongodb:2.0.0"
+    compile "org.quartz-scheduler:quartz:2.3.0"
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+
 
 
 }

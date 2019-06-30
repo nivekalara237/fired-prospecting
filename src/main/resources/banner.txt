@@ -6,5 +6,5 @@
   ${AnsiColor.GREEN}╚██████╔╝${AnsiColor.RED} ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗
   ${AnsiColor.GREEN} ╚═════╝ ${AnsiColor.RED} ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
 
-${AnsiColor.BRIGHT_BLUE}:: JHipster 🤓  :: Running Spring Boot ${spring-boot.version} ::
-:: https://www.jhipster.tech ::${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_BLUE}:: FireD 🤓  :: Running Spring Boot ${spring-boot.version} ::
+${AnsiColor.BRIGHT_CYAN}:: by https://nivekaa.com ::${AnsiColor.BRIGHT_CYAN}

@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="fichier">
+            <h2><span jhiTranslate="fireDApp.fichier.detail.title">Fichier</span> {{fichier.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="fireDApp.fichier.path">Path</span></dt>
+                <dd>
+                    <span>{{fichier.path}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.type">Type</span></dt>
+                <dd>
+                    <span>{{fichier.type}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.size">Size</span></dt>
+                <dd>
+                    <span>{{fichier.size}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.model">Model</span></dt>
+                <dd>
+                    <span>{{fichier.model}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.modelId">Model Id</span></dt>
+                <dd>
+                    <span>{{fichier.modelId}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.createdAt">Created At</span></dt>
+                <dd>
+                    <span>{{fichier.createdAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.updatedAt">Updated At</span></dt>
+                <dd>
+                    <span>{{fichier.updatedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="fireDApp.fichier.deletedAt">Deleted At</span></dt>
+                <dd>
+                    <span>{{fichier.deletedAt}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/fichier', fichier.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

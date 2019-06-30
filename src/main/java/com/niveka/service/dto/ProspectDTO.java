@@ -34,6 +34,8 @@ public class ProspectDTO implements Serializable {
 
     private String deletedAt;
 
+    private String entrepriseId;
+
     private String suiviId;
     private Suivi suivi;
 
@@ -132,6 +134,14 @@ public class ProspectDTO implements Serializable {
         return this;
     }*/
 
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
     public String getUpdatedAt() {
         return updatedAt;
     }
@@ -202,6 +212,7 @@ public class ProspectDTO implements Serializable {
             ", deletedAt='" + getDeletedAt() + "'" +
             ", suiviID=" + getSuiviId() +
             ", suivi=" + getSuivi() +
+            ", entrepriseId=" + getEntrepriseId() +
             ", user=" + getUserId() +
             "}";
     }

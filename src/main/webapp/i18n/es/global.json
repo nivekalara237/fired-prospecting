@@ -17,6 +17,7 @@
                 "message": "Message",
                 "suivi": "Suivi",
                 "compteRenduSuivi": "Compte Rendu Suivi",
+                "fichier": "Fichier",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

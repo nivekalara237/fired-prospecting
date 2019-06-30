@@ -17,7 +17,10 @@ public class SuiviDTO implements Serializable {
     private String updatedAt;
 
     private String deletedAt;
+
     private String userId;
+
+    private String entrepriseId;
 
     public String getId() {
         return id;
@@ -67,6 +70,14 @@ public class SuiviDTO implements Serializable {
         this.userId = userId;
     }
 
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -96,6 +107,7 @@ public class SuiviDTO implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
+            ", entrepriseId='" + getEntrepriseId() + "'" +
             "}";
     }
 }

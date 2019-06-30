@@ -2,11 +2,12 @@ package com.niveka.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,8 +29,20 @@ public class CompteRenduSuivi implements Serializable {
     @Field("rdv_honore")
     private boolean rdvHonore;
 
+    @Field("first_alarm")
+    private boolean firstAlarm;
+
+    @Field("second_alarm")
+    private boolean secondAlarm;
+
+    @Field("third_alarm")
+    private boolean thirdAlarm;
+
     @Field("date_prochaine_rdv")
     private String dateProchaineRdv;
+
+    @Field("date_prochaine_rdv_long")
+    private long dateProchaineRdvLong;
 
     @Field("created_at")
     private String createdAt;
@@ -46,6 +59,12 @@ public class CompteRenduSuivi implements Serializable {
     @Field("prospect_id")
     private String prospectId;
 
+    @Field("entreprise_id")
+    private String entrepriseId;
+
+    @Field("user_id")
+    private String userId;
+
     @DBRef
     @Field("suivi")
     @JsonIgnoreProperties("")
@@ -56,8 +75,43 @@ public class CompteRenduSuivi implements Serializable {
     @JsonIgnoreProperties("")
     private Prospect prospect;
 
+    @JsonIgnoreProperties("")
+    private List<Fichier> fichiers;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
+
+    public long getDateProchaineRdvLong() {
+        return dateProchaineRdvLong;
+    }
+
+    public void setDateProchaineRdvLong(long dateProchaineRdvLong) {
+        this.dateProchaineRdvLong = dateProchaineRdvLong;
+    }
+
+    public boolean isFirstAlarm() {
+        return firstAlarm;
+    }
+
+    public void setFirstAlarm(boolean firstAlarm) {
+        this.firstAlarm = firstAlarm;
+    }
+
+    public boolean isSecondAlarm() {
+        return secondAlarm;
+    }
+
+    public void setSecondAlarm(boolean secondAlarm) {
+        this.secondAlarm = secondAlarm;
+    }
+
+    public boolean isThirdAlarm() {
+        return thirdAlarm;
+    }
+
+    public void setThirdAlarm(boolean thirdAlarm) {
+        this.thirdAlarm = thirdAlarm;
+    }
 
     public String getSuiviId() {
         return suiviId;
@@ -69,6 +123,19 @@ public class CompteRenduSuivi implements Serializable {
 
     public CompteRenduSuivi suiviId(String suiviId){
         this.suiviId = suiviId;
+        return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public CompteRenduSuivi userId(String userId){
+        this.userId = userId;
         return this;
     }
 
@@ -154,6 +221,19 @@ public class CompteRenduSuivi implements Serializable {
         return this;
     }
 
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
+    public CompteRenduSuivi entrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+        return this;
+    }
+
     public void setDeletedAt(String deletedAt) {
         this.deletedAt = deletedAt;
     }
@@ -169,6 +249,14 @@ public class CompteRenduSuivi implements Serializable {
     public CompteRenduSuivi prospect(Prospect prospect) {
         this.prospect = prospect;
         return this;
+    }
+
+    public List<Fichier> getFichiers() {
+        return fichiers;
+    }
+
+    public void setFichiers(List<Fichier> fichiers) {
+        this.fichiers = fichiers;
     }
 
     public Prospect getProspect() {
@@ -226,6 +314,8 @@ public class CompteRenduSuivi implements Serializable {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
+            ", userId='" + getUserId() + "'" +
+            ", dateProchaineRdvLong='" + getDateProchaineRdvLong() + "'" +
             "}";
     }
 }

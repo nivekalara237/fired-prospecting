@@ -116,7 +116,7 @@ spring:
         default-domain: fireD
 
 server:
-    port: 8080
+    port: 8502
 
 # ===================================================================
 # JHipster specific properties

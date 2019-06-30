@@ -44,6 +44,9 @@ public class Rapport implements Serializable {
     @Field("user_id")
     private String userId;
 
+    @Field("entreprise_id")
+    private String entrepriseId;
+
     @Field("objet")
     private String objet;
 
@@ -209,10 +212,26 @@ public class Rapport implements Serializable {
         this.user = user;
         return this;
     }
+    public Rapport entrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
+        return this;
+    }
 
     public Rapport userId(String userId){
         this.userId = userId;
         return this;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(String entrepriseId) {
+        this.entrepriseId = entrepriseId;
     }
 
     public String getUserId() {
@@ -262,6 +281,7 @@ public class Rapport implements Serializable {
             ", pieceJointes='" + getPieceJointes() + "'" +
             ", user='" + getUser() + "'" +
             ", deletedAt='" + getDeletedAt() + "'" +
+            ", entrepriseId='" + getEntrepriseId() + "'" +
             "}";
     }
 }

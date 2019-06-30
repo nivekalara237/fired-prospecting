@@ -1,0 +1,29 @@
+{
+    "fireDApp": {
+        "fichier": {
+            "home": {
+                "title": "Fichiers",
+                "createLabel": "Crear nuevo Fichier",
+                "createOrEditLabel": "Crear o editar Fichier",
+                "search": "Search for Fichier"
+            },
+            "created": "Un nuevo Fichier ha sido creado con el identificador {{ param }}",
+            "updated": "Un Fichier ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Fichier ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Fichier {{ id }}?"
+            },
+            "detail": {
+                "title": "Fichier"
+            },
+            "path": "Path",
+            "type": "Type",
+            "size": "Size",
+            "model": "Model",
+            "modelId": "Model Id",
+            "createdAt": "Created At",
+            "updatedAt": "Updated At",
+            "deletedAt": "Deleted At"
+        }
+    }
+}

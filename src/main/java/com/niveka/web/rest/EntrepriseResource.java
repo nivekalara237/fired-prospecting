@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -182,8 +181,8 @@ public class EntrepriseResource {
     public ResponseEntity<List<EntrepriseDTO>> searchEntreprises(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of Entreprises for query {}", query);
         Page<EntrepriseDTO> page = entrepriseService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/entreprises");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/entreprises");
+        return ResponseEntity.ok().body(page.getContent());//new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 }

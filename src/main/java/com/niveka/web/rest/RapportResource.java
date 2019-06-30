@@ -99,7 +99,7 @@ public class RapportResource {
     @PostMapping(value = "/rapports/{id}/files")
     @Timed
     public List<UploadFileResponse> saveFiles(@PathVariable String id, @RequestParam("files") MultipartFile[] multipartFile) throws URISyntaxException {
-        log.debug("REST request to save RapportID : {}", id);
+        log.debug("REST request to save RapportID : {}", multipartFile.length);
         RapportDTO rapportDTO = rapportService.findOne(id).get();
         if (id == null) {
             throw new BadRequestAlertException("A new rapport cannot already have an ID", ENTITY_NAME, "idnotexists");

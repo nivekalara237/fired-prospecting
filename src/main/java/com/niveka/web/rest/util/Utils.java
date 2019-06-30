@@ -11,11 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
 /**
- * Created by Nivek@lara on 08/01/2019.
+ *  Created by Nivek@lara on 08/01/2019.
  */
 public class Utils {
 //    public static String convertJodaTimeToReadable(String jodaStr){
@@ -43,8 +45,7 @@ public class Utils {
             DateTimeFormatter dtf = ISODateTimeFormat.dateTime();
             LocalDateTime parsedDate = dtf.parseLocalDateTime(jodaStr);
             Date d = null;
-            String dateWithCustomFormat = parsedDate.toString(DateTimeFormat.forPattern(customFormat));
-            return dateWithCustomFormat;
+            return parsedDate.toString(DateTimeFormat.forPattern(customFormat));
         }else
             return "";
 
@@ -57,6 +58,17 @@ public class Utils {
             return  parsedDate.toDate().getTime();
         }else
             return 0;
+    }
+
+    public static long getDateStringYYYYMMDDHHIISS(String str){
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        try {
+            Date d = f.parse(str);
+            return d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public static String currentJodaDateStr(){
@@ -80,6 +92,33 @@ public class Utils {
                 login = (String) authentication.getPrincipal();
 
         return login;
+    }
+
+    public enum TYPES_MODELS_FICHIER {
+        ;
+        public static final String COMPTE_RENDU_SUIVI = "compte-rendu-suivi";
+        public static final String MESSAGE = "message";
+        public static final String PROSPECT = "prospect";
+        public static final String RAPPORT = "rapport";
+        public static final String SUIVI = "suivi";
+        public static final String USER_PIC = "user_pic";
+    }
+
+
+
+    public enum TYPE_PROSPECTION {;
+        public static final int SUIVI = 0;
+        public static final int PROSPECTION = 1;
+    }
+
+    public enum TYPE_NOTIFY {;
+        public static final int RAPPORT = 0;
+        public static final int PROSPECT = 1;
+        public static final int FORUM = 2;
+        public static final int SCHEDULE = 3;
+        public static final int ANY = 4;
+        public static final int ALARM = 5;
+        public static final int UPDATE_APP = 10;
     }
 
 }

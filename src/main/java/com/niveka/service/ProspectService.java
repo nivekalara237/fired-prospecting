@@ -89,6 +89,18 @@ public class ProspectService {
             .map(prospectMapper::toDto);
     }
 
+
+    /**
+     * Get one prospect by id.
+     *
+     * @param id the id of the entity
+     * @return the Prospect
+     */
+    public Prospect _findOne(String id) {
+        log.debug("Request to get Prospect : {}", id);
+        return prospectRepository.findById(id).get();
+    }
+
     /**
      * Delete the prospect by id.
      *

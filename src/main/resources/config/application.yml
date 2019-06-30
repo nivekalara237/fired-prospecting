@@ -125,6 +125,12 @@ jhipster:
         license:
         license-url:
 
+quartz:
+    jobStore:
+        #The database name to be used to create the quartz scheduler specific collections.
+        dbName: fireD
+        mongoUri: mongodb://127.0.0.1:27017
+
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

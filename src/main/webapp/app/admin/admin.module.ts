@@ -26,7 +26,8 @@ import {
 @NgModule({
     imports: [
         FireDSharedModule,
-        RouterModule.forChild(adminState)
+        RouterModule.forChild(adminState),
+        FireDElasticsearchReindexModule
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
     ],
     declarations: [

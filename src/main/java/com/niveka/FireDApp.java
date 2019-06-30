@@ -8,14 +8,18 @@ import io.github.kaiso.relmongo.config.EnableRelMongo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
+import org.springframework.web.WebApplicationInitializer;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -30,7 +34,7 @@ import java.util.Collection;
 @EnableConfigurationProperties({ApplicationProperties.class,FileStorageProperties.class})
 @EnableDiscoveryClient
 @EnableRelMongo
-public class FireDApp {
+public class FireDApp extends SpringBootServletInitializer implements WebApplicationInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(FireDApp.class);
 
@@ -66,11 +70,29 @@ public class FireDApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.setProperty("spring.devtools.restart.enabled", "true");
         SpringApplication app = new SpringApplication(FireDApp.class);
+        app.setRegisterShutdownHook(false);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
     }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return configureApplication(application);
+    }
+
+    private static SpringApplicationBuilder configureApplication(SpringApplicationBuilder builder) {
+        return builder.sources(FireDApp.class).bannerMode(Banner.Mode.OFF);
+    }
+
+   /*
+    public static void main(String[] args) {
+        SpringApplication.run(FireDApp.class, args);
+    }*/
+
+
 
     private static void logApplicationStartup(Environment env) {
         String protocol = "http";

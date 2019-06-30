@@ -11,7 +11,7 @@
         },
         {
             "fieldName": "size",
-            "fieldType": "int"
+            "fieldType": "Integer"
         },
         {
             "fieldName": "model",
