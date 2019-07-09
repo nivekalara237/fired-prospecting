@@ -9,6 +9,7 @@ import com.niveka.security.SecurityUtils;
 import com.niveka.service.FileStorageService;
 import com.niveka.service.PieceJointeService;
 import com.niveka.service.RapportService;
+import com.niveka.service.UserService;
 import com.niveka.service.dto.PieceJointeDTO;
 import com.niveka.service.dto.RapportDTO;
 import com.niveka.web.rest.errors.BadRequestAlertException;
@@ -62,10 +63,12 @@ public class RapportResource {
 
     private final RapportService rapportService;
     private final PieceJointeService pieceJointeService;
+    private final UserService userService;
 
-    public RapportResource(RapportService rapportService, PieceJointeService pieceJointeService) {
+    public RapportResource(RapportService rapportService, PieceJointeService pieceJointeService,UserService userService) {
         this.rapportService = rapportService;
         this.pieceJointeService = pieceJointeService;
+        this.userService = userService;
     }
 
     /**
@@ -209,11 +212,15 @@ public class RapportResource {
     public ResponseEntity<List<RapportDTO>> getAllRapportsByUser(@PathVariable String userId,Pageable pageable){
         log.debug("REST request to get Rapport by user : {}", userId);
         Page<RapportDTO> page = rapportService.findAllByUser(pageable,userId);
-        page.forEach(rapportDTO ->
-            rapportDTO.setPieceJointes(new HashSet<>(pieceJointeService.findAllByRapport(rapportDTO.getId())))
-        );
+        List<RapportDTO> list =new ArrayList<>();
+        page.forEach(rapportDTO ->{
+            rapportDTO.setPieceJointes(new HashSet<>(pieceJointeService.findAllByRapport(rapportDTO.getId())));
+            rapportDTO.setUser(userService.findOne(userId));
+            list.add(rapportDTO);
+        });
+        log.debug("R-----------------------------------------------------------------: {}", list);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rapports");
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(list);
     }
 
     /**

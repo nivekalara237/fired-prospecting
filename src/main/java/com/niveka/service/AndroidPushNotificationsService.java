@@ -91,7 +91,6 @@ public class AndroidPushNotificationsService {
         CompletableFuture.allOf(pushNotification).join();
         try {
             String firebaseResponse = pushNotification.get();
-
             notifyResponse.setResponse(firebaseResponse);
             notifyResponse.setStatusCode(pushNotification.isDone()?200:400);
         } catch (InterruptedException e) {

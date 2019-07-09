@@ -46,7 +46,7 @@ spring:
             uri: mongodb://localhost:27017
             database: fireD
         jest:
-            uri: http://localhost:9200
+            uri: http://localhost:9222
     mail:
         host: localhost
         port: 25

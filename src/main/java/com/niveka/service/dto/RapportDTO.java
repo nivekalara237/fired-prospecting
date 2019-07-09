@@ -154,6 +154,12 @@ public class RapportDTO implements Serializable {
         this.entrepriseId = entrepriseId;
     }
 
+    public RapportDTO rapportDTOToList(HashSet<PieceJointe> pieceJointes,User user) {
+        this.setUser(user);
+        this.setPieceJointes(pieceJointes);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

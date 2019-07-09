@@ -86,6 +86,11 @@ public class CompteRenduSuiviService {
         return compteRenduSuiviRepository.findByRdvHonoreAndRdvHonoreExistsAndFirstAlarmAndFirstAlarmExists(honore,isFirstAlarm);
     }
 
+    public List<CompteRenduSuivi> findToNotifier(long start,long end) {
+        log.debug("Request to get all CompteRenduSuivis");
+        return compteRenduSuiviRepository.findByDateProchaineRdvLongBetween(start,end);
+    }
+
 
     /**
      * Get one compteRenduSuivi by id.

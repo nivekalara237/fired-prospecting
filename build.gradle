@@ -54,7 +54,7 @@ dependencyManagement {
 defaultTasks 'bootRun'
 
 group = 'com.niveka'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 
 description = ''
 

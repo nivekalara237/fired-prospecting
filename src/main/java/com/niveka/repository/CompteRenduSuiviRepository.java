@@ -24,5 +24,7 @@ public interface CompteRenduSuiviRepository extends MongoRepository<CompteRenduS
 
     //@Query("{'prospect_id' : ?0, date_prochaine_rdv_long : {$gt : ?1, $lt : ?2}}")
     public List<CompteRenduSuivi> findByUserIdAndDateProchaineRdvLongBetween(String userId,long end,long start);
+
+    public List<CompteRenduSuivi> findByDateProchaineRdvLongBetween(long end,long start);
     //public List<CompteRenduSuivi> findByProspectIdAndDateProchaineRdvLongBetween(String prospectId, long start,long end);
 }

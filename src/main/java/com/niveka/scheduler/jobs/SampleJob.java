@@ -30,7 +30,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,65 +79,52 @@ public class SampleJob extends QuartzJobBean implements InitializingBean{
      */
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        List<CompteRenduSuivi> notHonores = compteRenduSuiviService.findAll(false,false);
+
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.MINUTE,121);
+        Date newDate = calendar.getTime();
+        long start = now.getTime(),end=newDate.getTime();
+        List<CompteRenduSuivi> notHonores = compteRenduSuiviService.findToNotifier(end,start);
         notHonores.forEach(this::__);
     }
 
     private void __(CompteRenduSuivi compteRenduSuivi){
-        String jodadate = compteRenduSuivi.getDateProchaineRdv();
-        if (jodadate==null || jodadate.equals("")){
-            return;
-        }
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date date = null;
-        try {
-            date = sdf.parse(jodadate);
-        } catch (ParseException e) {
-            return;
-        }
-        Date now = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now);
-        calendar.add(Calendar.MINUTE,61);
-        Date newDate = calendar.getTime();
-        log.debug("DATE = {}",sdf.format(date));
-        log.debug("NOW = {}",sdf.format(now));
-        log.debug("NEW-NOW = {}",sdf.format(newDate));
-        if (date.before(newDate) && date.after(now)){
-            User commercial = userService.findOne(compteRenduSuivi.getUserId());
-            Prospect prospect = prospectService._findOne(compteRenduSuivi.getProspectId());
-            if (commercial!=null){
-                SimpleDateFormat s0 = new SimpleDateFormat("dd/MM/yyyy");
-                SimpleDateFormat s1 = new SimpleDateFormat("HH:mm");
-                Notify notify = new Notify();
-                notify.setType(Utils.TYPE_NOTIFY.ALARM);
-                notify.setTitle("Rappel du RDV");
-                notify.setSenderName("FIRED-AUTO-ALARMER");
-                notify.setUniquid(UUID.randomUUID().toString());
-                String content = "Nous vous rappelons que vous avez programmé un rendez-vous avec "+prospect.getNom()+"" +
-                    " le "+s0.format(date)+" à "+s1.format(date)+".";
-                notify.setContent(content);
-                if (commercial.getAndroidFcmToken()!=null && commercial.getAndroidFcmToken().equals("")){
-                    try {
-                        String[] ids = {commercial.getAndroidFcmToken()};
-                        NotifyResponse response = androidPushNotificationsService.notifyUsers(notify,ids,false);
-                        if (response.getStatusCode()==200){
-                            if (compteRenduSuivi.isFirstAlarm()){
-                                compteRenduSuivi.setSecondAlarm(true);
-                                CompteRenduSuiviDTO dto = new CompteRenduSuiviDTO();
-                                BeanUtils.copyProperties(compteRenduSuivi,dto);
-                                compteRenduSuiviService.save(dto);
-                            }else{
-                                compteRenduSuivi.setFirstAlarm(true);
-                                CompteRenduSuiviDTO dto = new CompteRenduSuiviDTO();
-                                BeanUtils.copyProperties(compteRenduSuivi,dto);
-                                compteRenduSuiviService.save(dto);
-                            }
+        User commercial = userService.findOne(compteRenduSuivi.getUserId());
+        Prospect prospect = prospectService._findOne(compteRenduSuivi.getProspectId());
+        Date date = new Date();
+        date.setTime(compteRenduSuivi.getDateProchaineRdvLong());
+        if (commercial!=null){
+            SimpleDateFormat s0 = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat s1 = new SimpleDateFormat("HH:mm");
+            Notify notify = new Notify();
+            notify.setType(Utils.TYPE_NOTIFY.ALARM);
+            notify.setTitle("Rappel du RDV");
+            notify.setSenderName("FIRED-AUTO-ALARMER");
+            notify.setUniquid(UUID.randomUUID().toString());
+            String content = "Nous vous rappelons que vous avez programmé un rendez-vous avec "+prospect.getNom()+"" +
+                " le "+s0.format(date)+" à "+s1.format(date)+".";
+            notify.setContent(content);
+            if (commercial.getAndroidFcmToken()!=null && commercial.getAndroidFcmToken().equals("")){
+                try {
+                    String[] ids = {commercial.getAndroidFcmToken()};
+                    NotifyResponse response = androidPushNotificationsService.notifyUsers(notify,ids,false);
+                    if (response.getStatusCode()==200){
+                        if (compteRenduSuivi.isFirstAlarm()){
+                            compteRenduSuivi.setSecondAlarm(true);
+                            CompteRenduSuiviDTO dto = new CompteRenduSuiviDTO();
+                            BeanUtils.copyProperties(compteRenduSuivi,dto);
+                            compteRenduSuiviService.save(dto);
+                        }else{
+                            compteRenduSuivi.setFirstAlarm(true);
+                            CompteRenduSuiviDTO dto = new CompteRenduSuiviDTO();
+                            BeanUtils.copyProperties(compteRenduSuivi,dto);
+                            compteRenduSuiviService.save(dto);
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }

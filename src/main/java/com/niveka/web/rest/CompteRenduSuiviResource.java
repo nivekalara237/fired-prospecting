@@ -96,7 +96,7 @@ public class CompteRenduSuiviResource {
         }
         CompteRenduSuiviDTO result = compteRenduSuiviService.save(compteRenduSuiviDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, compteRenduSuiviDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, compteRenduSuiviDTO.getId()))
             .body(result);
     }
 
